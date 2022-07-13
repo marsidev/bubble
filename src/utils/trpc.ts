@@ -1,8 +1,22 @@
-// src/utils/trpc.ts
-import type { AppRouter } from '../server/router'
+import type { AppRouter } from '@server/router'
 import { createReactQueryHooks } from '@trpc/react'
 
-export const trpc = createReactQueryHooks<AppRouter>()
+const trpc = createReactQueryHooks<AppRouter>()
+
+const { useQuery, useMutation, useSubscription, useInfiniteQuery, useDehydratedState, useContext, createClient, Provider } = trpc
+
+export {
+	useQuery,
+	useMutation,
+	useSubscription,
+	useInfiniteQuery,
+	useDehydratedState,
+	useContext,
+	createClient,
+	Provider
+}
+
+export default trpc
 
 /**
  * Check out tRPC docs for Inference Helpers

@@ -1,31 +1,32 @@
 import NextAuth, { type NextAuthOptions } from 'next-auth'
 import GithubProvider from 'next-auth/providers/github'
-import CredentialsProvider from 'next-auth/providers/credentials'
-import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from '@server/db/client'
+// import { PrismaAdapter } from '@next-auth/prisma-adapter'
+import { CustomPrismaAdapter } from '@server/db/adapter'
 
 export const authOptions: NextAuthOptions = {
-	adapter: PrismaAdapter(prisma),
+	adapter: CustomPrismaAdapter(prisma),
 	providers: [
 		GithubProvider({
 			clientId: process.env.GITHUB_ID,
 			clientSecret: process.env.GITHUB_SECRET
-		}),
-		CredentialsProvider({
-			name: 'Credentials',
-			credentials: {
-				name: {
-					label: 'Name',
-					type: 'text',
-					placeholder: 'Enter your name'
-				}
-			},
-			async authorize(credentials, _req) {
-				const user = { id: 1, name: credentials?.name ?? 'J Smith' }
-				return user
-			}
 		})
-	]
+	],
+	callbacks: {
+		// async jwt({ token, account }) {
+		// 	if (account) {
+		// 		token.accessToken = account.access_token
+		// 	}
+		// 	return token
+		// },
+		async session({ session, user }) {
+			return {
+				// ...token,
+				...session,
+				user
+			}
+		}
+	}
 }
 
 export default NextAuth(authOptions)
