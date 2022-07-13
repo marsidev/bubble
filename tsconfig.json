@@ -47,7 +47,9 @@
 			"@utils/*": ["src/utils/*"],
 
 			"@layouts": ["src/layouts"],
-			"@layouts/*": ["src/layouts/*"]
+			"@layouts/*": ["src/layouts/*"],
+
+			"@node-modules/*": ["./node_modules/*"]
 		}
 	},
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

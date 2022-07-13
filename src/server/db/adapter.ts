@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // https://github.com/nextauthjs/next-auth/blob/main/packages/adapter-prisma/src/index.ts
-import type { Prisma, PrismaClient } from '@prisma/client'
+// import type { Prisma, PrismaClient } from '~/../node_modules/.prisma/client'
+import type { Prisma, PrismaClient } from '@node-modules/.prisma/client'
 import type { Adapter } from 'next-auth/adapters'
 
 export function CustomPrismaAdapter(p: PrismaClient): Adapter {
