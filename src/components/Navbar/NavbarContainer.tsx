@@ -12,15 +12,13 @@ export const NavbarContainer: FC<NavbarContainerProps> = ({ children, ...props }
 			align='center'
 			as='header'
 			// bg='teal.900'
+			bg='var(--panel-header-background)'
 			border='1px solid'
 			borderColor='gray.700'
+			color='var(--panel-header-icon)'
 			justify='center'
 			px={4}
 			py={1}
-			style={{
-				backgroundColor: 'var(--panel-header-background)',
-				color: 'var(--panel-header-icon)'
-			}}
 			w='full'
 			{...props}
 		>

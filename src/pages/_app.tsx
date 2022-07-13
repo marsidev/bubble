@@ -5,7 +5,6 @@ import { withTRPC } from '@trpc/next'
 import superjson from 'superjson'
 import { SessionProvider } from 'next-auth/react'
 import { ChakraProvider } from '@utils/chakra/Provider'
-import Layout from '@layouts/main'
 
 const MyApp: AppType = ({
 	Component,
@@ -14,9 +13,7 @@ const MyApp: AppType = ({
 	return (
 		<SessionProvider session={session}>
 			<ChakraProvider cookies={cookies}>
-				<Layout>
-					<Component {...pageProps} />
-				</Layout>
+				<Component {...pageProps} />
 			</ChakraProvider>
 		</SessionProvider>
 	)

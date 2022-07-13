@@ -1,17 +1,35 @@
 import type { FC, ReactNode } from 'react'
-import { Flex } from '@chakra-ui/react'
+import { Flex, Spinner } from '@chakra-ui/react'
 import { DefaultSeo } from 'next-seo'
-import { defaultSeo } from 'next-seo.config'
-import { Navbar } from '@components'
+import { defaultSeo as seo } from 'next-seo.config'
+import { Navbar, NonSigned } from '@components'
+import { useQuery } from '@utils/trpc'
 
 interface LayoutProps {
 	children: ReactNode
+	withAuth?: boolean
 }
 
-const Layout: FC<LayoutProps> = ({ children }) => {
+interface LayoutContentProps {
+	withAuth: boolean
+	isLoading: boolean
+	authenticated: boolean
+	children: ReactNode
+}
+
+const LayoutContent = ({ withAuth, isLoading, authenticated, children }: LayoutContentProps) => {
+	if (!withAuth || authenticated) return <>{children}</>
+	if (isLoading) return <Spinner />
+	return <NonSigned />
+}
+
+const Layout: FC<LayoutProps> = ({ withAuth = false, children }) => {
+	const session = useQuery(['auth.getSession'])
+	const authenticated = !!session.data && !session.isLoading
+
 	return (
 		<>
-			<DefaultSeo {...defaultSeo} />
+			<DefaultSeo {...seo} />
 
 			<Navbar minH='6.5vh' />
 
@@ -22,11 +40,16 @@ const Layout: FC<LayoutProps> = ({ children }) => {
 				flexDir='column'
 				justify='center'
 				minH='93.5vh'
-				py={14}
 				textAlign='center'
 				w='100%'
 			>
-				{children}
+				<LayoutContent
+					authenticated={authenticated}
+					isLoading={session.isLoading}
+					withAuth={withAuth}
+				>
+					{children}
+				</LayoutContent>
 			</Flex>
 		</>
 	)
