@@ -38,10 +38,12 @@ const Layout: FC<LayoutProps> = ({ withAuth = false, children }) => {
 				as='main'
 				flex={1}
 				flexDir='column'
+				h='full'
 				justify='center'
 				minH='93.5vh'
+				overflowY='auto'
 				textAlign='center'
-				w='100%'
+				w='full'
 			>
 				<LayoutContent
 					authenticated={authenticated}

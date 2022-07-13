@@ -9,8 +9,10 @@
 }
 
 body {
-  /* background-color: var(--background-default); */
+	height: 100%;   
+	overflow: hidden;
   color: var(--primary-default);
+  /* background-color: var(--background-default); */
 }
 
 :root {
@@ -727,8 +729,8 @@ body {
 }
 
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+	width: 6px;
+	height: 6px;
 }
 
 ::-webkit-scrollbar-track {
