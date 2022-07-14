@@ -16,6 +16,6 @@ const store = (set: Set, get: Get) => ({
 // export const useStore = createStore(devtools(persist(store, { name: 'bubble-store' })))
 export const useStore = createStore(devtools(store))
 
-export * from './types'
+export * from './types.d'
 
 export default useStore

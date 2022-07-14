@@ -1,25 +1,29 @@
 import type { Get, Set, StoreSlice } from '.'
 
 interface User {
-	name: string
-	avatar: string
-	email: string
-	token: string
-	userName: string
+	name?: string | null | undefined
+	image?: string | null | undefined
+	email?: string | null | undefined
+}
+
+interface Session {
+	expires?: string
+	token?: string
+	user?: User
 }
 
 export interface UserState {
-	user: User | null
-	setUser: (user: User) => void
-	logout: () => void
+	session: Session | null
+	setSession: (session: Session) => void
+	clearSession: () => void
 }
 
 export const user: StoreSlice<UserState> = (set: Set, _get: Get) => ({
-	user: null,
-	setUser: (user: User) => set({ user }),
-	logout: () =>
+	session: null,
+	setSession: (session: Session) => set({ session }),
+	clearSession: () =>
 		set({
-			user: null,
+			session: null,
 			activeConversation: null,
 			messages: []
 		})

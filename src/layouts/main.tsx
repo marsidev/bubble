@@ -3,7 +3,7 @@ import { Flex, Spinner } from '@chakra-ui/react'
 import { DefaultSeo } from 'next-seo'
 import { defaultSeo as seo } from 'next-seo.config'
 import { Navbar, NonSigned } from '@components'
-import { useQuery } from '@utils/trpc'
+import { useAuth } from '@hooks'
 
 interface LayoutProps {
 	children: ReactNode
@@ -24,10 +24,7 @@ const LayoutContent = ({ withAuth, isLoading, authenticated, children }: LayoutC
 }
 
 const Layout: FC<LayoutProps> = ({ withAuth = false, children }) => {
-	const session = useQuery(['auth.getSession'])
-	const authenticated = !!session.data && !session.isLoading
-
-	authenticated && console.log(session.data)
+	const { authenticated, loading } = useAuth()
 
 	return (
 		<>
@@ -49,7 +46,8 @@ const Layout: FC<LayoutProps> = ({ withAuth = false, children }) => {
 			>
 				<LayoutContent
 					authenticated={authenticated}
-					isLoading={session.isLoading}
+					// isLoading={session.isLoading}
+					isLoading={loading}
 					withAuth={withAuth}
 				>
 					{children}
