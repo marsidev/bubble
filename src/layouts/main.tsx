@@ -27,6 +27,8 @@ const Layout: FC<LayoutProps> = ({ withAuth = false, children }) => {
 	const session = useQuery(['auth.getSession'])
 	const authenticated = !!session.data && !session.isLoading
 
+	authenticated && console.log(session.data)
+
 	return (
 		<>
 			<DefaultSeo {...seo} />

@@ -29,6 +29,7 @@
 		"@trpc/server": "^9.25.3",
 		"@twilio/conversations": "^2.1.0",
 		"framer-motion": "6.4.3",
+		"jsonwebtoken": "^8.5.1",
 		"next": "12.2.2",
 		"next-auth": "^4.9.0",
 		"next-seo": "^5.4.0",
@@ -43,6 +44,7 @@
 	"devDependencies": {
 		"@babel/core": "^7.0.0",
 		"@chakra-ui/utils": "^2.0.3",
+		"@types/jsonwebtoken": "^8.5.8",
 		"@types/node": "18.0.3",
 		"@types/react": "18.0.15",
 		"@types/react-dom": "18.0.6",
