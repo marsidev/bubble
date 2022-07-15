@@ -9,12 +9,12 @@ export const useToken = async () => {
 	const setTwilioToken = useStore(state => state.setTwilioToken)
 
 	useEffect(() => {
-		if (session) {
+		if (session?.user) {
 			const cachedToken = getLocalStorageValue('twilio-token')
 			if (cachedToken && twilioToken !== cachedToken) {
 				setTwilioToken(cachedToken as string)
 			} else {
-				getAccessToken(session?.token as string).then(token => {
+				getAccessToken(session.user.email as string).then(token => {
 					setTwilioToken(token)
 					setLocalStorageValue('twilio-token', token)
 				})

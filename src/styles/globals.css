@@ -744,3 +744,14 @@ body {
 ::-webkit-scrollbar-thumb:hover {
 	background-color: rgba(255, 255, 255, 0.20);
 }
+
+
+.Toastify__toast {
+  border-radius: 24px !important;
+  max-width: 320px;
+  margin-bottom: 3px !important;
+}
+
+.Toastify__toast-container {
+  text-align: center;
+}

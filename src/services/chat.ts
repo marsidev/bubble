@@ -1,75 +1,80 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Client, Conversation } from '@twilio/conversations'
+import { Client, Conversation as TwilioConversation } from '@twilio/conversations'
 
 interface ChatService {
-	room: string
+	chatName: string
 	token: string
 }
+
+interface Error {
+	status: number
+	message: string
+	code?: string
+}
+
+interface ErrorObj {
+	error: Error
+}
+
+interface Conversation extends TwilioConversation {
+	error?: Error
+}
+
 const CONNECTION_STATE_CONNECTED = 'connected'
 
 export const isChatClientConnected = (client?: Client): boolean => client?.connectionState === CONNECTION_STATE_CONNECTED
 
-const ensureChatClient = (token: string) => {
+const ensureChatClient = async (token: string) => {
 	const newClient = new Client(token, {
 		logLevel: 'silent'
 	})
 
 	return new Promise<Client>((resolve, reject) => {
-		newClient.on('stateChanged', state => {
+		newClient.on('stateChanged', async state => {
 			if (state === 'initialized') {
 				resolve(newClient)
 			}
 			if (state === 'failed') {
-				reject(new Error('Failed to initialize chat client'))
+				reject(new Error('Failed to initialize Twilio client'))
 			}
 		})
 	})
 }
 
 export const joinChat = async (props: ChatService) => {
-	const { room, token } = props
+	const { chatName, token } = props
 	const client = await ensureChatClient(token)
 
-	let conversation: Conversation | undefined
+	let conversation: Conversation | undefined | ErrorObj
 
 	try {
-		conversation = await client.getConversationByUniqueName(room)
+		conversation = await client.getConversationByUniqueName(chatName)
 		conversation.join()
-		console.log('joined to chat:', conversation.sid)
 		return conversation
 	} catch (error: any) {
-		console.warn('Error joining conversation')
-		// console.error(error.status) // 404
-		// console.error(error.message) // Not Found
-		console.warn(error.body) // {status: 404, message: 'Conversation not found'}
+		const errorObj: ErrorObj = { error: error.body }
+		return errorObj
 	}
-
-	return conversation
 }
 
 export const createChat = async (props: ChatService) => {
-	const { room, token } = props
+	const { chatName, token } = props
 	const client = await ensureChatClient(token)
 
-	let conversation: Conversation | undefined
+	let conversation: Conversation | undefined | ErrorObj
 
 	try {
-		conversation = await client.createConversation({ uniqueName: room })
+		conversation = await client.createConversation({ uniqueName: chatName })
 		conversation.join()
-		console.log('chat created:', conversation.sid)
 		return conversation
 	} catch (error: any) {
-		console.warn('Error creating chat')
-		// console.error(error.status) // 409
-		// console.error(error.message) // Conflict
-		console.warn(error.body) // {status: 409, message: 'Conversation with provided unique name already exists', code: 50353}
+		const errorObj: ErrorObj = { error: error.body }
+		return errorObj
 	}
-
-	return conversation
 }
 
 export const joinOrCreateChat = async (props: ChatService) => {
-	let conversation: Conversation | undefined
+	let conversation: Conversation | undefined | ErrorObj
 
 	conversation = await joinChat(props)
 

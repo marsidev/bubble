@@ -1,10 +1,29 @@
 import '@styles/globals.css'
+import 'react-toastify/dist/ReactToastify.css'
 import type { AppRouter } from '@server/router'
 import type { AppType } from 'next/dist/shared/lib/utils'
 import { withTRPC } from '@trpc/next'
 import superjson from 'superjson'
 import { SessionProvider } from 'next-auth/react'
+import { ToastContainer, ToastContainerProps, Zoom } from 'react-toastify'
 import { ChakraProvider } from '@utils/chakra/Provider'
+
+const toastProps: ToastContainerProps = {
+	position: 'bottom-center',
+	autoClose: 2000,
+	hideProgressBar: true,
+	newestOnTop: false,
+	closeOnClick: true,
+	rtl: false,
+	pauseOnFocusLoss: false,
+	draggable: true,
+	pauseOnHover: false,
+	theme: 'dark',
+	limit: 15,
+	closeButton: false,
+	transition: Zoom,
+	icon: false
+}
 
 const MyApp: AppType = ({
 	Component,
@@ -14,15 +33,14 @@ const MyApp: AppType = ({
 		<SessionProvider session={session}>
 			<ChakraProvider cookies={cookies}>
 				<Component {...pageProps} />
+				<ToastContainer {...toastProps} />
 			</ChakraProvider>
 		</SessionProvider>
 	)
 }
 
 const getBaseUrl = () => {
-	if (typeof window !== 'undefined') {
-		return ''
-	}
+	if (typeof window !== 'undefined') return ''
 	if (process.browser) return '' // Browser should use current path
 	if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}` // SSR should use vercel url
 

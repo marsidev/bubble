@@ -15,7 +15,7 @@
 		"vercel:deploy:prod": "vercel deploy --prod"
 	},
 	"dependencies": {
-		"@chakra-ui/react": "^2.2.3",
+		"@chakra-ui/react": "^2.2.4",
 		"@emotion/react": "11.9.3",
 		"@emotion/styled": "11.9.3",
 		"@fontsource/nunito": "^4.5.9",
@@ -37,6 +37,7 @@
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
 		"react-query": "^3.39.1",
+		"react-toastify": "^9.0.5",
 		"superjson": "^1.9.1",
 		"zod": "^3.17.3",
 		"zustand": "4.0.0-rc.1"

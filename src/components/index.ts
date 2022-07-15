@@ -1,3 +1,6 @@
 export * from './Navbar'
 export * from './NonSigned'
 export * from './Chats'
+export * from './FloatingButton'
+export * from './Modal'
+export * from './Modals'
