@@ -25,6 +25,7 @@ export const user: StoreSlice<UserState> = (set: Set, _get: Get) => ({
 		set({
 			session: null,
 			activeConversation: null,
-			messages: []
+			messages: [],
+			twilioToken: null
 		})
 })

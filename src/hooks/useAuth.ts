@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useQuery } from '@utils/trpc'
 import { useStore } from '@store'
 
@@ -9,11 +10,13 @@ export const useAuth = () => {
 	const authenticated = !!session.data && !session.isLoading
 	const unauthenticated = !session.data && !session.isLoading
 
-	if (authenticated && session.data?.user) {
-		setSession(session.data)
-	} else if (unauthenticated) {
-		clearSession()
-	}
+	useEffect(() => {
+		if (authenticated && session.data?.user) {
+			setSession(session.data)
+		} else if (unauthenticated) {
+			clearSession()
+		}
+	}, [authenticated])
 
 	return {
 		session: session.data,

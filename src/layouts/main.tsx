@@ -3,7 +3,7 @@ import { Flex, Spinner } from '@chakra-ui/react'
 import { DefaultSeo } from 'next-seo'
 import { defaultSeo as seo } from 'next-seo.config'
 import { Navbar, NonSigned } from '@components'
-import { useAuth } from '@hooks'
+import { useAuth, useToken } from '@hooks'
 
 interface LayoutProps {
 	children: ReactNode
@@ -25,6 +25,7 @@ const LayoutContent = ({ withAuth, isLoading, authenticated, children }: LayoutC
 
 const Layout: FC<LayoutProps> = ({ withAuth = false, children }) => {
 	const { authenticated, loading } = useAuth()
+	useToken()
 
 	return (
 		<>
