@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 import { useQuery } from '@utils/trpc'
 import { useStore } from '@store'
 
@@ -6,22 +7,25 @@ export const useAuth = () => {
 	const setSession = useStore(state => state.setSession)
 	const clearSession = useStore(state => state.clearSession)
 	const session = useQuery(['auth.getSession'])
+	const router = useRouter()
 
-	const authenticated = !!session.data && !session.isLoading
-	const unauthenticated = !session.data && !session.isLoading
+	const { isLoading: loading, data: sessionData } = session
 
 	useEffect(() => {
-		if (authenticated && session.data?.user) {
-			setSession(session.data)
-		} else if (unauthenticated) {
-			clearSession()
+		if (!loading) {
+			if (sessionData && sessionData?.user) {
+				setSession(sessionData)
+			} else {
+				clearSession()
+				router.push('/')
+			}
 		}
-	}, [authenticated])
+	}, [loading, sessionData])
 
 	return {
-		session: session.data,
-		authenticated,
-		loading: session.isLoading
+		session: sessionData,
+		authenticated: !!sessionData && !loading,
+		loading
 	}
 }
 

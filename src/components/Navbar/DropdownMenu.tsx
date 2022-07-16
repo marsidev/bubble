@@ -18,7 +18,7 @@ export const DropdownMenu: FC<FlexProps> = () => {
 	const authenticated = !!session.data && !session.isLoading
 
 	const onSignIn = async () => {
-		await signIn('github')
+		await signIn('github', { callbackUrl: '/chats' })
 	}
 
 	const onSignOut = async () => {

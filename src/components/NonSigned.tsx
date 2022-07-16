@@ -6,7 +6,7 @@ import { GitHub } from '~/icons'
 
 export const NonSigned: FC<FlexProps> = ({ ...props }) => {
 	const onSignIn = async () => {
-		await signIn('github')
+		await signIn('github', { callbackUrl: '/chats' })
 	}
 
 	return (
