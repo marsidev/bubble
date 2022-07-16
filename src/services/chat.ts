@@ -61,7 +61,7 @@ export const createChat = async (props: ChatService) => {
 	let conversation: Conversation | undefined | ErrorObj
 
 	try {
-		conversation = await client.createConversation({ uniqueName: chatName })
+		conversation = await client.createConversation({ uniqueName: chatName, friendlyName: chatName })
 		conversation.join()
 		return conversation
 	} catch (error: any) {
