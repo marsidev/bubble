@@ -29,7 +29,7 @@ const Layout: FC<LayoutProps> = ({ isPrivate = false, children }) => {
 	const { authenticated, loading } = useAuth()
 	useTwilio()
 	const client = useStore(state => state.TwilioClient)
-	const isLoading = loading || !client
+	const isLoading = loading || (authenticated && !client)
 
 	return (
 		<>
