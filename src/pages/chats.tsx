@@ -20,12 +20,14 @@ const Chats: NextPage = () => {
 	const setChats = useStore(state => state.setChats)
 	const chats = useStore(state => state.chats)
 	const setIsAddingChat = useStore(state => state.setIsAddingChat)
+	const client = useStore(state => state.TwilioClient)
 
 	useQuery(['chat.getAll'], {
 		refetchOnWindowFocus: false,
-		onSuccess(data) {
-			setChats(data)
-		}
+		onSuccess: setChats
+		// onSuccess(data) {
+		// 	setChats(data)
+		// }
 	})
 
 	const addChatToDB = useMutation(['chat.add'], {
@@ -45,12 +47,16 @@ const Chats: NextPage = () => {
 			throw new Error('Twilio token is not available')
 		}
 
+		if (!client) {
+			throw new Error('Twilio client is not available')
+		}
+
 		if (!chatName) {
 			throw new Error('Chat name is empty')
 		}
 
 		setIsAddingChat(true)
-		const twilioChat = await createChat({ chatName, token: twilioToken! })
+		const twilioChat = await createChat({ chatName, client })
 
 		if (twilioChat.error) {
 			toast.error(twilioChat.error.message)

@@ -2,8 +2,8 @@
 import { Client, Conversation as TwilioConversation } from '@twilio/conversations'
 
 interface ChatService {
+	client: Client
 	chatName: string
-	token: string
 }
 
 interface Error {
@@ -24,7 +24,7 @@ const CONNECTION_STATE_CONNECTED = 'connected'
 
 export const isChatClientConnected = (client?: Client): boolean => client?.connectionState === CONNECTION_STATE_CONNECTED
 
-const ensureChatClient = async (token: string) => {
+export const createChatClient = async (token: string) => {
 	const newClient = new Client(token, {
 		logLevel: 'silent'
 	})
@@ -35,15 +35,14 @@ const ensureChatClient = async (token: string) => {
 				resolve(newClient)
 			}
 			if (state === 'failed') {
-				reject(new Error('Failed to initialize Twilio client'))
+				reject(new Error('Failed to initialize Twilio chat client'))
 			}
 		})
 	})
 }
 
 export const joinChat = async (props: ChatService) => {
-	const { chatName, token } = props
-	const client = await ensureChatClient(token)
+	const { client, chatName } = props
 
 	let conversation: Conversation | undefined | ErrorObj
 
@@ -58,9 +57,7 @@ export const joinChat = async (props: ChatService) => {
 }
 
 export const createChat = async (props: ChatService) => {
-	const { chatName, token } = props
-	const client = await ensureChatClient(token)
-
+	const { client, chatName } = props
 	let conversation: Conversation | undefined | ErrorObj
 
 	try {
