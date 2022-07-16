@@ -15,17 +15,12 @@ export const ChatItem: FC<ChatItemProps> = ({ sid, ...props }) => {
 	const [conversation, setConversation] = useState<Conversation | null>(null)
 
 	useEffect(() => {
-		client?.getConversationBySid(sid).then(conversation => {
-			setConversation(conversation)
-		})
-	}, [])
-
-	useEffect(() => {
-		if (conversation) {
-			const { uniqueName, createdBy, friendlyName } = conversation
-			console.log({ uniqueName, createdBy, friendlyName })
+		if (client) {
+			client?.getConversationBySid(sid).then(conversation => {
+				setConversation(conversation)
+			})
 		}
-	}, [conversation])
+	}, [client])
 
 	if (!conversation) return null
 
