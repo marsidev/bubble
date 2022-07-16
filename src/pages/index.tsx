@@ -3,7 +3,7 @@ import Layout from '@layouts/main'
 
 const Home: NextPage = () => {
 	return (
-		<Layout withAuth>
+		<Layout isPrivate>
 			<div />
 		</Layout>
 	)

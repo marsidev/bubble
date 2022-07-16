@@ -4,28 +4,32 @@ import { DefaultSeo } from 'next-seo'
 import { defaultSeo as seo } from 'next-seo.config'
 import { Navbar, NonSigned } from '@components'
 import { useAuth, useTwilio } from '@hooks'
+import { useStore } from '@store'
 
 interface LayoutProps {
 	children: ReactNode
-	withAuth?: boolean
+	isPrivate?: boolean
 }
 
 interface LayoutContentProps {
-	withAuth: boolean
+	isPrivate: boolean
 	isLoading: boolean
 	authenticated: boolean
 	children: ReactNode
 }
 
-const LayoutContent = ({ withAuth, isLoading, authenticated, children }: LayoutContentProps) => {
-	if (!withAuth || authenticated) return <>{children}</>
+const LayoutContent = ({ isPrivate, isLoading, authenticated, children }: LayoutContentProps) => {
 	if (isLoading) return <Spinner />
-	return <NonSigned />
+	if (!isPrivate) return <>{children}</>
+	if (!authenticated) return <NonSigned />
+	return <>{children}</>
 }
 
-const Layout: FC<LayoutProps> = ({ withAuth = false, children }) => {
+const Layout: FC<LayoutProps> = ({ isPrivate = false, children }) => {
 	const { authenticated, loading } = useAuth()
 	useTwilio()
+	const client = useStore(state => state.TwilioClient)
+	const isLoading = loading || !client
 
 	return (
 		<>
@@ -47,9 +51,8 @@ const Layout: FC<LayoutProps> = ({ withAuth = false, children }) => {
 			>
 				<LayoutContent
 					authenticated={authenticated}
-					// isLoading={session.isLoading}
-					isLoading={loading}
-					withAuth={withAuth}
+					isLoading={isLoading}
+					isPrivate={isPrivate}
 				>
 					{children}
 				</LayoutContent>

@@ -24,10 +24,10 @@ const Chats: NextPage = () => {
 
 	useQuery(['chat.getAll'], {
 		refetchOnWindowFocus: false,
-		onSuccess: setChats
-		// onSuccess(data) {
-		// 	setChats(data)
-		// }
+		// onSuccess: setChats
+		onSuccess(data) {
+			setChats(data)
+		}
 	})
 
 	const addChatToDB = useMutation(['chat.add'], {
@@ -75,7 +75,7 @@ const Chats: NextPage = () => {
 
 	return (
 		<>
-			<Layout withAuth>
+			<Layout isPrivate>
 				<ChatsContainer>
 					{chats.map(chat => (
 						<ChatItem key={chat.sid} sid={chat.sid} />

@@ -10,11 +10,10 @@ export const chatRouter = createRouter()
 		return next()
 	})
 	.mutation('add', {
-		input: z
-			.object({
-				sid: z.string(),
-				name: z.string()
-			}),
+		input: z.object({
+			sid: z.string(),
+			name: z.string()
+		}),
 		async resolve({ ctx, input }) {
 			const user = await ctx.prisma.user.findUnique({
 				where: { email: ctx.session?.user?.email ?? '' }
@@ -28,7 +27,7 @@ export const chatRouter = createRouter()
 				data: {
 					sid: input.sid,
 					name: input.name,
-					ownerId: user.id
+					ownerId: user!.id
 				}
 			})
 
@@ -37,6 +36,18 @@ export const chatRouter = createRouter()
 	})
 	.query('getAll', {
 		async resolve({ ctx }) {
-			return await ctx.prisma.chat.findMany()
+			const user = await ctx.prisma.user.findUnique({
+				where: { email: ctx.session?.user?.email ?? '' }
+			})
+
+			if (!user) {
+				throw new TRPCError({ code: 'NOT_FOUND' })
+			}
+
+			return await ctx.prisma.chat.findMany({
+				where: {
+					ownerId: user!.id
+				}
+			})
 		}
 	})
