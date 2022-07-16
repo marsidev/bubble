@@ -1,44 +1,46 @@
-import type { Get, Set, StoreSlice, StoreState } from '.'
-import type { Conversation, Message } from '@twilio/conversations'
+export default { foo: 'bar' }
 
-export type Messages = Array<Message>
+// import type { Get, Set, StoreSlice, StoreState } from '.'
+// import type { Conversation, Message } from '@twilio/conversations'
 
-export interface ChatState {
-	loading: boolean
-	setLoading: (loading: boolean) => void
+// export type Messages = Array<Message>
 
-	activeConversation: Conversation | null
-	setActiveConversation: (activeConversation: Conversation) => void
+// export interface ChatState {
+// 	loading: boolean
+// 	setLoading: (loading: boolean) => void
 
-	messages: Messages
-	getMessages: () => Promise<Messages>
-	setMessages: (messages: Messages) => void
-	addMessage: (message: Message) => void
-}
+// 	activeConversation: Conversation | null
+// 	setActiveConversation: (activeConversation: Conversation) => void
 
-export const chat: StoreSlice<ChatState> = (set: Set, get: Get) => ({
-	loading: false,
-	setLoading: (loading: boolean) => set({ loading }),
+// 	messages: Messages
+// 	getMessages: () => Promise<Messages>
+// 	setMessages: (messages: Messages) => void
+// 	addMessage: (message: Message) => void
+// }
 
-	activeConversation: null,
-	setActiveConversation: (activeConversation: Conversation) =>
-		set({ activeConversation }),
+// export const chat: StoreSlice<ChatState> = (set: Set, get: Get) => ({
+// 	loading: false,
+// 	setLoading: (loading: boolean) => set({ loading }),
 
-	messages: [],
-	async getMessages() {
-		const { activeConversation } = get()
-		set(() => ({ loading: true }))
+// 	activeConversation: null,
+// 	setActiveConversation: (activeConversation: Conversation) =>
+// 		set({ activeConversation }),
 
-		const paginator = await activeConversation?.getMessages()
-		const messages = paginator?.items as Messages
+// 	messages: [],
+// 	async getMessages() {
+// 		const { activeConversation } = get()
+// 		set(() => ({ loading: true }))
 
-		set(() => ({ messages, loading: false }))
-		return messages
-	},
-	setMessages: (messages: Messages) => set({ messages }),
-	addMessage: (message: Message) =>
-		// set({ messages: [...get().messages, message] })
-		set((state: StoreState) => ({
-			messages: [...state.messages, message]
-		}))
-})
+// 		const paginator = await activeConversation?.getMessages()
+// 		const messages = paginator?.items as Messages
+
+// 		set(() => ({ messages, loading: false }))
+// 		return messages
+// 	},
+// 	setMessages: (messages: Messages) => set({ messages }),
+// 	addMessage: (message: Message) =>
+// 		// set({ messages: [...get().messages, message] })
+// 		set((state: StoreState) => ({
+// 			messages: [...state.messages, message]
+// 		}))
+// })

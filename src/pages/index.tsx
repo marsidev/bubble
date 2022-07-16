@@ -2,35 +2,38 @@ import type { NextPage } from 'next'
 import type { Conversation } from '@twilio/conversations'
 import { useDisclosure } from '@chakra-ui/react'
 import { Plus } from 'phosphor-react'
-import { Suspense, lazy, useEffect } from 'react'
 import { toast } from 'react-toastify'
-import { FloatingButton } from '@components'
+import { CreateChatModal, FloatingButton } from '@components'
 import { useMutation, useQuery } from '@utils/trpc'
 import Layout from '@layouts/main'
 import { createChat } from '@services'
 import useStore from '@store'
 
-const CreateChatModal = lazy(() => import('@components/Modals/CreateChatModal'))
-
 const Home: NextPage = () => {
-	const hello = useQuery(['home.hello', { text: 'from tRPC' }])
-	const allChats = useQuery(['chat.getAll'])
-	const addChat = useMutation(['chat.add'], {
-		onSuccess: () => {
+	const twilioToken = useStore(state => state.twilioToken)
+	const addChatToStore = useStore(state => state.addChat)
+	const setChats = useStore(state => state.setChats)
+	const chats = useStore(state => state.chats)
+	const setIsAddingChat = useStore(state => state.setIsAddingChat)
+
+	useQuery(['chat.getAll'], {
+		refetchOnWindowFocus: false,
+		onSuccess(data) {
+			setChats(data)
+		}
+	})
+
+	const addChatToDB = useMutation(['chat.add'], {
+		onSuccess() {
 			toast.success('Chat created successfully')
 		}
 	})
-	const twilioToken = useStore(state => state.twilioToken)
 
 	const {
 		isOpen: modalIsOpen,
 		onClose: closeModal,
 		onOpen: openModal
 	} = useDisclosure()
-
-	useEffect(() => {
-		console.log(allChats.data)
-	}, [allChats.data])
 
 	const onAddingNewChat = async (chatName: string) => {
 		if (!twilioToken) {
@@ -41,23 +44,28 @@ const Home: NextPage = () => {
 			throw new Error('Chat name is empty')
 		}
 
-		const chat = await createChat({ chatName, token: twilioToken! })
+		setIsAddingChat(true)
+		const twilioChat = await createChat({ chatName, token: twilioToken! })
 
-		if (chat.error) {
-			toast.error(chat.error.message)
+		if (twilioChat.error) {
+			toast.error(twilioChat.error.message)
+			setIsAddingChat(false)
 			return
 		}
 
-		console.log('chat created!')
-		await addChat.mutateAsync({ name: chatName, sid: (chat as Conversation).sid })
-		console.log('chat added to db!')
+		const dbChat = await addChatToDB.mutateAsync({
+			name: chatName,
+			sid: (twilioChat as Conversation).sid
+		})
+
+		addChatToStore(dbChat)
+		setIsAddingChat(false)
 	}
 
 	return (
 		<>
 			<Layout withAuth>
-				{hello.data && <p>{hello.data.greeting}</p>}
-				{allChats.data && <p>{allChats.data.length} chats</p>}
+				{chats && <p>{chats.length} chats</p>}
 			</Layout>
 
 			<aside>
@@ -68,16 +76,7 @@ const Home: NextPage = () => {
 				/>
 			</aside>
 
-			<Suspense aria-hidden='true' fallback={<div>test</div>}>
-				<aside>
-					<CreateChatModal
-						isOpen={modalIsOpen}
-						onAddingNewChat={onAddingNewChat}
-						onClose={closeModal}
-					/>
-				</aside>
-			</Suspense>
-			{/* <CreateChatModal isOpen={modalIsOpen} onClose={closeModal} /> */}
+			<CreateChatModal isOpen={modalIsOpen} onAddingNewChat={onAddingNewChat} onClose={closeModal} />
 		</>
 	)
 }

@@ -1,6 +1,7 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Button, FormControl, Input, chakra } from '@chakra-ui/react'
 import { Modal } from '@components'
+import useStore from '@store'
 
 interface CreateChatModalProps {
 	isOpen: boolean
@@ -11,6 +12,15 @@ interface CreateChatModalProps {
 export const CreateChatModal: React.FC<CreateChatModalProps> = props => {
 	const { isOpen, onClose, onAddingNewChat, ...rest } = props
 	const form = useRef(null)
+	const isAddingChat = useStore(state => state.isAddingChat)
+	const [submitted, setSubmitted] = useState(false)
+
+	useEffect(() => {
+		if (submitted && !isAddingChat) {
+			onClose()
+			setSubmitted(false)
+		}
+	}, [isAddingChat, submitted])
 
 	const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
@@ -19,8 +29,8 @@ export const CreateChatModal: React.FC<CreateChatModalProps> = props => {
 		const { chatName } = data
 
 		if (chatName) {
+			setSubmitted(true)
 			onAddingNewChat(chatName as string)
-			onClose()
 		}
 	}
 
@@ -63,6 +73,7 @@ export const CreateChatModal: React.FC<CreateChatModalProps> = props => {
 						bg: 'brand.400'
 					}}
 					bg='brand.500'
+					isLoading={isAddingChat}
 					type='submit'
 				>
 					Create
