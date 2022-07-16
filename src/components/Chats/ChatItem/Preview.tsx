@@ -6,10 +6,17 @@ import { Header } from './Header'
 import { SubHeader } from './SubHeader'
 
 interface PreviewProps extends FlexProps {
-	conversation?: Conversation
+	conversation: Conversation
 }
 
 export const Preview: FC<PreviewProps> = ({ conversation, ...props }) => {
+	const { friendlyName, uniqueName, lastMessage } = conversation
+	const chatName = friendlyName ?? uniqueName as string
+
+	const lastMessageBody = lastMessage ? 'Test message body' : ''
+	const lastMessageAuthor = lastMessage ? 'Test Author' : ''
+	const lastMessageTimestamp = lastMessage ? 'yesterday' : ''
+
 	return (
 		<Flex
 			borderTop='1px solid'
@@ -25,8 +32,8 @@ export const Preview: FC<PreviewProps> = ({ conversation, ...props }) => {
 			w='100%'
 			{...props}
 		>
-			<Header chatName='Chat name' lastMessageTimestamp='ayer' />
-			<SubHeader lastMessageAuthor='Mafer' lastMessageBody='Ultimo mensaje' />
+			<Header chatName={chatName} lastMessageTimestamp={lastMessageTimestamp} />
+			<SubHeader lastMessageAuthor={lastMessageAuthor} lastMessageBody={lastMessageBody} />
 		</Flex>
 	)
 }

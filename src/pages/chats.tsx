@@ -5,7 +5,7 @@ import { Plus } from 'phosphor-react'
 import { toast } from 'react-toastify'
 import Layout from '@layouts/main'
 import {
-	// ChatItem,
+	ChatItem,
 	ChatsContainer,
 	CreateChatModal,
 	FloatingButton
@@ -77,8 +77,9 @@ const Chats: NextPage = () => {
 		<>
 			<Layout withAuth>
 				<ChatsContainer>
-					{chats && <p>{chats.length} chats</p>}
-					{/* <ChatItem /> */}
+					{chats.map(chat => (
+						<ChatItem key={chat.sid} sid={chat.sid} />
+					))}
 				</ChatsContainer>
 			</Layout>
 

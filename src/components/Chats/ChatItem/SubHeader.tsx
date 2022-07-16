@@ -30,10 +30,12 @@ export const SubHeader: FC<SubHeaderProps> = ({
 				textOverflow='ellipsis'
 				whiteSpace='nowrap'
 			>
-				<span>{lastMessageAuthor}</span>
-				<span>:</span>
+				{lastMessageBody && <span>{lastMessageAuthor}</span>}
+				{lastMessageBody && <span>:</span>}
 
-				<chakra.span ml='3px'>{lastMessageBody}</chakra.span>
+				<chakra.span ml={lastMessageBody ? '3px' : 0}>
+					{lastMessageBody || 'Chat is empty'}
+				</chakra.span>
 			</Flex>
 		</Flex>
 	)
