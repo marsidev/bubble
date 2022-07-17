@@ -8,7 +8,7 @@ export interface TwilioState {
 	removeTwilioToken: () => void
 
 	TwilioClient: Client | null
-	createTwilioClient: () => void
+	createTwilioClient: (token?: string) => void
 }
 
 export const twilio: StoreSlice<TwilioState> = (set: Set, get: Get) => ({
@@ -17,11 +17,13 @@ export const twilio: StoreSlice<TwilioState> = (set: Set, get: Get) => ({
 	removeTwilioToken: () => set({ twilioToken: null }),
 
 	TwilioClient: null,
-	async createTwilioClient() {
-		const token = get().twilioToken
+	async createTwilioClient(_token) {
+		const token = _token ?? get().twilioToken
 		if (token) {
 			const client = await createChatClient(token)
 			set({ TwilioClient: client })
+		} else {
+			console.warn('Could not create Twilio client because no token was provided or found in the store.')
 		}
 	}
 })
