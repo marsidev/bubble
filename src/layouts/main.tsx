@@ -9,6 +9,7 @@ import { useStore } from '@store'
 interface LayoutProps {
 	children: ReactNode
 	isPrivate?: boolean
+	title?: string
 }
 
 interface LayoutContentProps {
@@ -25,7 +26,7 @@ const LayoutContent = ({ isPrivate, isLoading, authenticated, children }: Layout
 	return <>{children}</>
 }
 
-const Layout: FC<LayoutProps> = ({ isPrivate = false, children }) => {
+const Layout: FC<LayoutProps> = ({ isPrivate = false, children, title }) => {
 	const { authenticated, loading } = useAuth()
 	useTwilio()
 	const client = useStore(state => state.TwilioClient)
@@ -33,7 +34,7 @@ const Layout: FC<LayoutProps> = ({ isPrivate = false, children }) => {
 
 	return (
 		<>
-			<DefaultSeo {...seo} />
+			<DefaultSeo {...seo} title={title} />
 
 			<Navbar minH='6.5vh' />
 
