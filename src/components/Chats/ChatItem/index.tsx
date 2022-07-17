@@ -3,6 +3,7 @@ import { type FC, useEffect, useState } from 'react'
 import { Conversation } from '@twilio/conversations'
 import { DefaultGroup } from '~/icons'
 import useStore from '@store'
+import { Link } from '@components'
 import { Container } from './Container'
 import { Preview } from './Preview'
 
@@ -12,15 +13,19 @@ export interface ChatItemProps extends FlexProps {
 
 export const ChatItem: FC<ChatItemProps> = ({ sid, ...props }) => {
 	const client = useStore(state => state.TwilioClient)
+	const setActiveChat = useStore(state => state.setActiveChat)
+	const getChatData = useStore(state => state.getChatData)
 	const [conversation, setConversation] = useState<Conversation | null>(null)
 
 	useEffect(() => {
 		if (client) {
-			client?.getConversationBySid(sid).then(conversation => {
-				setConversation(conversation)
-			})
+			getChatData(sid).then(setConversation)
 		}
 	}, [client])
+
+	const onSelectChat = () => {
+		setActiveChat(conversation)
+	}
 
 	if (!conversation) return null
 
@@ -37,10 +42,12 @@ export const ChatItem: FC<ChatItemProps> = ({ sid, ...props }) => {
 	// }, [conversation])
 
 	return (
-		<Container {...props}>
-			<DefaultGroup />
-			<Preview conversation={conversation} />
-		</Container>
+		<Link href={`/chats/${sid}`} onClick={onSelectChat}>
+			<Container {...props}>
+				<DefaultGroup />
+				<Preview conversation={conversation} />
+			</Container>
+		</Link>
 	)
 }
 

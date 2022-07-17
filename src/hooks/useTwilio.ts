@@ -15,14 +15,11 @@ export const useTwilio = async () => {
 			const cachedToken = getLocalStorageValue('twilio-token', TTL)
 
 			if (cachedToken !== twilioToken) {
-				console.log('setting twilio token from localStorage, and generating client...')
 				setTwilioToken(cachedToken as string)
 				createTwilioClient(cachedToken as string)
 			}
 
 			if (!cachedToken) {
-				console.log('generating token and client...')
-				// console.log('getting new token...')
 				getAccessToken(session.user.email as string).then(token => {
 					setTwilioToken(token)
 					createTwilioClient(token)

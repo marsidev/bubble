@@ -34,7 +34,7 @@ export const DropdownMenu: FC<FlexProps> = () => {
 					<DotsThreeVertical
 						color='var(--panel-header-icon)'
 						size={32}
-						weight='fill'
+						weight='bold'
 					/>
 				}
 				variant='ghost'
