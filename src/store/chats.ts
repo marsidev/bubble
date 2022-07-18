@@ -1,5 +1,6 @@
 import type { Get, Set, StoreSlice } from '.'
 import type { Conversation } from '@twilio/conversations'
+import { sortChats } from '@utils/sort-chats'
 
 interface DBChat {
 	sid: string // twilio sid
@@ -73,7 +74,7 @@ export const chats: StoreSlice<ChatsState> = (set: Set, get: Get) => ({
 			TwilioClient
 				.getSubscribedConversations()
 				.then(paginator => {
-					const chats = paginator.items
+					const chats = sortChats(paginator.items)
 					set(() => ({ subscribedChats: chats, fetchingChats: false }))
 					resolve(chats)
 				})
