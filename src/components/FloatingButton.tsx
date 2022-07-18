@@ -7,15 +7,12 @@ const MotionButton = motion(IconButton)
 interface FloatingButtonProps extends IconButtonProps {
 	onClickHandler?: () => void
 	icon: ReactElement
-	bottom?: number
-	right?: number
+	bottom?: number | string
+	right?: number | string
 }
 
 const variants = {
-	initial: {
-		opacity: 1,
-		scale: 1
-	},
+	initial: { opacity: 1, scale: 1 },
 	animate: {
 		transition: { duration: 0.5, ease: 'easeOut' }
 	},
@@ -46,7 +43,7 @@ export const FloatingButton: FC<FloatingButtonProps> = props => {
 			fontSize='md'
 			icon={icon}
 			initial='initial'
-			pos='absolute'
+			pos='fixed'
 			right={right}
 			size='lg'
 			variant='solid'
