@@ -6,7 +6,7 @@ import { Navbar, NonSigned } from '@components'
 import { useAuth, useTwilio } from '@hooks'
 import { useStore } from '@store'
 
-interface LayoutProps {
+export interface LayoutProps {
 	children: ReactNode
 	isPrivate?: boolean
 	title?: string
@@ -26,7 +26,7 @@ const LayoutContent = ({ isPrivate, isLoading, authenticated, children }: Layout
 	return <>{children}</>
 }
 
-const Layout: FC<LayoutProps> = ({ isPrivate = false, children, title }) => {
+export const Layout: FC<LayoutProps> = ({ isPrivate = false, children, title }) => {
 	const { authenticated, loading } = useAuth()
 	useTwilio()
 	const client = useStore(state => state.TwilioClient)
