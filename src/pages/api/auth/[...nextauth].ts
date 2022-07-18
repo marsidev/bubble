@@ -6,6 +6,10 @@ import { prisma } from '@server/db/client'
 // import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { CustomPrismaAdapter } from '@server/db/adapter'
 
+if (!process.env.GITHUB_ID || !process.env.GITHUB_SECRET) {
+	throw new Error('GITHUB_ID and GITHUB_SECRET must be set')
+}
+
 export const authOptions: NextAuthOptions = {
 	adapter: CustomPrismaAdapter(prisma),
 	providers: [
