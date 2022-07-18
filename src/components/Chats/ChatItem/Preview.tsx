@@ -1,7 +1,8 @@
 import type { FlexProps } from '@chakra-ui/react'
-import type { Conversation } from '@twilio/conversations'
-import { type FC, useEffect } from 'react'
+import type { Conversation, Message } from '@twilio/conversations'
+import { type FC, useEffect, useState } from 'react'
 import { Flex } from '@chakra-ui/react'
+import { useStore } from '@store'
 import { Header } from './Header'
 import { SubHeader } from './SubHeader'
 
@@ -10,16 +11,34 @@ interface PreviewProps extends FlexProps {
 }
 
 export const Preview: FC<PreviewProps> = ({ chat, ...props }) => {
-	const { friendlyName, uniqueName, lastMessage } = chat
-	const chatName = friendlyName ?? (uniqueName as string)
+	const getMessages = useStore(state => state.getMessages)
+	const session = useStore(state => state.session)
+	const [messages, setMessages] = useState<Message[]>([])
+	const [lastMessage, setLastMessage] = useState<Message | undefined>()
 
-	const lastMessageBody = lastMessage ? 'Test message body' : ''
-	const lastMessageAuthor = lastMessage ? 'Test Author' : ''
-	const lastMessageTimestamp = lastMessage ? 'yesterday' : ''
+	const { friendlyName, uniqueName } = chat
+	const chatName = (friendlyName ?? uniqueName) as string
+	const lastMessageBody = lastMessage ? lastMessage.body! : ''
+	const lastMessageAuthor = lastMessage ? lastMessage.author! : ''
+	const lastMessageDate = lastMessage ? lastMessage.dateCreated! : null
 
-	// useEffect(() => {
-	// 	console.log({ lastMessage })
-	// }, [lastMessage])
+	const userEmail = session?.user?.email
+	const isOutgoing = userEmail === lastMessageAuthor
+	const formattedAuthor = isOutgoing ? 'You' : `${lastMessageAuthor}`
+
+	useEffect(() => {
+		if (chat.lastMessage) {
+			getMessages(chat).then(setMessages)
+		}
+	}, [chat.lastMessage])
+
+	useEffect(() => {
+		if (messages.length > 0 && chat.lastMessage) {
+			const lastMessageIndex = chat.lastMessage.index
+			const lastMessage = messages.find(m => m.index === lastMessageIndex)
+			setLastMessage(lastMessage)
+		}
+	}, [messages])
 
 	return (
 		<Flex
@@ -36,9 +55,9 @@ export const Preview: FC<PreviewProps> = ({ chat, ...props }) => {
 			w='100%'
 			{...props}
 		>
-			<Header chatName={chatName} lastMessageTimestamp={lastMessageTimestamp} />
+			<Header chatName={chatName} lastMessageDate={lastMessageDate} />
 			<SubHeader
-				lastMessageAuthor={lastMessageAuthor}
+				lastMessageAuthor={formattedAuthor}
 				lastMessageBody={lastMessageBody}
 			/>
 		</Flex>

@@ -1,5 +1,5 @@
 import type { Get, Set, StoreSlice } from '.'
-import type { Message } from '@twilio/conversations'
+import type { Conversation, Message } from '@twilio/conversations'
 
 export type Messages = Message[]
 
@@ -11,6 +11,8 @@ export interface MessagesState {
 	getActiveChatMessages: () => Promise<Messages>
 	setActiveChatMessages: (messages: Messages) => void
 	addActiveChatMessage: (message: Message) => void
+
+	getMessages: (chat: Conversation) => Promise<Messages>
 }
 
 export const messages: StoreSlice<MessagesState> = (set: Set, get: Get) => ({
@@ -51,5 +53,19 @@ export const messages: StoreSlice<MessagesState> = (set: Set, get: Get) => ({
 	addActiveChatMessage: message =>
 		set(state => ({
 			activeChatMessages: [...state.activeChatMessages, message]
-		}))
+		})),
+
+	getMessages: async chat => {
+		return new Promise<Messages>(resolve => {
+			chat
+				.getMessages()
+				.then(paginator => {
+					const messages = paginator.items
+					resolve(messages)
+				})
+				.catch(e => {
+					console.error(e)
+				})
+		})
+	}
 })

@@ -1,13 +1,16 @@
 import type { FlexProps } from '@chakra-ui/react'
 import type { FC } from 'react'
 import { Flex, chakra } from '@chakra-ui/react'
+import { getTimeAgo } from '@utils/time'
 
 interface HeaderProps extends FlexProps {
 	chatName: string
-	lastMessageTimestamp: string | number
+	lastMessageDate: Date | null
 }
 
-export const Header: FC<HeaderProps> = ({ chatName, lastMessageTimestamp, ...props }) => {
+export const Header: FC<HeaderProps> = ({ chatName, lastMessageDate, ...props }) => {
+	const timeAgo = lastMessageDate ? getTimeAgo(lastMessageDate) : ''
+
 	return (
 		<Flex
 			justify='space-between'
@@ -42,7 +45,7 @@ export const Header: FC<HeaderProps> = ({ chatName, lastMessageTimestamp, ...pro
 					textOverflow='ellipsis'
 					whiteSpace='nowrap'
 				>
-					{lastMessageTimestamp}
+					{timeAgo}
 				</chakra.span>
 			</Flex>
 		</Flex>
