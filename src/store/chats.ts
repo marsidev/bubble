@@ -1,7 +1,7 @@
 import type { Get, Set, StoreSlice } from '.'
 import type { Conversation } from '@twilio/conversations'
 
-interface Chat {
+interface DBChat {
 	sid: string // twilio sid
 	name: string // chat name
 	ownerId: string // user id - chat admin
@@ -10,10 +10,14 @@ interface Chat {
 	updatedAt: Date
 }
 
+type Chat = Conversation
+type ChatList = Chat[]
+
 export interface ChatsState {
-	chats: Chat[]
-	setChats: (chats: Chat[]) => void
-	addChat: (chat: Chat) => void
+	// db related states
+	chats: DBChat[]
+	setChats: (chats: DBChat[]) => void
+	addChat: (chat: DBChat) => void
 	removeChatBySid: (sid: string) => void
 
 	activeChat: Conversation | null
@@ -25,13 +29,19 @@ export interface ChatsState {
 
 	isRemovingChat: boolean
 	setIsRemovingChat: (isRemovingChat: boolean) => void
+
+	fetchingChats: boolean
+	subscribedChats: ChatList
+	setSubscribedChats: (subscribedChats: ChatList) => void
+	getSubscribedChats: () => Promise<ChatList>
 }
 
 export const chats: StoreSlice<ChatsState> = (set: Set, get: Get) => ({
 	chats: [],
 	setChats: chats => set({ chats }),
 	addChat: chat => set(state => ({ chats: [...state.chats, chat] })),
-	removeChatBySid: sid => set(state => ({ chats: state.chats.filter(c => c.sid !== sid) })),
+	removeChatBySid: sid =>
+		set(state => ({ chats: state.chats.filter(c => c.sid !== sid) })),
 
 	activeChat: null,
 	setActiveChat: activeChat => set({ activeChat }),
@@ -48,5 +58,29 @@ export const chats: StoreSlice<ChatsState> = (set: Set, get: Get) => ({
 	setIsAddingChat: isAddingChat => set({ isAddingChat }),
 
 	isRemovingChat: false,
-	setIsRemovingChat: isRemovingChat => set({ isRemovingChat })
+	setIsRemovingChat: isRemovingChat => set({ isRemovingChat }),
+
+	fetchingChats: false,
+	subscribedChats: [],
+	setSubscribedChats: subscribedChats => set({ subscribedChats }),
+	getSubscribedChats: async () => {
+		const { TwilioClient } = get()
+		if (!TwilioClient) return []
+
+		set(() => ({ fetchingChats: true }))
+
+		return new Promise<ChatList>(resolve => {
+			TwilioClient
+				.getSubscribedConversations()
+				.then(paginator => {
+					const chats = paginator.items
+					set(() => ({ subscribedChats: chats, fetchingChats: false }))
+					resolve(chats)
+				})
+				.catch(e => {
+					console.error(e)
+					set(() => ({ fetchingChats: false }))
+				})
+		})
+	}
 })

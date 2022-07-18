@@ -1,5 +1,6 @@
 import type { NextPage } from 'next'
 import type { Conversation } from '@twilio/conversations'
+import { useEffect } from 'react'
 import { useDisclosure } from '@chakra-ui/react'
 import { Plus } from 'phosphor-react'
 import { toast } from 'react-toastify'
@@ -18,9 +19,10 @@ const Chats: NextPage = () => {
 	const twilioToken = useStore(state => state.twilioToken)
 	const addChatToStore = useStore(state => state.addChat)
 	const setChats = useStore(state => state.setChats)
-	const chats = useStore(state => state.chats)
 	const setIsAddingChat = useStore(state => state.setIsAddingChat)
 	const client = useStore(state => state.TwilioClient)
+	const subscribedChats = useStore(state => state.subscribedChats)
+	const getSubscribedChats = useStore(state => state.getSubscribedChats)
 
 	useQuery(['chat.getAll'], {
 		refetchOnWindowFocus: false,
@@ -35,6 +37,12 @@ const Chats: NextPage = () => {
 			toast.success('Chat created successfully')
 		}
 	})
+
+	useEffect(() => {
+		if (client) {
+			getSubscribedChats()
+		}
+	}, [client])
 
 	const {
 		isOpen: modalIsOpen,
@@ -77,8 +85,8 @@ const Chats: NextPage = () => {
 		<>
 			<Layout isPrivate>
 				<ChatsContainer>
-					{chats.map(chat => (
-						<ChatItem key={chat.sid} sid={chat.sid} />
+					{subscribedChats.map(chat => (
+						<ChatItem key={chat.sid} chat={chat} />
 					))}
 				</ChatsContainer>
 			</Layout>

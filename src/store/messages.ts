@@ -34,9 +34,6 @@ export const messages: StoreSlice<MessagesState> = (set: Set, get: Get) => ({
 					resolve(activeChatMessages)
 				})
 				.catch(e => {
-					console.error(e.body)
-					console.error(e.message)
-					console.error(e.code)
 					console.error(e)
 					set(() => ({ fetchingMessages: false }))
 				})

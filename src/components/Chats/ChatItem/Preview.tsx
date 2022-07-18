@@ -1,21 +1,25 @@
 import type { FlexProps } from '@chakra-ui/react'
-import type { FC } from 'react'
 import type { Conversation } from '@twilio/conversations'
+import { type FC, useEffect } from 'react'
 import { Flex } from '@chakra-ui/react'
 import { Header } from './Header'
 import { SubHeader } from './SubHeader'
 
 interface PreviewProps extends FlexProps {
-	conversation: Conversation
+	chat: Conversation
 }
 
-export const Preview: FC<PreviewProps> = ({ conversation, ...props }) => {
-	const { friendlyName, uniqueName, lastMessage } = conversation
-	const chatName = friendlyName ?? uniqueName as string
+export const Preview: FC<PreviewProps> = ({ chat, ...props }) => {
+	const { friendlyName, uniqueName, lastMessage } = chat
+	const chatName = friendlyName ?? (uniqueName as string)
 
 	const lastMessageBody = lastMessage ? 'Test message body' : ''
 	const lastMessageAuthor = lastMessage ? 'Test Author' : ''
 	const lastMessageTimestamp = lastMessage ? 'yesterday' : ''
+
+	// useEffect(() => {
+	// 	console.log({ lastMessage })
+	// }, [lastMessage])
 
 	return (
 		<Flex
@@ -33,7 +37,10 @@ export const Preview: FC<PreviewProps> = ({ conversation, ...props }) => {
 			{...props}
 		>
 			<Header chatName={chatName} lastMessageTimestamp={lastMessageTimestamp} />
-			<SubHeader lastMessageAuthor={lastMessageAuthor} lastMessageBody={lastMessageBody} />
+			<SubHeader
+				lastMessageAuthor={lastMessageAuthor}
+				lastMessageBody={lastMessageBody}
+			/>
 		</Flex>
 	)
 }
