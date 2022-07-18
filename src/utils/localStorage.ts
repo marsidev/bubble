@@ -4,9 +4,13 @@ interface StoredValue {
 	data: any
 }
 
-const hoursToMs = (hours: number) => 1000 * 60 * 60 * hours
-
-export const getLocalStorageValue = (key: string, cachedHours = 24) => {
+/**
+ * If the key exists in localStorage, and the data hasn't expired, return the data
+ * @param {string} key - the key to store the data under
+ * @param [TTL=3600] - Time to live, in seconds. Default is 3600 (1 hour)
+ * @returns The value of the key in localStorage if it exists and has not expired.
+ */
+export const getLocalStorageValue = (key: string, TTL = 3600) => {
 	const localData = window.localStorage.getItem(key)
 	if (localData) {
 		const stored: StoredValue = JSON.parse(localData)
@@ -14,7 +18,7 @@ export const getLocalStorageValue = (key: string, cachedHours = 24) => {
 		const expires = new Date(stored.expires).getTime()
 		const diff = now - expires
 
-		if (diff < hoursToMs(cachedHours) && stored.data) {
+		if (diff < TTL && stored.data) {
 			// console.log(`got cached ${key} from localStorage`)
 			return stored.data
 		} else {
@@ -25,8 +29,14 @@ export const getLocalStorageValue = (key: string, cachedHours = 24) => {
 	}
 }
 
-export const setLocalStorageValue = (key: string, data: unknown, cachedHours = 24) => {
-	const expiresTimestamp = new Date().getTime() + hoursToMs(cachedHours)
+/**
+ * It takes a key, data, and TTL (time to live) and saves it to localStorage
+ * @param {string} key - string - the key to store the data under
+ * @param {unknown} data - the data you want to store
+ * @param [TTL=3600] - Time to live in seconds. Default is 3600 (1 hour)
+ */
+export const setLocalStorageValue = (key: string, data: unknown, TTL = 3600) => {
+	const expiresTimestamp = new Date().getTime() + TTL
 	const expires = new Date(expiresTimestamp).toISOString()
 	window.localStorage.setItem(key, JSON.stringify({ expires, data }))
 	// console.log(`saved ${key} to localStorage`)
