@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Button, FormControl, Input, chakra } from '@chakra-ui/react'
 import { Modal } from '@components'
-import useStore from '@store'
+import { useStore } from '@store'
 
 interface CreateChatModalProps {
 	isOpen: boolean

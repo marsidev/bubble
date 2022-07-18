@@ -1,8 +1,10 @@
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import useStore from '@store'
-import Layout from '@layouts/main'
+import { Box, Spacer } from '@chakra-ui/react'
+import { useStore } from '@store'
+import { Layout } from '@layouts'
+import { ChatContainer } from '@components'
 
 const Chat: NextPage = () => {
 	const { sid } = useRouter().query
@@ -21,14 +23,20 @@ const Chat: NextPage = () => {
 
 	useEffect(() => {
 		if (activeChat) {
-			setTitle(activeChat.friendlyName || activeChat.uniqueName as string)
+			setTitle(activeChat.friendlyName || (activeChat.uniqueName as string))
 		}
 	}, [activeChat])
 
 	return (
 		<Layout title={title}>
-			<h1>Chat</h1>
-			<p>{sid}</p>
+			<ChatContainer>
+				<Box>
+					<h1>Chat</h1>
+					<p>{sid}</p>
+				</Box>
+
+				<Spacer />
+			</ChatContainer>
 		</Layout>
 	)
 }

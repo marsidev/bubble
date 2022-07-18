@@ -1,13 +1,12 @@
 import { type FlexProps, HStack, Heading } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import useStore from '@store'
+import { useStore } from '@store'
 import { BackToHome, DropdownMenu, NavbarAvatar, NavbarContainer } from '.'
 
 export const Navbar: React.FC<FlexProps> = ({ ...props }) => {
-	const router = useRouter()
+	const { pathname } = useRouter()
 	const activeChat = useStore(state => state.activeChat)
 
-	const { pathname } = router
 	const isNotHome = pathname !== '/chats'
 	const isChat = pathname.startsWith('/chats/')
 
@@ -23,7 +22,7 @@ export const Navbar: React.FC<FlexProps> = ({ ...props }) => {
 					<Heading
 						as='h1'
 						fontFamily='NunitoVariable'
-						fontSize={['xl', '2xl']}
+						fontSize={['xl', 'xl']}
 					>
 						{chatTitle}
 					</Heading>

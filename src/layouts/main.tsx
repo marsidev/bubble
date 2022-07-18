@@ -1,8 +1,9 @@
 import type { FC, ReactNode } from 'react'
 import { Flex, Spinner } from '@chakra-ui/react'
 import { DefaultSeo } from 'next-seo'
+import { useRouter } from 'next/router'
 import { defaultSeo as seo } from 'next-seo.config'
-import { Navbar, NonSigned } from '@components'
+import { ChatInput, Navbar, NonSigned } from '@components'
 import { useAuth, useTwilio } from '@hooks'
 import { useStore } from '@store'
 
@@ -30,7 +31,10 @@ export const Layout: FC<LayoutProps> = ({ isPrivate = false, children, title }) 
 	const { authenticated, loading } = useAuth()
 	useTwilio()
 	const client = useStore(state => state.TwilioClient)
+	const { pathname } = useRouter()
+
 	const isLoading = loading || (authenticated && !client)
+	const isChat = pathname.startsWith('/chats/')
 
 	return (
 		<>
@@ -45,7 +49,8 @@ export const Layout: FC<LayoutProps> = ({ isPrivate = false, children, title }) 
 				flexDir='column'
 				h='full'
 				justify='center'
-				minH='93.5vh'
+				minH='82.6vh'
+				overflowX='hidden'
 				overflowY='auto'
 				textAlign='center'
 				w='full'
@@ -58,6 +63,8 @@ export const Layout: FC<LayoutProps> = ({ isPrivate = false, children, title }) 
 					{children}
 				</LayoutContent>
 			</Flex>
+
+			{isChat && <ChatInput />}
 		</>
 	)
 }

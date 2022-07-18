@@ -3,7 +3,7 @@ import type { Conversation } from '@twilio/conversations'
 import { useDisclosure } from '@chakra-ui/react'
 import { Plus } from 'phosphor-react'
 import { toast } from 'react-toastify'
-import Layout from '@layouts/main'
+import { Layout } from '@layouts'
 import {
 	ChatItem,
 	ChatsContainer,
@@ -12,7 +12,7 @@ import {
 } from '@components'
 import { useMutation, useQuery } from '@utils/trpc'
 import { createChat } from '@services'
-import useStore from '@store'
+import { useStore } from '@store'
 
 const Chats: NextPage = () => {
 	const twilioToken = useStore(state => state.twilioToken)

@@ -1,5 +1,5 @@
 import type { FC, ReactNode } from 'react'
-import { Flex, FlexProps } from '@chakra-ui/react'
+import { Flex, type FlexProps } from '@chakra-ui/react'
 
 interface ChatsContainerProps extends FlexProps {
 	children: ReactNode
