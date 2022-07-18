@@ -81,27 +81,23 @@ const Chats: NextPage = () => {
 						<ChatItem key={chat.sid} sid={chat.sid} />
 					))}
 				</ChatsContainer>
-
-				<FloatingButton
-					aria-label='Create a new chat'
-					icon={<Plus size={24} />}
-					onClick={openModal}
-				/>
 			</Layout>
 
-			{/* <aside>
+			<aside>
 				<FloatingButton
 					aria-label='Create a new chat'
 					icon={<Plus size={24} />}
 					onClick={openModal}
 				/>
-			</aside> */}
+			</aside>
 
-			<CreateChatModal
-				isOpen={modalIsOpen}
-				onAddingNewChat={onAddingNewChat}
-				onClose={closeModal}
-			/>
+			<aside>
+				<CreateChatModal
+					isOpen={modalIsOpen}
+					onAddingNewChat={onAddingNewChat}
+					onClose={closeModal}
+				/>
+			</aside>
 		</>
 	)
 }
