@@ -7,7 +7,7 @@ export const Navbar: React.FC<FlexProps> = ({ ...props }) => {
 	const { pathname } = useRouter()
 	const activeChat = useStore(state => state.activeChat)
 
-	const isNotHome = pathname !== '/chats'
+	const isNotHome = pathname !== '/' && pathname !== '/chats'
 	const isChat = pathname.startsWith('/chats/')
 
 	const chatTitle = activeChat?.friendlyName || activeChat?.uniqueName || ''
