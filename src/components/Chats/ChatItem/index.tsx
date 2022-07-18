@@ -3,7 +3,6 @@ import { type FC, useEffect, useState } from 'react'
 import { Conversation } from '@twilio/conversations'
 import { DefaultGroup } from '~/icons'
 import { useStore } from '@store'
-import { Link } from '@components'
 import { Container } from './Container'
 import { Preview } from './Preview'
 
@@ -42,12 +41,10 @@ export const ChatItem: FC<ChatItemProps> = ({ sid, ...props }) => {
 	// }, [conversation])
 
 	return (
-		<Link href={`/chats/${sid}`} onClick={onSelectChat}>
-			<Container {...props}>
-				<DefaultGroup />
-				<Preview conversation={conversation} />
-			</Container>
-		</Link>
+		<Container sid={sid} onClick={onSelectChat} {...props}>
+			<DefaultGroup />
+			<Preview conversation={conversation} />
+		</Container>
 	)
 }
 

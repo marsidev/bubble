@@ -10,7 +10,7 @@ export const ChatsContainer: FC<ChatsContainerProps> = ({ children }) => {
 		<Flex
 			bg='var(--background-default)'
 			flexDir='column'
-			minH='93.5vh'
+			minH='82.6vh'
 			w='100vw'
 		>
 			{children}

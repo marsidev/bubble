@@ -24,7 +24,6 @@ export function CustomPrismaAdapter(p: PrismaClient): Adapter {
 		deleteUser: id => p.user.delete({ where: { id } }),
 
 		linkAccount: ({ refresh_token_expires_in: _, ...data }) => {
-			console.log('linkAccount (adapter):', data)
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			return p.account.create({ data }) as any
 		},

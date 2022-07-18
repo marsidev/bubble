@@ -51,7 +51,7 @@ export const Layout: FC<LayoutProps> = ({ isPrivate = false, children, title }) 
 				justify='center'
 				minH='82.6vh'
 				overflowX='hidden'
-				overflowY='auto'
+				overflowY='hidden'
 				textAlign='center'
 				w='full'
 			>

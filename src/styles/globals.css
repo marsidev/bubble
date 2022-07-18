@@ -10,7 +10,7 @@
 
 body {
 	height: 100%;   
-	overflow: hidden;
+	/* overflow: hidden; */
   color: var(--primary-default);
   /* background-color: var(--background-default); */
 }
