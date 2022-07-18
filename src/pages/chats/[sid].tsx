@@ -1,18 +1,21 @@
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-import { Box, Spacer } from '@chakra-ui/react'
+import { useEffect, useRef, useState } from 'react'
 import { useStore } from '@store'
 import { Layout } from '@layouts'
-import { ChatContainer } from '@components'
+import { Bubble, ChatContainer } from '@components'
 
 const Chat: NextPage = () => {
 	const { sid } = useRouter().query
+	const [title, setTitle] = useState('')
 	const client = useStore(state => state.TwilioClient)
 	const activeChat = useStore(state => state.activeChat)
 	const setActiveChat = useStore(state => state.setActiveChat)
 	const getChatData = useStore(state => state.getChatData)
-	const [title, setTitle] = useState('')
+	const activeChatMessages = useStore(state => state.activeChatMessages)
+	const addActiveChatMessage = useStore(state => state.addActiveChatMessage)
+	const getActiveChatMessages = useStore(state => state.getActiveChatMessages)
+	const bottomRef = useRef<HTMLDivElement>(null)
 
 	useEffect(() => {
 		if (client && activeChat?.sid !== sid) {
@@ -24,18 +27,36 @@ const Chat: NextPage = () => {
 	useEffect(() => {
 		if (activeChat) {
 			setTitle(activeChat.friendlyName || (activeChat.uniqueName as string))
+
+			activeChat.on('messageAdded', message => {
+				console.log('messageAdded', message)
+				addActiveChatMessage(message)
+			})
+
+			getActiveChatMessages()
 		}
 	}, [activeChat])
+
+	useEffect(() => {
+		scrollToBottom()
+	}, [activeChatMessages])
+
+	const scrollToBottom = () => {
+		bottomRef.current?.scrollIntoView({
+			behavior: 'auto',
+			block: 'start'
+		})
+	}
 
 	return (
 		<Layout title={title}>
 			<ChatContainer>
-				<Box>
-					<h1>Chat</h1>
-					<p>{sid}</p>
-				</Box>
+				{activeChatMessages?.map(message => (
+					<Bubble key={message.sid} message={message} />
+				))}
 
-				<Spacer />
+				<span ref={bottomRef} />
+				{/* <Spacer /> */}
 			</ChatContainer>
 		</Layout>
 	)

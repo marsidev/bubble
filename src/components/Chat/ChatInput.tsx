@@ -6,18 +6,21 @@ import {
 } from '@chakra-ui/react'
 import { PaperPlaneRight, Smiley } from 'phosphor-react'
 import { useRef } from 'react'
+import { useStore } from '@store'
 
 export const ChatInput = () => {
 	const form = useRef<HTMLFormElement | null>(null)
+	const activeChat = useStore(state => state.activeChat)
 
-	const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+	const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		const formData = new FormData(form.current!)
 		const data = Object.fromEntries(formData.entries())
 		const { message } = data
 
 		if (message) {
-			console.log({ message })
+			await activeChat?.sendMessage(message as string)
+			// console.log({ message })
 		}
 
 		form.current?.reset()
@@ -33,7 +36,7 @@ export const ChatInput = () => {
 			left={0}
 			pos='fixed'
 			px={2}
-			py={3.5}
+			py={4}
 			w='full'
 			zIndex={999}
 		>
