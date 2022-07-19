@@ -12,7 +12,7 @@ body {
 	height: 100%;   
 	/* overflow: hidden; */
   color: var(--primary-default);
-  /* background-color: var(--background-default); */
+  background-color: var(--background-default) !important;
 }
 
 :root {

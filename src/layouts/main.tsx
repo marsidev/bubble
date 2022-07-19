@@ -49,7 +49,7 @@ export const Layout: FC<LayoutProps> = ({ isPrivate = false, children, title }) 
 				flexDir='column'
 				h='full'
 				justify='center'
-				minH='82vh'
+				minH={isChat ? '82vh' : '93.5vh'} // 100vh - (navbar height + chat input height)
 				overflowX='hidden'
 				overflowY='hidden'
 				textAlign='center'
