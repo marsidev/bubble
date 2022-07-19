@@ -7,23 +7,17 @@ export const Navbar: React.FC<FlexProps> = ({ ...props }) => {
 	const { pathname } = useRouter()
 	const activeChat = useStore(state => state.activeChat)
 
-	const isNotHome = pathname !== '/' && pathname !== '/chats'
 	const isChat = pathname.startsWith('/chats/')
-
 	const chatTitle = activeChat?.friendlyName || activeChat?.uniqueName || ''
 
 	return (
 		<NavbarContainer {...props}>
 			<HStack>
-				{isNotHome && <BackToHome />}
+				{isChat && <BackToHome />}
 				<NavbarAvatar />
 
 				{isChat && (
-					<Heading
-						as='h1'
-						fontFamily='NunitoVariable'
-						fontSize={['xl', 'xl']}
-					>
+					<Heading as='h1' fontFamily='NunitoVariable' fontSize={['xl', 'xl']}>
 						{chatTitle}
 					</Heading>
 				)}

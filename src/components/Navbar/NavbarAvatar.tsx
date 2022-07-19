@@ -1,26 +1,48 @@
 import { Avatar, Spinner } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import { useQuery } from '@utils/trpc'
+import { Link } from '@components'
+
+const Brand = () => (
+	<Avatar
+		bg='transparent'
+		borderRadius='sm'
+		name='Bubble logo'
+		size='sm'
+		src='/logo.png'
+	/>
+)
 
 export const NavbarAvatar = () => {
 	const session = useQuery(['auth.getSession'])
+	const { pathname } = useRouter()
 	const authenticated = !!session.data && !session.isLoading
+	const isHome = pathname.startsWith('/chats') || pathname === '/'
+
+	const name = session.data?.user?.name as string
+	const image = session.data?.user?.image as string // ?? `https://i.pravatar.cc/150?u=${name}`
 
 	if (session.isLoading) return <Spinner />
 
-	if (!authenticated) {
+	if (!authenticated && !isHome) {
 		return (
-			<Avatar
-				bg='transparent'
-				borderRadius='sm'
-				name='Bubble logo'
-				size='sm'
-				src='/logo.png'
-			/>
+			<Link href='/'>
+				<Brand />
+			</Link>
 		)
 	}
 
-	const name = session.data?.user?.name as string
-	const image = session.data?.user?.image ?? `https://i.pravatar.cc/150?u=${name}`
+	if (!authenticated && isHome) {
+		return <Brand />
+	}
+
+	if (authenticated && !isHome) {
+		return (
+			<Link href='/chats'>
+				<Avatar name={name} size='sm' src={image} />
+			</Link>
+		)
+	}
 
 	return <Avatar name={name} size='sm' src={image} />
 }
