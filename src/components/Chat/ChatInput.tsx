@@ -1,4 +1,6 @@
 import {
+	Flex,
+	type FlexProps,
 	HStack,
 	IconButton,
 	Input,
@@ -8,7 +10,7 @@ import { PaperPlaneRight, Smiley } from 'phosphor-react'
 import { useRef } from 'react'
 import { useStore } from '@store'
 
-export const ChatInput = () => {
+export const ChatInput: React.FC<FlexProps> = ({ ...props }) => {
 	const form = useRef<HTMLFormElement | null>(null)
 	const activeChat = useStore(state => state.activeChat)
 
@@ -27,41 +29,50 @@ export const ChatInput = () => {
 	}
 
 	return (
-		<HStack
+		<Flex
+			{...props}
 			align='center'
 			as='footer'
 			bg='var(--compose-panel-background)'
-			bottom={0}
-			justify='flex-end'
-			left={0}
+			justify='center'
 			pos='fixed'
-			px={2}
-			py={4}
 			w='full'
 			zIndex={999}
 		>
-			<IconButton aria-label='left caret icon' variant='ghost'>
-				<Smiley color='var(--icon)' size={32} weight='regular' />
-			</IconButton>
+			<HStack
+				align='center'
+				bg='var(--compose-panel-background)'
+				bottom={0}
+				justify='flex-end'
+				left={0}
+				maxW='4xl'
+				px={2}
+				py={4}
+				w='100%'
+			>
+				<IconButton aria-label='left caret icon' variant='ghost'>
+					<Smiley color='var(--icon)' size={32} weight='regular' />
+				</IconButton>
 
-			<chakra.form ref={form} w='100%' onSubmit={onSubmit}>
-				<Input
-					autoComplete='off'
-					// bg='var(--compose-input-background)'
-					// border='1px solid var(--compose-input-border)'
-					id='message'
-					name='message'
-					placeholder='Write a message...'
-					spellCheck='false'
-					type='text'
-					variant='filled'
-				/>
-			</chakra.form>
+				<chakra.form ref={form} w='100%' onSubmit={onSubmit}>
+					<Input
+						autoComplete='off'
+						// bg='var(--compose-input-background)'
+						// border='1px solid var(--compose-input-border)'
+						id='message'
+						name='message'
+						placeholder='Write a message...'
+						spellCheck='false'
+						type='text'
+						variant='filled'
+					/>
+				</chakra.form>
 
-			<IconButton aria-label='left caret icon' variant='ghost'>
-				<PaperPlaneRight color='var(--icon)' size={32} weight='fill' />
-			</IconButton>
-		</HStack>
+				<IconButton aria-label='left caret icon' variant='ghost'>
+					<PaperPlaneRight color='var(--icon)' size={32} weight='fill' />
+				</IconButton>
+			</HStack>
+		</Flex>
 	)
 }
 

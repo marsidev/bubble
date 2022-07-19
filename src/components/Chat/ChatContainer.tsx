@@ -22,7 +22,7 @@ export const ChatContainer: FC<ChatContainerProps> = ({ children }) => {
 			<Flex
 				bg='var(--conversation-panel-background)'
 				flexDir='column'
-				minH='82.6vh'
+				minH='82vh'
 				px={8}
 				py={4}
 				w='100vw'

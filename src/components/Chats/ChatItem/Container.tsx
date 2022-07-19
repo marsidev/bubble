@@ -10,8 +10,8 @@ interface ContainerProps extends FlexProps {
 
 export const Container: FC<ContainerProps> = ({ children, sid, ...props }) => {
 	return (
-		<Flex align='center' display='flex' justify='center'>
-			<Link href={`/chats/${sid}`} maxW='lg' w='100%'>
+		<Flex align='center' justify='center' {...props}>
+			<Link href={`/chats/${sid}`} maxW='4xl' w='100%'>
 				<Flex
 					_hover={{
 						bg: 'var(--background-default-hover)'
@@ -21,11 +21,10 @@ export const Container: FC<ContainerProps> = ({ children, sid, ...props }) => {
 					gap={2}
 					h={16}
 					justify='flex-start'
-					maxW='lg'
+					maxW='4xl'
 					mx='auto'
 					pl={4}
-					w='100%'
-					{...props}
+					w='full'
 				>
 					{children}
 				</Flex>

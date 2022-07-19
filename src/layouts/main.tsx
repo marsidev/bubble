@@ -49,7 +49,7 @@ export const Layout: FC<LayoutProps> = ({ isPrivate = false, children, title }) 
 				flexDir='column'
 				h='full'
 				justify='center'
-				minH='82.6vh'
+				minH='82vh'
 				overflowX='hidden'
 				overflowY='hidden'
 				textAlign='center'
@@ -64,7 +64,7 @@ export const Layout: FC<LayoutProps> = ({ isPrivate = false, children, title }) 
 				</LayoutContent>
 			</Flex>
 
-			{isChat && <ChatInput />}
+			{isChat && <ChatInput minH='7.5vh' />}
 		</>
 	)
 }

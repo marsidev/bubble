@@ -26,41 +26,44 @@ export const Bubble: React.FC<BubbleProps> = ({ message }) => {
 		: 'var(--incoming-background)'
 
 	return (
-		<Flex
-			align={outgoingMessage ? 'flex-end' : 'flex-start'}
-			flexDir='column'
-			mb={2}
-			pos='relative'
-			w='100%'
-		>
+		<Flex align='center' justify='center' w='100%'>
 			<Flex
-				bg={bubbleBg}
-				borderRadius='lg'
-				borderTopLeftRadius={outgoingMessage ? 'md' : 0}
-				borderTopRightRadius={outgoingMessage ? 0 : 'md'}
-				boxShadow='0 1px 0.5px rgba(var(--shadow-rgb),.13)'
-				color='var(--message-primary)'
+				align={outgoingMessage ? 'flex-end' : 'flex-start'}
 				flexDir='column'
-				// fontSize='14.2px'
-				lineHeight='normal'
-				maxW='85%'
-				minW='120px'
+				maxW='4xl'
+				mb={2}
 				pos='relative'
-				px={2}
-				py={1}
-				textAlign='left'
-				zIndex={199}
+				w='full'
 			>
-				<chakra.span fontSize='xs' fontWeight='bold'>
-					{formattedAuthor}
-				</chakra.span>
-				<chakra.span
-					fontSize='sm'
-					overflowWrap='break-word'
-					whiteSpace='pre-wrap'
+				<Flex
+					bg={bubbleBg}
+					borderRadius='lg'
+					borderTopLeftRadius={outgoingMessage ? 'md' : 0}
+					borderTopRightRadius={outgoingMessage ? 0 : 'md'}
+					boxShadow='0 1px 0.5px rgba(var(--shadow-rgb),.13)'
+					color='var(--message-primary)'
+					flexDir='column'
+					// fontSize='14.2px'
+					lineHeight='normal'
+					maxW='85%'
+					minW='120px'
+					pos='relative'
+					px={2}
+					py={1}
+					textAlign='left'
+					zIndex={199}
 				>
-					{body}
-				</chakra.span>
+					<chakra.span fontSize='xs' fontWeight='bold'>
+						{formattedAuthor}
+					</chakra.span>
+					<chakra.span
+						fontSize='sm'
+						overflowWrap='break-word'
+						whiteSpace='pre-wrap'
+					>
+						{body}
+					</chakra.span>
+				</Flex>
 			</Flex>
 		</Flex>
 	)
