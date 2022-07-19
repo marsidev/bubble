@@ -1,5 +1,5 @@
 import type { Get, Set, StoreSlice } from '.'
-import type { Conversation } from '@twilio/conversations'
+import type { Conversation, Message } from '@twilio/conversations'
 import { sortChats } from '@utils/sort-chats'
 
 interface DBChat {
@@ -9,9 +9,20 @@ interface DBChat {
 	id: string // db id
 	createdAt: Date
 	updatedAt: Date
+	// lastMessage?: {
+	// 	sid: string
+	// 	participantSid: string
+	// 	body: string
+	// 	dateCreated: Date
+	// 	author: string
+	// 	type: string
+	// }
 }
 
-type Chat = Conversation
+export interface Chat extends Conversation {
+	lastMessageData?: Message | undefined
+}
+
 type ChatList = Chat[]
 
 export interface ChatsState {
@@ -74,7 +85,20 @@ export const chats: StoreSlice<ChatsState> = (set: Set, get: Get) => ({
 			TwilioClient
 				.getSubscribedConversations()
 				.then(paginator => {
+					// paginator.hasNextPage
 					const chats = sortChats(paginator.items)
+
+					// const messagesPromises = chats.map(chat => chat.getMessages())
+					// Promise.all(messagesPromises).then(msgsPaginator => {
+					// 	msgsPaginator.forEach((paginator, i) => {
+					// 		const messages = paginator.items
+					// 		const lastMessageData = messages.at(-1)
+					// 		chats[i]!.lastMessageData = lastMessageData
+					// 	})
+					// }).catch(err => {
+					// 	console.error(err)
+					// })
+
 					set(() => ({ subscribedChats: chats, fetchingChats: false }))
 					resolve(chats)
 				})

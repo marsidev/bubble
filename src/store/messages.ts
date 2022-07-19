@@ -40,12 +40,6 @@ export const messages: StoreSlice<MessagesState> = (set: Set, get: Get) => ({
 					set(() => ({ fetchingMessages: false }))
 				})
 		})
-
-		// const paginator = await activeChat.getMessages()
-		// const activeChatMessages = paginator.items
-
-		// set(() => ({ activeChatMessages, fetchingMessages: false }))
-		// return activeChatMessages
 	},
 
 	setActiveChatMessages: messages => set({ activeChatMessages: messages }),

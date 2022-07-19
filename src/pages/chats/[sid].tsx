@@ -13,7 +13,6 @@ const Chat: NextPage = () => {
 	const setActiveChat = useStore(state => state.setActiveChat)
 	const getChatData = useStore(state => state.getChatData)
 	const activeChatMessages = useStore(state => state.activeChatMessages)
-	const addActiveChatMessage = useStore(state => state.addActiveChatMessage)
 	const getActiveChatMessages = useStore(state => state.getActiveChatMessages)
 	const bottomRef = useRef<HTMLDivElement>(null)
 
@@ -27,12 +26,6 @@ const Chat: NextPage = () => {
 	useEffect(() => {
 		if (activeChat) {
 			setTitle(activeChat.friendlyName || (activeChat.uniqueName as string))
-
-			activeChat.on('messageAdded', message => {
-				console.log('messageAdded', message)
-				addActiveChatMessage(message)
-			})
-
 			getActiveChatMessages()
 		}
 	}, [activeChat])
@@ -51,12 +44,11 @@ const Chat: NextPage = () => {
 	return (
 		<Layout title={title}>
 			<ChatContainer>
-				{activeChatMessages?.map(message => (
+				{activeChatMessages.map(message => (
 					<Bubble key={message.sid} message={message} />
 				))}
 
 				<span ref={bottomRef} />
-				{/* <Spacer /> */}
 			</ChatContainer>
 		</Layout>
 	)

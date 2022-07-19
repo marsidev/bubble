@@ -1,7 +1,6 @@
-import type { FlexProps } from '@chakra-ui/react'
 import type { Conversation, Message } from '@twilio/conversations'
 import { type FC, useEffect, useState } from 'react'
-import { Flex } from '@chakra-ui/react'
+import { Flex, type FlexProps } from '@chakra-ui/react'
 import { useStore } from '@store'
 import { Header } from './Header'
 import { SubHeader } from './SubHeader'
@@ -13,7 +12,6 @@ interface PreviewProps extends FlexProps {
 export const Preview: FC<PreviewProps> = ({ chat, ...props }) => {
 	const getMessages = useStore(state => state.getMessages)
 	const session = useStore(state => state.session)
-	const [messages, setMessages] = useState<Message[]>([])
 	const [lastMessage, setLastMessage] = useState<Message | undefined>()
 
 	const { friendlyName, uniqueName } = chat
@@ -28,17 +26,17 @@ export const Preview: FC<PreviewProps> = ({ chat, ...props }) => {
 
 	useEffect(() => {
 		if (chat.lastMessage) {
-			getMessages(chat).then(setMessages)
+			getMessages(chat).then(messages => {
+				setLastMessage(messages.at(-1))
+			})
 		}
-	}, [chat.lastMessage])
+	}, [])
 
 	useEffect(() => {
-		if (messages.length > 0 && chat.lastMessage) {
-			const lastMessageIndex = chat.lastMessage.index
-			const lastMessage = messages.find(m => m.index === lastMessageIndex)
-			setLastMessage(lastMessage)
-		}
-	}, [messages])
+		chat.on('messageAdded', msg => {
+			setLastMessage(msg)
+		})
+	}, [chat])
 
 	return (
 		<Flex

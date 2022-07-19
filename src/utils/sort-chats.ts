@@ -1,6 +1,6 @@
-import type { Conversation } from '@twilio/conversations'
+import type { Chat } from '@store/chats'
 
-export const sortChats = (chats: Conversation[]) => {
+export const sortChats = (chats: Chat[]) => {
 	return chats.sort((a, b) => {
 		const dateB = b.lastMessage?.dateCreated || b.dateUpdated || b.dateCreated
 		const timeB = new Date(dateB!).getTime()
