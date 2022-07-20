@@ -1,5 +1,6 @@
 import type { Get, Set, StoreSlice } from '.'
-import type { Conversation, Message } from '@twilio/conversations'
+import type { Conversation, Message, Participant } from '@twilio/conversations'
+import { User } from '.prisma/client'
 import { sortChats } from '@utils/sort-chats'
 
 interface DBChat {
@@ -9,14 +10,6 @@ interface DBChat {
 	id: string // db id
 	createdAt: Date
 	updatedAt: Date
-	// lastMessage?: {
-	// 	sid: string
-	// 	participantSid: string
-	// 	body: string
-	// 	dateCreated: Date
-	// 	author: string
-	// 	type: string
-	// }
 }
 
 export interface Chat extends Conversation {
@@ -35,6 +28,13 @@ export interface ChatsState {
 	activeChat: Conversation | null
 	setActiveChat: (activeChat: Conversation | null) => void
 	getChatData: (sid: string) => Promise<Conversation | null>
+
+	activeChatParticipants: Participant[]
+	setActiveChatParticipants: (participants: Participant[]) => void
+	getActiveChatParticipants: () => Promise<Participant[]>
+
+	activeChatDBUsers: User[]
+	setActiveChatDBUsers: (users: User[]) => void
 
 	isAddingChat: boolean
 	setIsAddingChat: (isAddingChat: boolean) => void
@@ -66,6 +66,20 @@ export const chats: StoreSlice<ChatsState> = (set: Set, get: Get) => ({
 		return chat
 	},
 
+	activeChatParticipants: [],
+	setActiveChatParticipants: participants => set({ activeChatParticipants: participants }),
+	getActiveChatParticipants: async () => {
+		const { activeChat } = get()
+		if (!activeChat) return []
+
+		const participants = await activeChat.getParticipants()
+		set({ activeChatParticipants: participants })
+		return participants
+	},
+
+	activeChatDBUsers: [],
+	setActiveChatDBUsers: users => set({ activeChatDBUsers: users }),
+
 	isAddingChat: false,
 	setIsAddingChat: isAddingChat => set({ isAddingChat }),
 
@@ -87,17 +101,6 @@ export const chats: StoreSlice<ChatsState> = (set: Set, get: Get) => ({
 				.then(paginator => {
 					// paginator.hasNextPage
 					const chats = sortChats(paginator.items)
-
-					// const messagesPromises = chats.map(chat => chat.getMessages())
-					// Promise.all(messagesPromises).then(msgsPaginator => {
-					// 	msgsPaginator.forEach((paginator, i) => {
-					// 		const messages = paginator.items
-					// 		const lastMessageData = messages.at(-1)
-					// 		chats[i]!.lastMessageData = lastMessageData
-					// 	})
-					// }).catch(err => {
-					// 	console.error(err)
-					// })
 
 					set(() => ({ subscribedChats: chats, fetchingChats: false }))
 					resolve(chats)

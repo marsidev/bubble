@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useStore } from '@store'
 import { Layout } from '@layouts'
 import { Bubble, ChatContainer } from '@components'
+import { useQuery } from '@utils/trpc'
 
 const Chat: NextPage = () => {
 	const { sid } = useRouter().query
@@ -14,7 +15,18 @@ const Chat: NextPage = () => {
 	const getChatData = useStore(state => state.getChatData)
 	const activeChatMessages = useStore(state => state.activeChatMessages)
 	const getActiveChatMessages = useStore(state => state.getActiveChatMessages)
+	const activeChatParticipants = useStore(state => state.activeChatParticipants)
+	const getActiveChatParticipants = useStore(state => state.getActiveChatParticipants)
+	const setActiveChatDBUsers = useStore(state => state.setActiveChatDBUsers)
+	const activeChatDBUsers = useStore(state => state.activeChatDBUsers)
 	const bottomRef = useRef<HTMLDivElement>(null)
+
+	useQuery(['user.findManyByEmails', {
+		emails: activeChatParticipants?.map(p => p.identity)
+	}], {
+		refetchOnWindowFocus: false,
+		onSuccess: setActiveChatDBUsers
+	})
 
 	useEffect(() => {
 		if (client && activeChat?.sid !== sid) {
@@ -27,11 +39,13 @@ const Chat: NextPage = () => {
 		if (activeChat) {
 			setTitle(activeChat.friendlyName || (activeChat.uniqueName as string))
 			getActiveChatMessages()
+			getActiveChatParticipants()
 		}
 	}, [activeChat])
 
 	useEffect(() => {
 		scrollToBottom()
+		// console.log(activeChatMessages.length)
 	}, [activeChatMessages])
 
 	const scrollToBottom = () => {
@@ -44,7 +58,7 @@ const Chat: NextPage = () => {
 	return (
 		<Layout title={title}>
 			<ChatContainer>
-				{activeChatMessages.map(message => (
+				{activeChatDBUsers.length > 0 && activeChatMessages.map(message => (
 					<Bubble key={message.sid} message={message} />
 				))}
 

@@ -10,6 +10,7 @@ interface BubbleProps extends FlexProps {
 export const Bubble: React.FC<BubbleProps> = ({ message }) => {
 	const activeChat = useStore(state => state.activeChat)
 	const session = useStore(state => state.session)
+	const activeChatDBUsers = useStore(state => state.activeChatDBUsers)
 	const { createdBy: chatHost } = activeChat ?? {}
 
 	const userEmail = session?.user?.email
@@ -18,7 +19,10 @@ export const Bubble: React.FC<BubbleProps> = ({ message }) => {
 
 	const outgoingMessage = userEmail === author
 	const incomingMessage = !outgoingMessage
-	const formattedAuthor = outgoingMessage ? 'You' : `${author}`
+
+	const authorUser = activeChatDBUsers?.find(user => user.email === author)
+
+	const formattedAuthor = outgoingMessage ? 'You' : `${authorUser?.name ?? author}`
 	const bubbleBg = outgoingMessage
 		? 'var(--outgoing-background)'
 		: 'var(--incoming-background)'

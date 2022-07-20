@@ -14,3 +14,24 @@ export const usersRouter = createRouter()
 			})
 		}
 	})
+	.query('findManyByEmails', {
+		input: z.object({
+			emails: z.array(z.string().email().nullish())
+		}),
+		async resolve({ ctx, input }) {
+			if (!input.emails) return []
+
+			for (const email of input.emails) {
+				if (!email) return []
+				if (typeof email !== 'string') return []
+			}
+
+			return await ctx.prisma.user.findMany({
+				where: {
+					email: {
+						in: input.emails as string[]
+					}
+				}
+			})
+		}
+	})
