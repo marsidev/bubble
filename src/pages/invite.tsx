@@ -73,26 +73,27 @@ const Invite: NextPage = () => {
 	const [conversation, setConversation] = useState<Conversation | null>(null)
 	const [joinable, setJoinable] = useState(true)
 	const [loading, setLoading] = useState(true)
-	const { data: encodedData } = router.query
+	const { data: encryptedData } = router.query
 
 	const invitation = useQuery(
-		['invite.decryptInvitationLink', { data: (encodedData as string) || '' }],
+		['invite.decryptInvitationLink', { data: (encryptedData as string)?.replace(/ /g, '+') || '' }],
 		{
 			refetchOnWindowFocus: false,
 			retry: false,
 			retryOnMount: true,
 			async onSuccess(data) {
-				const client = await createChatClient(data.accessToken)
-				const conversation = await client.getConversationBySid(data.chat.sid)
-				const participant = await conversation.getParticipantByIdentity(session?.user?.email)
-
 				const title = `${data.host.name} invited you to chat!`
 				setTitle(title)
 
-				if (participant) {
+				const client = await createChatClient(data.accessToken)
+				const conversation = await client.getConversationBySid(data.chat.sid)
+
+				try {
+					await conversation.getParticipantByIdentity(session?.user?.email)
 					console.warn('You are already a member of this chat')
 					setJoinable(false)
-				} else {
+					return
+				} catch (e) {
 					setConversation(conversation)
 				}
 

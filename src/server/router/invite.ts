@@ -12,9 +12,8 @@ export const inviteRouter = createRouter()
 		}),
 		async resolve({ ctx, input }) {
 			// decrypt the data and check if has expected params
-			const decoded = decrypt(input.data)
-
-			const [hostIdentity, chatSid, expires] = decoded.split(',')
+			const decrypted = decrypt(input.data)
+			const [hostIdentity, chatSid, expires] = decrypted.split(',')
 
 			if (!hostIdentity || !chatSid || !expires) {
 				throw new TRPCError({
