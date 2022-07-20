@@ -15,25 +15,26 @@ body {
 }
 
 :root {
-	--primary-title: rgba(233,237,239,0.88);
-	--intro-secondary: #8696a0;
-	--outgoing-background: #005c4b;
-  --incoming-background: #202c33;
-  --shadow-rgb: 11,20,26;
-	--message-primary: #e9edef;
+  --avatar-placeholder-background: #6a7175;
+  --avatar-placeholder-primary: #cfd4d6;
+  --chat-meta: #8696a0;
+  --background-default: #111b21;
+  --background-default-hover: #202c33;
+  --border-list: rgba(134,150,160,0.15);
 	--bubble-meta: hsla(0,0%,100%,0.6);
 	--conversation-panel-background: #0b141a;
   --compose-panel-background: #202c33;
 	--icon: #8696a0;
-  --background-default: #111b21;
-  --background-default-hover: #202c33;
-  --chat-meta: #8696a0;
-  --border-list: rgba(134,150,160,0.15);
-  --secondary: #8696a0;
+  --incoming-background: #202c33;
+	--intro-secondary: #8696a0;
+	--message-primary: #e9edef;
+	--outgoing-background: #005c4b;
   --panel-header-icon: #aebac1;
   --panel-header-background: #202c33;
-  --avatar-placeholder-background: #6a7175;
-  --avatar-placeholder-primary: #cfd4d6;
+	--primary-title: rgba(233,237,239,0.88);
+  --shadow-rgb: 11,20,26;
+  --secondary: #8696a0;
+
 }
 
 ::-webkit-scrollbar {
