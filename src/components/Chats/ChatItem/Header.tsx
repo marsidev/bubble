@@ -8,7 +8,7 @@ interface HeaderProps extends FlexProps {
 }
 
 export const Header: FC<HeaderProps> = ({ chatName, lastMessageDate, ...props }) => {
-	const timeAgo = lastMessageDate ? getTimeAgo(lastMessageDate) : ''
+	const timeAgo = lastMessageDate ? getTimeAgo(lastMessageDate, { preventFuture: true }) : ''
 
 	return (
 		<Flex

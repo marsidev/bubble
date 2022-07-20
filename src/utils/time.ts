@@ -1,5 +1,9 @@
 /* @ref https://midu.dev/como-crear-un-time-ago-sin-dependencias-intl-relativeformat/ */
 
+interface Options {
+	preventFuture?: boolean
+}
+
 const rtf = new Intl.RelativeTimeFormat('en', {
 	localeMatcher: 'best fit',
 	numeric: 'auto',
@@ -24,9 +28,16 @@ const getUnitAndValueDate = (secondsElapsed: number) => {
 	}
 }
 
-export const getTimeAgo = (date: Date) => {
-	const timestamp = date.getTime()
-	const secondsElapsed = getSecondsDiff(timestamp)
+export const getTimeAgo = (date: Date, options: Options = {}) => {
+	const { preventFuture = false } = options
+
+	let secondsElapsed = getSecondsDiff(date.getTime())
+	const isFuture = secondsElapsed < 0
+
+	if (preventFuture && isFuture) {
+		secondsElapsed = 0
+	}
+
 	const { value, unit } = getUnitAndValueDate(secondsElapsed)!
 	return rtf.format(value, unit as Intl.RelativeTimeFormatUnit)
 }
