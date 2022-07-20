@@ -17,24 +17,29 @@ import { useStore } from '@store'
 
 const Chats: NextPage = () => {
 	const twilioToken = useStore(state => state.twilioToken)
-	const addChatToStore = useStore(state => state.addChat)
 	const setChats = useStore(state => state.setChats)
 	const setIsAddingChat = useStore(state => state.setIsAddingChat)
 	const client = useStore(state => state.TwilioClient)
 	const subscribedChats = useStore(state => state.subscribedChats)
 	const getSubscribedChats = useStore(state => state.getSubscribedChats)
 
-	useQuery(['chat.getAll'], {
+	const allChats = useQuery(['chat.getAll'], {
 		refetchOnWindowFocus: false,
-		// onSuccess: setChats
 		onSuccess(data) {
 			setChats(data)
 		}
 	})
 
 	const addChatToDB = useMutation(['chat.add'], {
-		onSuccess() {
+		async onSuccess() {
+			allChats.refetch()
+			await getSubscribedChats()
+			setIsAddingChat(false)
 			toast.success('Chat created successfully')
+		},
+		onError(error) {
+			console.error(error.message)
+			setIsAddingChat(false)
 		}
 	})
 
@@ -72,13 +77,10 @@ const Chats: NextPage = () => {
 			return
 		}
 
-		const dbChat = await addChatToDB.mutateAsync({
+		await addChatToDB.mutateAsync({
 			name: chatName,
 			sid: (twilioChat as Conversation).sid
 		})
-
-		addChatToStore(dbChat)
-		setIsAddingChat(false)
 	}
 
 	return (
