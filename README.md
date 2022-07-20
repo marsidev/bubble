@@ -1,5 +1,5 @@
 ## Bubble Chat
-Live chat powered by [Twilio](https://www.twilio.com). <br />
+Live and secure chat strongly inspired on WhatsApp. Powered by [Twilio Conversations API](https://www.twilio.com/messaging/conversations-api). <br />
 Created to participate in a hackathon hosted by [midudev](https://www.github.com/midudev).
 
 <!-- ## 🚀 Preview
@@ -14,25 +14,24 @@ App preview before deadline and project review: <br />
 > Screenshots provided by [webmobilefirst](https://www.webmobilefirst.com/en/). -->
 
 ## 👨‍💻 Hackathon Info
-- The hackathon goal was build a live and secure text chat (*mobile-first* or *mobile-only*) using [Twilio](https://www.twilio.com) messaging API.
+- The hackathon goal was build a live and secure text chat (*mobile-first* or *mobile-only*) using [Twilio Conversations API](https://www.twilio.com/messaging/conversations-api).
 - Announced at **[2022/07/01](https://www.twitch.tv/videos/1519558242)**.
 - Deadline: **2022/07/20**.
 
 ## 🚀 Preview
-- [Demo](https://bubble-peach.vercel.app)
+- [Demo](https://bubble-marsiglia.vercel.app)
 
 ## 🛠️ Technologies
+- [Twilio Conversations API](https://www.twilio.com/messaging/conversations-api)
 - [TypeScript](https://github.com/microsoft/TypeScript)
 - [NextJS](https://github.com/vercel/next.js/)
 - [ChakraUI](https://github.com/chakra-ui/chakra-ui)
 - [Zustand](https://github.com/pmndrs/zustand)
 - [tRPC](https://github.com/trpc/trpc)
-- [Prisma](https://github.com/prisma/prisma)
-- [Supabase](https://github.com/supabase/supabase)
-- [next-auth](https://github.com/nextauthjs/next-auth)
-- [next-seo](https://github.com/garmeeh/next-seo)
 - [zod](https://github.com/colinhacks/zod)
-- [Twilio Conversations API](https://www.twilio.com/messaging/conversations-api)
+- [Supabase](https://github.com/supabase/supabase)
+- [Prisma](https://github.com/prisma/prisma)
+- [next-auth](https://github.com/nextauthjs/next-auth)
 
 ## 🧰 Requirements
 - [NodeJS](https://nodejs.org)
@@ -42,7 +41,7 @@ App preview before deadline and project review: <br />
 ## ✨ Getting Started
 
 ### 1. Create a [Twilio Token Service](https://github.com/marsidev/twilio-token-service).
-This is a service to generate a [Twilio Access Token](https://www.twilio.com/docs/iam/access-tokens), using [Twilio Functions](https://www.twilio.com/docs/runtime/functions). The token provides grant for [Chat](https://www.twilio.com/docs/api/chat) and [Video](https://www.twilio.com/docs/api/video). Created using [Twilio official guide](https://www.twilio.com/blog/generate-access-token-twilio-chat-video-voice-using-twilio-functions).
+This is a service to generate a [Twilio Access Token](https://www.twilio.com/docs/iam/access-tokens), using [Twilio Functions](https://www.twilio.com/docs/runtime/functions) (serverless functions). The token provides the required permissions. Created using [Twilio official guide](https://www.twilio.com/blog/generate-access-token-twilio-chat-video-voice-using-twilio-functions).
 
 ### 2. Create a [Supabase](https://app.supabase.com/) project.
 
@@ -65,14 +64,17 @@ NEXTAUTH_SECRET=
 NEXTAUTH_URL=http://localhost:3000
 GITHUB_ID=
 GITHUB_SECRET=
+CRYPTO_SECRET=
 ```
 > Fill the `TWILIO_TOKEN_SERVICE_URL` with the token service URL generated in step 1.
 
 > Fill the `DATABASE_URL` with the URL of your Supabase Database, under `Settings > Database > Connection string > Nodejs`.
 
-> Fill the `NEXTAUTH_SECRET` with a secret string.
+> Fill the `NEXTAUTH_SECRET` with a secret string. This is used to sign the JWT tokens.
 
 > Fill the `GITHUB_ID` and `GITHUB_SECRET` with the GitHub App credentials generated in step 3.
+
+> Fill the `CRYPTO_SECRET` with a secret string. This is used to encrypt/decrypt chat messages and invitation links.
 
 ### 6. Install dependencies
 ```bash
