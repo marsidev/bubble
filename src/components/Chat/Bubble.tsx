@@ -1,6 +1,6 @@
 import type { Message } from '@twilio/conversations'
 // import { useEffect } from 'react'
-import { Flex, type FlexProps, Tag, chakra } from '@chakra-ui/react'
+import { Flex, type FlexProps, Tag } from '@chakra-ui/react'
 import { useStore } from '@store'
 
 interface BubbleProps extends FlexProps {
@@ -13,7 +13,7 @@ export const Bubble: React.FC<BubbleProps> = ({ message }) => {
 	const { createdBy: chatHost } = activeChat ?? {}
 
 	const userEmail = session?.user?.email
-	const { body, author } = message
+	const { body, author, dateCreated } = message
 	const sentByHost = chatHost === author
 
 	const outgoingMessage = userEmail === author
@@ -22,6 +22,13 @@ export const Bubble: React.FC<BubbleProps> = ({ message }) => {
 	const bubbleBg = outgoingMessage
 		? 'var(--outgoing-background)'
 		: 'var(--incoming-background)'
+
+	const today = new Date()
+	const isToday = today.toDateString() === new Date(dateCreated!).toDateString()
+
+	const timestamp = isToday
+		? new Date(dateCreated!).toLocaleTimeString()
+		: new Date(dateCreated!).toLocaleString()
 
 	return (
 		<Flex align='center' justify='center' w='100%'>
@@ -34,6 +41,7 @@ export const Bubble: React.FC<BubbleProps> = ({ message }) => {
 				w='full'
 			>
 				<Flex
+					as='article'
 					bg={bubbleBg}
 					borderRadius='lg'
 					borderTopLeftRadius={outgoingMessage ? 'md' : 0}
@@ -41,13 +49,13 @@ export const Bubble: React.FC<BubbleProps> = ({ message }) => {
 					boxShadow='0 1px 0.5px rgba(var(--shadow-rgb),.13)'
 					color='var(--message-primary)'
 					flexDir='column'
-					// fontSize='14.2px'
+					fontSize='14.2px'
 					lineHeight='normal'
 					maxW='85%'
 					minW='120px'
 					pos='relative'
 					px={2}
-					py={1}
+					py={2}
 					textAlign='left'
 					zIndex={199}
 				>
@@ -55,19 +63,38 @@ export const Bubble: React.FC<BubbleProps> = ({ message }) => {
 						{formattedAuthor}
 
 						{incomingMessage && sentByHost && (
-							<Tag borderRadius='full' colorScheme='twitter' fontSize='xs' ml={2} size='sm' variant='solid'>
+							<Tag
+								borderRadius='full'
+								colorScheme='twitter'
+								fontSize='xs'
+								ml={2}
+								size='sm'
+								variant='solid'
+							>
 								Host
 							</Tag>
 						)}
 					</Flex>
 
-					<chakra.span
-						fontSize='sm'
+					<Flex
+						as='span'
+						fontSize='xs'
 						overflowWrap='break-word'
 						whiteSpace='pre-wrap'
+						wordBreak='break-word'
 					>
 						{body}
-					</chakra.span>
+					</Flex>
+
+					<Flex
+						as='span'
+						color='var(--bubble-meta)'
+						fontSize='xx-small'
+						justify='flex-end'
+						textAlign='right'
+					>
+						{timestamp}
+					</Flex>
 				</Flex>
 			</Flex>
 		</Flex>
