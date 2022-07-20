@@ -19,7 +19,7 @@ export const useTwilio = async () => {
 		if (session?.user) {
 			const cachedToken = getLocalStorageValue('twilio-token', TTL)
 
-			if (cachedToken !== twilioToken) {
+			if (cachedToken && cachedToken !== twilioToken) {
 				setTwilioToken(cachedToken as string)
 				createTwilioClient(cachedToken as string)
 			}

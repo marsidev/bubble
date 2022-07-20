@@ -14,17 +14,21 @@ export const getLocalStorageValue = (key: string, TTL = 3600) => {
 	const localData = window.localStorage.getItem(key)
 	if (localData) {
 		const stored: StoredValue = JSON.parse(localData)
+
 		const now = new Date().getTime()
 		const expires = new Date(stored.expires).getTime()
-		const diff = now - expires
+		const diff = (now - expires) / 1000
+		// console.log({ stored, now, expires, diff, TTL })
 
-		if (diff < TTL && stored.data) {
+		if (diff < TTL && !!stored.data) {
 			// console.log(`got cached ${key} from localStorage`)
 			return stored.data
 		} else {
+			// console.log(`got cached ${key} from localStorage but it has expired`)
 			return null
 		}
 	} else {
+		// console.log(`${key} not found in localStorage`)
 		return null
 	}
 }
