@@ -3,6 +3,18 @@ import { TRPCError } from '@trpc/server'
 import { createRouter } from './context'
 
 export const chatRouter = createRouter()
+	.query('findBySid', {
+		input: z.object({
+			sid: z.string()
+		}),
+		async resolve({ ctx, input }) {
+			return await ctx.prisma.chat.findUnique({
+				where: {
+					sid: input.sid
+				}
+			})
+		}
+	})
 	.middleware(async ({ ctx, next }) => {
 		if (!ctx.session) {
 			throw new TRPCError({ code: 'UNAUTHORIZED' })
@@ -15,7 +27,7 @@ export const chatRouter = createRouter()
 			name: z.string()
 		}),
 		async resolve({ ctx, input }) {
-			if (!ctx.session?.userId) {
+			if (!ctx.session?.user?.id) {
 				throw new TRPCError({ code: 'NOT_FOUND' })
 			}
 
@@ -23,7 +35,7 @@ export const chatRouter = createRouter()
 				data: {
 					sid: input.sid,
 					name: input.name,
-					ownerId: ctx.session.userId
+					ownerId: ctx.session.user.id
 				}
 			})
 
@@ -32,13 +44,13 @@ export const chatRouter = createRouter()
 	})
 	.query('getAll', {
 		async resolve({ ctx }) {
-			if (!ctx.session?.userId) {
+			if (!ctx.session?.user?.id) {
 				throw new TRPCError({ code: 'NOT_FOUND' })
 			}
 
 			return await ctx.prisma.chat.findMany({
 				where: {
-					ownerId: ctx.session.userId
+					ownerId: ctx.session.user.id
 				}
 			})
 		}

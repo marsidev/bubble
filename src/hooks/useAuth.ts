@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useRouter } from 'next/router'
+// import { useRouter } from 'next/router'
 import { useQuery } from '@utils/trpc'
 import { useStore } from '@store'
 
@@ -8,7 +8,7 @@ export const useAuth = () => {
 	const setSession = useStore(state => state.setSession)
 	const clearSession = useStore(state => state.clearSession)
 	const session = useQuery(['auth.getSession'], { refetchInterval: 60000 })
-	const router = useRouter()
+	// const router = useRouter()
 
 	const { isLoading: loading, data: sessionData } = session
 
@@ -20,7 +20,7 @@ export const useAuth = () => {
 
 			if (!sessionData) {
 				clearSession()
-				router.push('/')
+				// router.push('/')
 			}
 		}
 	}, [loading, sessionData])

@@ -1,10 +1,8 @@
-import type { FlexProps } from '@chakra-ui/react'
-import type { FC } from 'react'
-import { Button, Flex, Heading, Text } from '@chakra-ui/react'
+import { Button, Flex, type FlexProps, Heading, Text } from '@chakra-ui/react'
 import { signIn } from 'next-auth/react'
 import { GitHub } from '~/icons'
 
-export const NonSigned: FC<FlexProps> = ({ ...props }) => {
+export const NonSigned: React.FC<FlexProps> = ({ ...props }) => {
 	const onSignIn = async () => {
 		await signIn('github', { callbackUrl: '/chats' })
 	}

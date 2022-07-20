@@ -16,10 +16,6 @@ body {
 }
 
 :root {
-  --scrollbar-track-bg: #e0e0e0;
-  --scrollbar-thumb-bg: rgba(0, 0, 0, 0.24);
-  --scrollbar-thumb_hover-bg: #718096;
-
 	--active-tab-marker: #00a884;
   --active-tab-marker-rgb: 0,168,132;
   --app-background: #0a1014;
@@ -747,9 +743,11 @@ body {
 
 
 .Toastify__toast {
-  border-radius: 24px !important;
-  max-width: 320px;
+  border-radius: var(--chakra-radii-md) !important;
   margin-bottom: 3px !important;
+	opacity: 0.85;
+	font-size: var(--chakra-fontSizes-sm);
+	background-color: var(--background-default) !important;
 }
 
 .Toastify__toast-container {

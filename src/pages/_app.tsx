@@ -9,7 +9,7 @@ import { ToastContainer, ToastContainerProps, Zoom } from 'react-toastify'
 import { ChakraProvider } from '@utils/chakra/Provider'
 
 const toastProps: ToastContainerProps = {
-	position: 'bottom-center',
+	position: 'top-center',
 	autoClose: 2000,
 	hideProgressBar: true,
 	newestOnTop: false,
@@ -22,7 +22,7 @@ const toastProps: ToastContainerProps = {
 	limit: 15,
 	closeButton: false,
 	transition: Zoom,
-	icon: false
+	icon: true
 }
 
 const MyApp: AppType = ({
@@ -39,7 +39,7 @@ const MyApp: AppType = ({
 	)
 }
 
-const getBaseUrl = () => {
+export const getBaseUrl = () => {
 	if (typeof window !== 'undefined') return ''
 	if (process.browser) return '' // Browser should use current path
 	if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}` // SSR should use vercel url

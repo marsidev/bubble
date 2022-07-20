@@ -1,16 +1,8 @@
 import * as trpc from '@trpc/server'
 import * as trpcNext from '@trpc/server/adapters/next'
-import {
-	Session as NextAuthSession,
-	unstable_getServerSession as getServerSession
-} from 'next-auth'
-import { authOptions as nextAuthOptions } from '~/pages/api/auth/[...nextauth]'
+import { unstable_getServerSession as getServerSession } from 'next-auth'
+import { Session, authOptions as nextAuthOptions } from '~/pages/api/auth/[...nextauth]'
 import { prisma } from '@server/db/client'
-
-interface Session extends NextAuthSession {
-	token: string
-	userId: string
-}
 
 export const createContext = async (
 	opts?: trpcNext.CreateNextContextOptions
