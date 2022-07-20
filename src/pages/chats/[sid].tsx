@@ -40,12 +40,12 @@ const Chat: NextPage = () => {
 			setTitle(activeChat.friendlyName || (activeChat.uniqueName as string))
 			getActiveChatMessages()
 			getActiveChatParticipants()
+			scrollToBottom()
 		}
 	}, [activeChat])
 
 	useEffect(() => {
-		scrollToBottom()
-		// console.log(activeChatMessages.length)
+		if (activeChatMessages) scrollToBottom()
 	}, [activeChatMessages])
 
 	const scrollToBottom = () => {
