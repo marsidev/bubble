@@ -25,12 +25,11 @@ export const ChatInput: React.FC<FlexProps> = ({ ...props }) => {
 		const formData = new FormData(form.current!)
 		const data = Object.fromEntries(formData.entries())
 		const { message } = data
+		form.current?.reset()
 
 		if (message) {
 			await activeChat?.sendMessage(message as string)
 		}
-
-		form.current?.reset()
 	}
 
 	return (
