@@ -1,6 +1,5 @@
-import type { FlexProps } from '@chakra-ui/react'
 import type { FC } from 'react'
-import { Flex, chakra } from '@chakra-ui/react'
+import { Flex, type FlexProps, Spacer } from '@chakra-ui/react'
 import { getTimeAgo } from '@utils/time'
 
 interface HeaderProps extends FlexProps {
@@ -13,41 +12,42 @@ export const Header: FC<HeaderProps> = ({ chatName, lastMessageDate, ...props })
 
 	return (
 		<Flex
-			justify='space-between'
+			align='center'
+			fontWeight='medium'
 			lineHeight='normal'
+			overflow='hidden'
 			textAlign='left'
 			{...props}
 		>
 			<Flex
-				flexGrow={1}
-				fontSize='17px'
-				fontWeight='medium'
-				lineHeight='normal'
-				overflow='hidden'
+				as='span'
+				className='ellipsis'
+				fontSize='sm'
+				maxW='85%'
+				pos='relative'
 			>
-				<chakra.span
-					display='inline-block'
-					flexGrow={1}
-					overflow='hidden'
-					pos='relative'
-					textOverflow='ellipsis'
-					whiteSpace='nowrap'
-				>
-					{chatName}
-				</chakra.span>
+				{chatName}
+			</Flex>
 
-				<chakra.span
+			<Spacer />
+
+			{timeAgo && (
+				<Flex
+					align='center'
+					as='span'
+					className='ellipsis'
 					color='var(--chat-meta)'
-					fontSize='12px'
+					fontSize='xx-small'
 					fontWeight='light'
+					justify='flex-end'
 					lineHeight='14px'
-					overflow='hidden'
-					textOverflow='ellipsis'
-					whiteSpace='nowrap'
+					// minW='120px'
+					minW='15%'
+					textAlign='right'
 				>
 					{timeAgo}
-				</chakra.span>
-			</Flex>
+				</Flex>
+			)}
 		</Flex>
 	)
 }

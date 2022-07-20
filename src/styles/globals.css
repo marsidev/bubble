@@ -753,3 +753,9 @@ body {
 .Toastify__toast-container {
   text-align: center;
 }
+
+.ellipsis {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}

@@ -1,6 +1,5 @@
-import type { FlexProps } from '@chakra-ui/react'
 import type { FC, ReactNode } from 'react'
-import { Flex } from '@chakra-ui/react'
+import { Flex, type FlexProps, HStack } from '@chakra-ui/react'
 import { Link } from '@components'
 
 interface ContainerProps extends FlexProps {
@@ -10,24 +9,24 @@ interface ContainerProps extends FlexProps {
 
 export const Container: FC<ContainerProps> = ({ children, sid, ...props }) => {
 	return (
-		<Flex align='center' justify='center' {...props}>
-			<Link href={`/chats/${sid}`} maxW='4xl' w='100%'>
-				<Flex
+		<Flex align='center' justify='center' w='full' {...props}>
+			<Link href={`/chats/${sid}`} maxW='4xl' w='full'>
+				<HStack
 					_hover={{
 						bg: 'var(--background-default-hover)'
 					}}
 					align='center'
 					bg='var(--background-default)'
-					gap={2}
 					h={16}
 					justify='flex-start'
 					maxW='4xl'
 					mx='auto'
-					pl={4}
+					px={8}
+					spacing={2}
 					w='full'
 				>
 					{children}
-				</Flex>
+				</HStack>
 			</Link>
 		</Flex>
 	)

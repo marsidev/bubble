@@ -44,11 +44,12 @@ export const Preview: FC<PreviewProps> = ({ chat, ...props }) => {
 			// eslint-disable-next-line react/jsx-sort-props
 			borderColor='var(--border-list)'
 			flexDir='column'
-			flexGrow={1}
-			flexShrink={1}
+			// flexGrow={1}
+			// flexShrink={1}
 			h={16}
 			justify='center'
-			pr={4}
+			// maxW='3xl'
+			// pr={4}
 			py={0}
 			w='100%'
 			{...props}

@@ -19,7 +19,7 @@ export const ChatItem: FC<ChatItemProps> = ({ chat, ...props }) => {
 
 	return (
 		<Container sid={chat.sid} onClick={onSelectChat} {...props}>
-			<DefaultGroup />
+			<span><DefaultGroup /></span>
 			<Preview chat={chat} />
 		</Container>
 	)
