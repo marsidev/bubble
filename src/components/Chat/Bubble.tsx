@@ -1,6 +1,6 @@
 import type { Message } from '@twilio/conversations'
 // import { useEffect } from 'react'
-import { Flex, type FlexProps, chakra } from '@chakra-ui/react'
+import { Flex, type FlexProps, Tag, chakra } from '@chakra-ui/react'
 import { useStore } from '@store'
 
 interface BubbleProps extends FlexProps {
@@ -8,18 +8,16 @@ interface BubbleProps extends FlexProps {
 }
 
 export const Bubble: React.FC<BubbleProps> = ({ message }) => {
-	// const activeChat = useStore(state => state.activeChat)
+	const activeChat = useStore(state => state.activeChat)
 	const session = useStore(state => state.session)
-	// const { createdBy: chatAdmin } = activeChat ?? {}
+	const { createdBy: chatHost } = activeChat ?? {}
 
 	const userEmail = session?.user?.email
 	const { body, author } = message
-
-	// useEffect(() => {
-	// 	console.log({ chatAdmin, body, author, userEmail })
-	// }, [chatAdmin, body, author, userEmail])
+	const sentByHost = chatHost === author
 
 	const outgoingMessage = userEmail === author
+	const incomingMessage = !outgoingMessage
 	const formattedAuthor = outgoingMessage ? 'You' : `${author}`
 	const bubbleBg = outgoingMessage
 		? 'var(--outgoing-background)'
@@ -53,9 +51,16 @@ export const Bubble: React.FC<BubbleProps> = ({ message }) => {
 					textAlign='left'
 					zIndex={199}
 				>
-					<chakra.span fontSize='xs' fontWeight='bold'>
+					<Flex as='span' fontSize='xs' fontWeight='bold'>
 						{formattedAuthor}
-					</chakra.span>
+
+						{incomingMessage && sentByHost && (
+							<Tag borderRadius='full' colorScheme='twitter' fontSize='xs' ml={2} size='sm' variant='solid'>
+								Host
+							</Tag>
+						)}
+					</Flex>
+
 					<chakra.span
 						fontSize='sm'
 						overflowWrap='break-word'
