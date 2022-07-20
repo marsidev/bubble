@@ -40,27 +40,20 @@ const Chat: NextPage = () => {
 			setTitle(activeChat.friendlyName || (activeChat.uniqueName as string))
 			getActiveChatMessages()
 			getActiveChatParticipants()
-			scrollToBottom()
 		}
 	}, [activeChat])
-
-	useEffect(() => {
-		if (activeChatMessages) scrollToBottom()
-	}, [activeChatMessages])
-
-	const scrollToBottom = () => {
-		bottomRef.current?.scrollIntoView({
-			behavior: 'auto',
-			block: 'start'
-		})
-	}
 
 	return (
 		<Layout title={title}>
 			<ChatContainer>
-				{activeChatDBUsers.length > 0 && activeChatMessages.map(message => (
-					<Bubble key={message.sid} message={message} />
-				))}
+				{activeChatDBUsers.length > 0 &&
+					activeChatMessages.map(message => (
+						<Bubble
+							key={message.sid}
+							endOfChatRef={bottomRef}
+							message={message}
+						/>
+					))}
 
 				<span ref={bottomRef} />
 			</ChatContainer>

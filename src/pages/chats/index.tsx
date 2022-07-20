@@ -33,7 +33,7 @@ const Chats: NextPage = () => {
 	const addChatToDB = useMutation(['chat.add'], {
 		async onSuccess() {
 			allChats.refetch()
-			await getSubscribedChats()
+			await getSubscribedChats() // <-- this is a refetch of the zustand method
 			setIsAddingChat(false)
 			toast.success('Chat created successfully')
 		},

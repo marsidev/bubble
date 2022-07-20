@@ -1,9 +1,12 @@
 import type { Message } from '@twilio/conversations'
 import { Flex, type FlexProps, Tag } from '@chakra-ui/react'
+import { useEffect } from 'react'
 import { useStore } from '@store'
+import { useQuery } from '@utils/trpc'
 
 interface BubbleProps extends FlexProps {
 	message: Message
+	endOfChatRef: React.RefObject<HTMLDivElement>
 }
 
 const beforeTodayFmtOpts: Intl.DateTimeFormatOptions = {
@@ -15,17 +18,40 @@ const todayFmtOpts: Intl.DateTimeFormatOptions = {
 	hour: 'numeric',
 	minute: 'numeric'
 }
+
 const beforeTodayFmt = new Intl.DateTimeFormat('en-US', beforeTodayFmtOpts)
 const todayFmt = new Intl.DateTimeFormat('en-US', todayFmtOpts)
 
-export const Bubble: React.FC<BubbleProps> = ({ message }) => {
+export const Bubble: React.FC<BubbleProps> = ({ message, endOfChatRef }) => {
 	const activeChat = useStore(state => state.activeChat)
 	const session = useStore(state => state.session)
 	const activeChatDBUsers = useStore(state => state.activeChatDBUsers)
+
+	const { body: encryptedMessage, author, dateCreated } = message
+
+	const decryptedMessage = useQuery(
+		['message.decrypt', { encrypted: encryptedMessage }],
+		{
+			refetchOnWindowFocus: false,
+			retryOnMount: true,
+			retry: false
+		}
+	)
+
+	const scrollChatToBottom = () => {
+		endOfChatRef.current?.scrollIntoView({
+			behavior: 'auto',
+			block: 'start'
+		})
+	}
+
+	useEffect(() => {
+		scrollChatToBottom()
+	}, [decryptedMessage.data, scrollChatToBottom, message])
+
 	const { createdBy: chatHost } = activeChat ?? {}
 
 	const userEmail = session?.user?.email
-	const { body, author, dateCreated } = message
 	const sentByHost = chatHost === author
 
 	const outgoingMessage = userEmail === author
@@ -33,7 +59,10 @@ export const Bubble: React.FC<BubbleProps> = ({ message }) => {
 
 	const authorUser = activeChatDBUsers?.find(user => user.email === author)
 
-	const formattedAuthor = outgoingMessage ? 'You' : `${authorUser?.name ?? author}`
+	const formattedAuthor = outgoingMessage
+		? 'You'
+		: `${authorUser?.name ?? author}`
+
 	const bubbleBg = outgoingMessage
 		? 'var(--outgoing-background)'
 		: 'var(--incoming-background)'
@@ -43,6 +72,8 @@ export const Bubble: React.FC<BubbleProps> = ({ message }) => {
 	const timestamp = isToday
 		? todayFmt.format(dateCreated!)
 		: beforeTodayFmt.format(dateCreated!)
+
+	const messageBody = decryptedMessage?.data ?? ''
 
 	return (
 		<Flex align='center' justify='center' w='100%'>
@@ -97,7 +128,7 @@ export const Bubble: React.FC<BubbleProps> = ({ message }) => {
 						whiteSpace='pre-wrap'
 						wordBreak='break-word'
 					>
-						{body}
+						{messageBody}
 					</Flex>
 
 					<Flex

@@ -9,14 +9,22 @@ import {
 import { PaperPlaneRight } from 'phosphor-react'
 import { useRef } from 'react'
 import { useStore } from '@store'
+import { useMutation } from '@utils/trpc'
 
 export const ChatInput: React.FC<FlexProps> = ({ ...props }) => {
 	const form = useRef<HTMLFormElement | null>(null)
 	const activeChat = useStore(state => state.activeChat)
 	const activeChatMessages = useStore(state => state.activeChatMessages)
 
+	const encryptMessage = useMutation(['message.encrypt'], {
+		async onSuccess(encrypted) {
+			await activeChat?.sendMessage(encrypted)
+		}
+	})
+
 	const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
+
 		if (!activeChatMessages || !activeChat || !form) {
 			console.warn('Chat not initialized')
 			return
@@ -28,7 +36,7 @@ export const ChatInput: React.FC<FlexProps> = ({ ...props }) => {
 		form.current?.reset()
 
 		if (message) {
-			await activeChat?.sendMessage(message as string)
+			encryptMessage.mutate({ message: message as string })
 		}
 	}
 

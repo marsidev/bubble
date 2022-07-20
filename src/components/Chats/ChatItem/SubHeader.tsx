@@ -1,5 +1,6 @@
 import type { FC } from 'react'
 import { Flex, type FlexProps, chakra } from '@chakra-ui/react'
+import { useQuery } from '@utils/trpc'
 
 interface SubHeaderProps extends FlexProps {
 	lastMessageAuthor: string
@@ -7,9 +8,16 @@ interface SubHeaderProps extends FlexProps {
 }
 
 export const SubHeader: FC<SubHeaderProps> = ({ lastMessageAuthor, lastMessageBody, ...props }) => {
-	// const previewMessage = lastMessageBody
-	// 	? `${lastMessageAuthor}: ${lastMessageBody}`
-	// 	: 'Chat is empty'
+	const decryptedMessage = useQuery(
+		['message.decrypt', { encrypted: lastMessageBody }],
+		{
+			refetchOnWindowFocus: false,
+			retryOnMount: true,
+			retry: false
+		}
+	)
+
+	const messageBody = decryptedMessage?.data
 
 	return (
 		<Flex
@@ -25,7 +33,7 @@ export const SubHeader: FC<SubHeaderProps> = ({ lastMessageAuthor, lastMessageBo
 			w='100%'
 			{...props}
 		>
-			{lastMessageBody && (
+			{messageBody && (
 				<chakra.span
 					className='ellipsis'
 					maxW={['100px', '150px', '200px', '300px', '400px']}
@@ -34,14 +42,14 @@ export const SubHeader: FC<SubHeaderProps> = ({ lastMessageAuthor, lastMessageBo
 				</chakra.span>
 			)}
 
-			{lastMessageBody && <chakra.span>:</chakra.span>}
+			{messageBody && <chakra.span>:</chakra.span>}
 
 			<chakra.span
 				className='ellipsis'
 				maxW={['300px', '350px', '400px', '600px', '600px']}
-				ml={lastMessageBody ? '3px' : 0}
+				ml={messageBody ? '3px' : 0}
 			>
-				{lastMessageBody || 'Chat is empty'}
+				{messageBody || 'Chat is empty'}
 			</chakra.span>
 		</Flex>
 	)
