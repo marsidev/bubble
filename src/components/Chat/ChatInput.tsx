@@ -6,7 +6,7 @@ import {
 	Input,
 	chakra
 } from '@chakra-ui/react'
-import { PaperPlaneRight, Smiley } from 'phosphor-react'
+import { PaperPlaneRight } from 'phosphor-react'
 import { useRef } from 'react'
 import { useStore } from '@store'
 
@@ -56,15 +56,13 @@ export const ChatInput: React.FC<FlexProps> = ({ ...props }) => {
 				py={4}
 				w='100%'
 			>
-				<IconButton aria-label='left caret icon' variant='ghost'>
+				{/* <IconButton aria-label='left caret icon' variant='ghost'>
 					<Smiley color='var(--icon)' size={32} weight='regular' />
-				</IconButton>
+				</IconButton> */}
 
 				<chakra.form ref={form} display='flex' gap={2} w='100%' onSubmit={onSubmit}>
 					<Input
 						autoComplete='off'
-						// bg='var(--compose-input-background)'
-						// border='1px solid var(--compose-input-border)'
 						id='message'
 						name='message'
 						placeholder='Write a message...'
