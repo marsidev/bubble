@@ -1,11 +1,22 @@
 import type { Message } from '@twilio/conversations'
-// import { useEffect } from 'react'
 import { Flex, type FlexProps, Tag } from '@chakra-ui/react'
 import { useStore } from '@store'
 
 interface BubbleProps extends FlexProps {
 	message: Message
 }
+
+const beforeTodayFmtOpts: Intl.DateTimeFormatOptions = {
+	dateStyle: 'short',
+	timeStyle: 'short'
+}
+
+const todayFmtOpts: Intl.DateTimeFormatOptions = {
+	hour: 'numeric',
+	minute: 'numeric'
+}
+const beforeTodayFmt = new Intl.DateTimeFormat('en-US', beforeTodayFmtOpts)
+const todayFmt = new Intl.DateTimeFormat('en-US', todayFmtOpts)
 
 export const Bubble: React.FC<BubbleProps> = ({ message }) => {
 	const activeChat = useStore(state => state.activeChat)
@@ -27,12 +38,11 @@ export const Bubble: React.FC<BubbleProps> = ({ message }) => {
 		? 'var(--outgoing-background)'
 		: 'var(--incoming-background)'
 
-	const today = new Date()
-	const isToday = today.toDateString() === new Date(dateCreated!).toDateString()
+	const isToday = new Date().toDateString() === dateCreated!.toDateString()
 
 	const timestamp = isToday
-		? new Date(dateCreated!).toLocaleTimeString()
-		: new Date(dateCreated!).toLocaleString()
+		? todayFmt.format(dateCreated!)
+		: beforeTodayFmt.format(dateCreated!)
 
 	return (
 		<Flex align='center' justify='center' w='100%'>
