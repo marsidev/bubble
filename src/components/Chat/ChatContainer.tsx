@@ -14,7 +14,7 @@ export const ChatContainer: FC<ChatContainerProps> = ({ children }) => {
 				h='full'
 				left={0}
 				opacity='0.06'
-				pos='absolute'
+				pos='fixed'
 				top={0}
 				w='full'
 			/>
