@@ -58,6 +58,7 @@ export const CreateChatModal: React.FC<CreateChatModalProps> = props => {
 				<FormControl>
 					<Input
 						autoComplete='off'
+						autoFocus={true}
 						id='chatName'
 						name='chatName'
 						placeholder='Chat name'
