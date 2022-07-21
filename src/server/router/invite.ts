@@ -47,19 +47,6 @@ export const inviteRouter = createRouter()
 				})
 			}
 
-			const chat = await ctx.prisma.chat.findUnique({
-				where: {
-					sid: chatSid
-				}
-			})
-
-			if (!chat) {
-				throw new TRPCError({
-					code: 'NOT_FOUND',
-					message: 'Chat not found 🔎'
-				})
-			}
-
 			// get access token
 			const tokenServiceUrl = process.env.NEXT_PUBLIC_TWILIO_TOKEN_SERVICE_URL
 			const query = new URLSearchParams({
@@ -77,7 +64,7 @@ export const inviteRouter = createRouter()
 			}
 
 			const { accessToken } = tokenData
-			return { host, chat, accessToken }
+			return { host, chatSid, accessToken }
 		}
 	})
 	.mutation('getInvitationLink', {

@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { Button, HStack, Heading, VStack, chakra } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
-import { Chat } from '.prisma/client'
 import { ClientlessLayout } from '@layouts'
 import { useAuth } from '@hooks'
 import { Link, ReturnHome } from '@components'
@@ -12,7 +11,7 @@ import { useQuery } from '@utils/trpc'
 import { createChatClient } from '@services'
 
 interface AlreadyJoinedProps {
-	chat: Chat | undefined
+	chat: Conversation
 	title: string
 }
 
@@ -51,15 +50,13 @@ const AlreadyJoined: React.FC<AlreadyJoinedProps> = ({ title = '', chat }) => {
 				>
 					{'You have already joined to the chat '}
 					<chakra.span fontStyle='italic' fontWeight='bold'>
-						{chat?.name}
+						{chat.friendlyName || chat.sid}
 					</chakra.span>
 					{'. 🤗'}
 				</Heading>
 
-				<Link href={`/chats/${chat?.sid}`}>
-					<Button colorScheme='linkedin'>
-						Go to chat
-					</Button>
+				<Link href={`/chats/${chat.sid}`}>
+					<Button colorScheme='linkedin'>Go to chat</Button>
 				</Link>
 			</VStack>
 		</ClientlessLayout>
@@ -76,7 +73,9 @@ const Invite: NextPage = () => {
 	const { data: encryptedData } = router.query
 
 	const invitation = useQuery(
-		['invite.decryptInvitationLink', { data: (encryptedData as string)?.replace(/ /g, '+') || '' }],
+		['invite.decryptInvitationLink', {
+			data: (encryptedData as string)?.replace(/ /g, '+') || ''
+		}],
 		{
 			refetchOnWindowFocus: false,
 			retry: false,
@@ -86,15 +85,15 @@ const Invite: NextPage = () => {
 				setTitle(title)
 
 				const client = await createChatClient(data.accessToken)
-				const conversation = await client.getConversationBySid(data.chat.sid)
+				const conversation = await client.getConversationBySid(data.chatSid)
+				setConversation(conversation)
 
 				try {
 					await conversation.getParticipantByIdentity(session?.user?.email)
 					console.warn('You are already a member of this chat')
 					setJoinable(false)
-					return
 				} catch (e) {
-					setConversation(conversation)
+					console.log('joinable')
 				}
 
 				setLoading(false)
@@ -102,7 +101,7 @@ const Invite: NextPage = () => {
 		}
 	)
 
-	const { chat, host: hostUser } = invitation.data || {}
+	const { host: hostUser, chatSid } = invitation.data || {}
 
 	const onDecline = () => {
 		router.push(authenticated ? '/chats' : '/')
@@ -113,11 +112,11 @@ const Invite: NextPage = () => {
 			return toast.error('You are already a member of this chat')
 		}
 
-		if (session?.user?.email && conversation && chat?.sid) {
+		if (session?.user?.email && conversation) {
 			const identity = session.user.email
 			const participant = await conversation.add(identity)
 			if (participant) {
-				router.push(`/chats/${chat.sid}`)
+				router.push(`/chats/${chatSid}`)
 			}
 		} else {
 			toast.error('Something went wrong 😢')
@@ -132,8 +131,8 @@ const Invite: NextPage = () => {
 		return <BrokenLink message={invitation.error.message} />
 	}
 
-	if (!joinable) {
-		return <AlreadyJoined chat={chat} title={title} />
+	if (!joinable && conversation) {
+		return <AlreadyJoined chat={conversation} title={title} />
 	}
 
 	return (
@@ -147,7 +146,7 @@ const Invite: NextPage = () => {
 					<chakra.span fontWeight='bold'>{hostUser?.name}</chakra.span> invited
 					you to chat on{' '}
 					<chakra.span fontStyle='italic' fontWeight='bold'>
-						{chat?.name}
+						{conversation?.friendlyName}
 					</chakra.span>
 				</Heading>
 
