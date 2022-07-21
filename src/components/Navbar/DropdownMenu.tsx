@@ -1,34 +1,38 @@
-import type { FlexProps } from '@chakra-ui/react'
-import type { FC } from 'react'
 import {
+	type FlexProps,
 	IconButton,
 	Menu,
 	MenuButton,
 	MenuItem,
 	MenuList
 } from '@chakra-ui/react'
-import { DotsThreeVertical, Trash } from 'phosphor-react'
+import {
+	DotsThreeVertical as DotsIcon,
+	IconProps,
+	SignOut as LeaveIcon,
+	Trash as TrashIcon
+} from 'phosphor-react'
 import { signIn, signOut } from 'next-auth/react'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/router'
-import { useMutation, useQuery } from '@utils/trpc'
+import { useQuery } from '@utils/trpc'
 import { useStore } from '@store'
 import { SignIcon } from '.'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface DropdownMenuProps extends FlexProps {}
+interface DropdownMenuProps extends FlexProps { }
 
-export const DropdownMenu: FC<DropdownMenuProps> = () => {
+const iconProps: IconProps = {
+	color: 'var(--panel-header-icon)',
+	size: 24,
+	weight: 'bold'
+}
+
+export const DropdownMenu: React.FC<DropdownMenuProps> = () => {
 	const activeChat = useStore(state => state.activeChat)
 	const session = useQuery(['auth.getSession'])
 	const router = useRouter()
 	const { sid: routeSid } = router.query
-
-	const removeChatFromDB = useMutation(['chat.remove'], {
-		async onSuccess() {
-			await activeChat?.delete()
-		}
-	})
 
 	const { data: sessionData } = session
 	const authenticated = !!session.data && !session.isLoading
@@ -37,7 +41,9 @@ export const DropdownMenu: FC<DropdownMenuProps> = () => {
 	const host = activeChat?.createdBy
 	const isHost = !!host && sessionData?.user?.email === host
 	const isSameChat = routeSid === activeChat?.sid
+
 	const showDeleteOption = isChat && isHost && isSameChat && !!activeChat
+	const showLeaveOption = isChat && !isHost && isSameChat && !!activeChat
 
 	const onSignIn = async () => {
 		await signIn('github', { callbackUrl: '/chats' })
@@ -48,11 +54,22 @@ export const DropdownMenu: FC<DropdownMenuProps> = () => {
 	}
 
 	const onRemoveChat = async () => {
-		const promise = removeChatFromDB.mutateAsync({ sid: activeChat!.sid })
-
+		const promise = activeChat!.delete()
 		await toast.promise(promise, {
 			pending: 'Removing chat...',
 			success: 'Chat removed! 🗑️',
+			error: 'Something went wrong! 😞'
+		})
+
+		router.push('/chats')
+	}
+
+	const onLeaveChat = async () => {
+		const promise = activeChat!.leave()
+
+		await toast.promise(promise, {
+			pending: 'Leaving chat...',
+			success: 'Chat leaved!',
 			error: 'Something went wrong! 😞'
 		})
 
@@ -64,13 +81,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = () => {
 			<MenuButton
 				aria-label='Options'
 				as={IconButton}
-				icon={
-					<DotsThreeVertical
-						color='var(--panel-header-icon)'
-						size={32}
-						weight='bold'
-					/>
-				}
+				icon={<DotsIcon {...iconProps} size={32} />}
 				variant='ghost'
 			/>
 
@@ -83,13 +94,14 @@ export const DropdownMenu: FC<DropdownMenuProps> = () => {
 				</MenuItem>
 
 				{showDeleteOption && (
-					<MenuItem
-						icon={
-							<Trash color='var(--panel-header-icon)' size={24} weight='bold' />
-						}
-						onClick={onRemoveChat}
-					>
+					<MenuItem icon={<TrashIcon {...iconProps} />} onClick={onRemoveChat}>
 						Delete chat
+					</MenuItem>
+				)}
+
+				{showLeaveOption && (
+					<MenuItem icon={<LeaveIcon {...iconProps} />} onClick={onLeaveChat}>
+						Leave chat
 					</MenuItem>
 				)}
 			</MenuList>

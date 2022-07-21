@@ -1,4 +1,4 @@
-import type { Conversation, Message } from '@twilio/conversations'
+import type { Conversation, Message, Participant } from '@twilio/conversations'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/router'
@@ -38,32 +38,45 @@ export const useTwilio = async () => {
 		}
 	}, [session, client])
 
-	const onMessageAdded = (message: Message) => {
-		if (message.conversation.sid === activeChat?.sid) {
-			addActiveChatMessage(message)
+	const onMessageAdded = (m: Message) => {
+		if (m.conversation.sid === activeChat?.sid) {
+			addActiveChatMessage(m)
 		}
 	}
 
-	const onConversationAdded = async (conversation: Conversation) => {
-		console.log(`conversation added: ${conversation.sid}`)
+	const onConversationAdded = async (c: Conversation) => {
+		console.log(`conversation added: ${c.sid}`)
 		await getSubscribedChats()
 	}
 
-	const onConversationRemoved = async (conversation: Conversation) => {
-		const { friendlyName, sid, createdBy } = conversation
+	const onConversationRemoved = async (c: Conversation) => {
+		const { friendlyName, sid, createdBy } = c
 		console.log(`conversation removed: ${sid}`)
 
 		const isHost = session?.user?.email === createdBy
+		const isChatPage = router.pathname.startsWith('/chats/')
 
-		if (!isHost) {
-			toast.info(`Chat "${friendlyName}" was deleted by the host. 🗑️`)
-		}
-
+		!isHost && toast.info(`Chat ${friendlyName} removed. 🗑️`)
 		await getSubscribedChats()
-
-		if (!isHost && sid === activeChat?.sid) {
+		if (isChatPage && sid === router.query.sid) {
 			router.push('/chats')
 		}
+	}
+
+	const onConversationLeft = async (c: Conversation) => {
+		const { sid } = c
+		console.log(`conversation left: ${sid}`)
+		const isChatPage = router.pathname.startsWith('/chats/')
+
+		await getSubscribedChats()
+		if (isChatPage && sid === router.query.sid) {
+			router.push('/chats')
+		}
+	}
+
+	const onParticipantLeft = async (p: Participant) => {
+		console.log(`user ${p.identity} left the conversation ${p.conversation.sid}`)
+		await getSubscribedChats()
 	}
 
 	// twilio listeners
@@ -72,12 +85,13 @@ export const useTwilio = async () => {
 			client.on('messageAdded', onMessageAdded)
 			client.on('conversationAdded', onConversationAdded)
 			client.on('conversationRemoved', onConversationRemoved)
+			client.on('conversationLeft', onConversationLeft)
+			client.on('participantLeft', onParticipantLeft)
 			// client.on('tokenExpired', console.warn)
 			// client.on('tokenAboutToExpire', console.warn)
 
 			// implement later:
 			// client.on('participantJoined', handleParticipantJoined)
-			// client.on('participantLeft', handleParticipantLeft)
 			// client.on('typingStarted', handleParticipantLeft)
 			// client.on('typingEnded', handleParticipantLeft)
 
@@ -85,11 +99,22 @@ export const useTwilio = async () => {
 				client.off('messageAdded', onMessageAdded)
 				client.off('conversationAdded', onConversationAdded)
 				client.off('conversationRemoved', onConversationRemoved)
+				client.off('conversationLeft', onConversationLeft)
+				client.off('participantLeft', onParticipantLeft)
 				// client.off('tokenExpired', console.warn)
 				// client.off('tokenAboutToExpire', console.warn)
 			}
 		}
-	}, [client, activeChat, onMessageAdded, onConversationAdded, onConversationRemoved, getSubscribedChats])
+	}, [
+		client,
+		activeChat,
+		onMessageAdded,
+		onConversationAdded,
+		onConversationRemoved,
+		getSubscribedChats,
+		onParticipantLeft,
+		onConversationLeft
+	])
 
 	return twilioToken
 }
