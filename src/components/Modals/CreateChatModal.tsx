@@ -56,8 +56,8 @@ export const CreateChatModal: React.FC<CreateChatModalProps> = props => {
 				onSubmit={onSubmit}
 			>
 				<FormControl>
-					{/* <FormLabel htmlFor='chatName'>Chat name</FormLabel> */}
 					<Input
+						autoComplete='off'
 						id='chatName'
 						name='chatName'
 						placeholder='Chat name'

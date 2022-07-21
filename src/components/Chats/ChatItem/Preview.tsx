@@ -30,13 +30,15 @@ export const Preview: FC<PreviewProps> = ({ chat, ...props }) => {
 				setLastMessage(messages.at(-1))
 			})
 		}
-	}, [])
+	}, [chat.lastMessage])
 
 	useEffect(() => {
-		chat.on('messageAdded', msg => {
-			setLastMessage(msg)
-		})
-	}, [chat])
+		chat.on('messageAdded', setLastMessage)
+
+		return () => {
+			chat.off('messageAdded', setLastMessage)
+		}
+	}, [chat, setLastMessage])
 
 	return (
 		<Flex

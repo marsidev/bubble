@@ -1,5 +1,5 @@
 import type { Get, Set, StoreSlice } from '.'
-import type { Conversation, Message, Participant } from '@twilio/conversations'
+import type { Conversation, Participant } from '@twilio/conversations'
 import { User } from '.prisma/client'
 import { sortChats } from '@utils/sort-chats'
 
@@ -12,17 +12,12 @@ interface DBChat {
 	updatedAt: Date
 }
 
-export interface Chat extends Conversation {
-	lastMessageData?: Message | undefined
-}
-
-type ChatList = Chat[]
+type ChatList = Conversation[]
 
 export interface ChatsState {
 	// db related states
 	chats: DBChat[]
 	setChats: (chats: DBChat[]) => void
-	addChat: (chat: DBChat) => void
 	removeChatBySid: (sid: string) => void
 
 	activeChat: Conversation | null
@@ -30,7 +25,6 @@ export interface ChatsState {
 	getChatData: (sid: string) => Promise<Conversation | null>
 
 	activeChatParticipants: Participant[]
-	setActiveChatParticipants: (participants: Participant[]) => void
 	getActiveChatParticipants: () => Promise<Participant[]>
 
 	activeChatDBUsers: User[]
@@ -39,19 +33,14 @@ export interface ChatsState {
 	isAddingChat: boolean
 	setIsAddingChat: (isAddingChat: boolean) => void
 
-	isRemovingChat: boolean
-	setIsRemovingChat: (isRemovingChat: boolean) => void
-
 	fetchingChats: boolean
 	subscribedChats: ChatList
-	setSubscribedChats: (subscribedChats: ChatList) => void
 	getSubscribedChats: () => Promise<ChatList>
 }
 
 export const chats: StoreSlice<ChatsState> = (set: Set, get: Get) => ({
 	chats: [],
 	setChats: chats => set({ chats }),
-	addChat: chat => set(state => ({ chats: [...state.chats, chat] })),
 	removeChatBySid: sid =>
 		set(state => ({ chats: state.chats.filter(c => c.sid !== sid) })),
 
@@ -67,7 +56,6 @@ export const chats: StoreSlice<ChatsState> = (set: Set, get: Get) => ({
 	},
 
 	activeChatParticipants: [],
-	setActiveChatParticipants: participants => set({ activeChatParticipants: participants }),
 	getActiveChatParticipants: async () => {
 		const { activeChat } = get()
 		if (!activeChat) return []
@@ -83,12 +71,8 @@ export const chats: StoreSlice<ChatsState> = (set: Set, get: Get) => ({
 	isAddingChat: false,
 	setIsAddingChat: isAddingChat => set({ isAddingChat }),
 
-	isRemovingChat: false,
-	setIsRemovingChat: isRemovingChat => set({ isRemovingChat }),
-
 	fetchingChats: false,
 	subscribedChats: [],
-	setSubscribedChats: subscribedChats => set({ subscribedChats }),
 	getSubscribedChats: async () => {
 		const { TwilioClient } = get()
 		if (!TwilioClient) return []
@@ -96,8 +80,7 @@ export const chats: StoreSlice<ChatsState> = (set: Set, get: Get) => ({
 		set(() => ({ fetchingChats: true }))
 
 		return new Promise<ChatList>(resolve => {
-			TwilioClient
-				.getSubscribedConversations()
+			TwilioClient.getSubscribedConversations()
 				.then(paginator => {
 					// paginator.hasNextPage
 					const chats = sortChats(paginator.items)

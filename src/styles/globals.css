@@ -34,7 +34,6 @@ body {
 	--primary-title: rgba(233,237,239,0.88);
   --shadow-rgb: 11,20,26;
   --secondary: #8696a0;
-
 }
 
 ::-webkit-scrollbar {
@@ -57,7 +56,7 @@ body {
 
 .Toastify__toast {
   border-radius: var(--chakra-radii-md) !important;
-  margin-bottom: 3px !important;
+  margin-bottom: 80px !important;
 	opacity: 0.85;
 	font-size: var(--chakra-fontSizes-sm);
 	background-color: var(--background-default) !important;

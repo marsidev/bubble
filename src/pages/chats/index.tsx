@@ -11,29 +11,19 @@ import {
 	CreateChatModal,
 	FloatingButton
 } from '@components'
-import { useMutation, useQuery } from '@utils/trpc'
+import { useMutation } from '@utils/trpc'
 import { createChat } from '@services'
 import { useStore } from '@store'
 
 const Chats: NextPage = () => {
 	const twilioToken = useStore(state => state.twilioToken)
-	const setChats = useStore(state => state.setChats)
 	const setIsAddingChat = useStore(state => state.setIsAddingChat)
 	const client = useStore(state => state.TwilioClient)
 	const subscribedChats = useStore(state => state.subscribedChats)
 	const getSubscribedChats = useStore(state => state.getSubscribedChats)
 
-	const allChats = useQuery(['chat.getAll'], {
-		refetchOnWindowFocus: false,
-		onSuccess(data) {
-			setChats(data)
-		}
-	})
-
 	const addChatToDB = useMutation(['chat.add'], {
 		async onSuccess() {
-			allChats.refetch()
-			await getSubscribedChats() // <-- this is a refetch of the zustand method
 			setIsAddingChat(false)
 			toast.success('Chat created successfully')
 		},
@@ -44,7 +34,7 @@ const Chats: NextPage = () => {
 	})
 
 	useEffect(() => {
-		if (client) {
+		if (client && subscribedChats.length === 0) {
 			getSubscribedChats()
 		}
 	}, [client])

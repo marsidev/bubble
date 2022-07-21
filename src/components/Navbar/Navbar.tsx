@@ -1,4 +1,4 @@
-import { type FlexProps, HStack, Heading } from '@chakra-ui/react'
+import { Flex, type FlexProps, HStack, Heading } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useStore } from '@store'
 import {
@@ -19,7 +19,7 @@ export const Navbar: React.FC<FlexProps> = ({ ...props }) => {
 	const chatTitle = activeChat?.friendlyName || activeChat?.uniqueName || ''
 	const chatSid = activeChat?.sid || ''
 	const host = activeChat?.createdBy
-	const isHost = host && session?.user?.email === host
+	const isHost = !!host && session?.user?.email === host
 
 	return (
 		<NavbarContainer {...props}>
@@ -35,7 +35,7 @@ export const Navbar: React.FC<FlexProps> = ({ ...props }) => {
 				)}
 			</HStack>
 
-			<HStack>
+			<Flex flexDir='row' gap={2}>
 				{isChat && client && isHost && <InviteButton sid={chatSid} />}
 
 				{/* <IconButton aria-label='toggle theme' variant='ghost'>
@@ -43,7 +43,7 @@ export const Navbar: React.FC<FlexProps> = ({ ...props }) => {
 				</IconButton> */}
 
 				<DropdownMenu />
-			</HStack>
+			</Flex>
 		</NavbarContainer>
 	)
 }

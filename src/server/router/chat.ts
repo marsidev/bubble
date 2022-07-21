@@ -55,3 +55,36 @@ export const chatRouter = createRouter()
 			})
 		}
 	})
+	.mutation('remove', {
+		input: z.object({
+			sid: z.string()
+		}),
+		async resolve({ ctx, input }) {
+			if (!ctx.session?.user?.id) {
+				throw new TRPCError({ code: 'NOT_FOUND' })
+			}
+
+			const chat = await ctx.prisma.chat.findUnique({
+				where: {
+					sid: input.sid
+				}
+			})
+
+			if (!chat) {
+				console.warn('chat not found')
+				throw new TRPCError({ code: 'NOT_FOUND', message: 'Chat not found' })
+			}
+
+			if (chat.ownerId !== ctx.session.user.id) {
+				throw new TRPCError({ code: 'UNAUTHORIZED', message: 'You are not the owner of this chat' })
+			}
+
+			await ctx.prisma.chat.delete({
+				where: {
+					sid: input.sid
+				}
+			})
+
+			return true
+		}
+	})

@@ -11,7 +11,7 @@ export const SignIcon = ({ authenticated, ...props }: SignIconProps) => {
 			<SignOut
 				color='var(--panel-header-icon)'
 				size={24}
-				weight='fill'
+				weight='bold'
 				{...props}
 			/>
 		)

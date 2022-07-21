@@ -9,7 +9,7 @@ import { ToastContainer, ToastContainerProps, Zoom } from 'react-toastify'
 import { ChakraProvider } from '@utils/chakra/Provider'
 
 const toastProps: ToastContainerProps = {
-	position: 'top-center',
+	position: 'bottom-center',
 	autoClose: 2000,
 	hideProgressBar: true,
 	newestOnTop: false,
