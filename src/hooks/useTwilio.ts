@@ -68,7 +68,7 @@ export const useTwilio = async () => {
 
 	// twilio listeners
 	useEffect(() => {
-		if (client && activeChat) {
+		if (client) {
 			client.on('messageAdded', onMessageAdded)
 			client.on('conversationAdded', onConversationAdded)
 			client.on('conversationRemoved', onConversationRemoved)

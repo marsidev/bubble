@@ -1,5 +1,4 @@
 import type { NextPage } from 'next'
-import type { Conversation } from '@twilio/conversations'
 import { useEffect } from 'react'
 import { useDisclosure } from '@chakra-ui/react'
 import { Plus } from 'phosphor-react'
@@ -12,7 +11,7 @@ import {
 	FloatingButton
 } from '@components'
 import { useMutation } from '@utils/trpc'
-import { createChat } from '@services'
+import { createChat as createTwilioChat } from '@services'
 import { useStore } from '@store'
 
 const Chats: NextPage = () => {
@@ -59,18 +58,20 @@ const Chats: NextPage = () => {
 		}
 
 		setIsAddingChat(true)
-		const twilioChat = await createChat({ chatName, client })
 
-		if (twilioChat.error) {
-			toast.error(twilioChat.error.message)
+		try {
+			const twilioChat = await createTwilioChat({ chatName, client })
+
+			if (twilioChat) {
+				await addChatToDB.mutateAsync({
+					name: chatName,
+					sid: twilioChat.sid
+				})
+			}
+		} catch (_error) {
+			toast.error('Error creating chat')
 			setIsAddingChat(false)
-			return
 		}
-
-		await addChatToDB.mutateAsync({
-			name: chatName,
-			sid: (twilioChat as Conversation).sid
-		})
 	}
 
 	return (

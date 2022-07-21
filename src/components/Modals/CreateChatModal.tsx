@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Button, FormControl, Input, chakra } from '@chakra-ui/react'
+import { toast } from 'react-toastify'
 import { Modal } from '@components'
 import { useStore } from '@store'
 
@@ -26,12 +27,20 @@ export const CreateChatModal: React.FC<CreateChatModalProps> = props => {
 		e.preventDefault()
 		const formData = new FormData(form.current!)
 		const data = Object.fromEntries(formData.entries())
-		const { chatName } = data
+		const chatName = data.chatName as string
 
-		if (chatName) {
-			setSubmitted(true)
-			onAddingNewChat(chatName as string)
+		if (chatName.trim() === '') {
+			toast.error('Chat name is empty')
+			return
 		}
+
+		if (chatName.replace(/[^a-zA-Z0-9]/g, '').length < 3) {
+			toast.error('Name is too short')
+			return
+		}
+
+		setSubmitted(true)
+		onAddingNewChat(chatName as string)
 	}
 
 	return (

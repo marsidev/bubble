@@ -1,28 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Client, Conversation as TwilioConversation } from '@twilio/conversations'
+import { Client, Conversation } from '@twilio/conversations'
+import { v4 as uuidv4 } from 'uuid'
 
 interface ChatService {
 	client: Client
 	chatName: string
 }
-
-interface Error {
-	status: number
-	message: string
-	code?: string
-}
-
-interface ErrorObj {
-	error: Error
-}
-
-interface Conversation extends TwilioConversation {
-	error?: Error
-}
-
-const CONNECTION_STATE_CONNECTED = 'connected'
-
-export const isChatClientConnected = (client?: Client): boolean => client?.connectionState === CONNECTION_STATE_CONNECTED
 
 export const createChatClient = async (token: string) => {
 	const newClient = new Client(token, {
@@ -44,34 +27,37 @@ export const createChatClient = async (token: string) => {
 export const joinChat = async (props: ChatService) => {
 	const { client, chatName } = props
 
-	let conversation: Conversation | undefined | ErrorObj
+	let conversation: Conversation | null
 
 	try {
 		conversation = await client.getConversationByUniqueName(chatName)
 		conversation.join()
 		return conversation
 	} catch (error: any) {
-		const errorObj: ErrorObj = { error: error.body }
-		return errorObj
+		console.warn(error)
+		return null
 	}
 }
 
 export const createChat = async (props: ChatService) => {
 	const { client, chatName } = props
-	let conversation: Conversation | undefined | ErrorObj
+	let conversation: Conversation | null
 
 	try {
-		conversation = await client.createConversation({ uniqueName: chatName, friendlyName: chatName })
+		conversation = await client.createConversation({
+			uniqueName: uuidv4(),
+			friendlyName: chatName
+		})
 		conversation.join()
 		return conversation
 	} catch (error: any) {
-		const errorObj: ErrorObj = { error: error.body }
-		return errorObj
+		console.warn(error)
+		return null
 	}
 }
 
 export const joinOrCreateChat = async (props: ChatService) => {
-	let conversation: Conversation | undefined | ErrorObj
+	let conversation: Conversation | null
 
 	conversation = await joinChat(props)
 
