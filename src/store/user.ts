@@ -1,4 +1,5 @@
 import type { Get, Set, StoreSlice } from '.'
+import { clearLocalStorageValue } from '@utils/localStorage'
 
 interface User {
 	name?: string | null | undefined
@@ -21,11 +22,17 @@ export interface UserState {
 export const user: StoreSlice<UserState> = (set: Set, _get: Get) => ({
 	session: null,
 	setSession: (session: Session) => set({ session }),
-	clearSession: () =>
+	clearSession: () => {
+		clearLocalStorageValue('twilio-token')
 		set({
 			session: null,
-			// activeConversation: null,
-			// messages: [],
-			twilioToken: null
+			activeChat: null,
+			subscribedChats: [],
+			activeChatParticipants: [],
+			activeChatDBUsers: [],
+			activeChatMessages: [],
+			twilioToken: null,
+			TwilioClient: null
 		})
+	}
 })

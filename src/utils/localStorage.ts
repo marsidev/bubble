@@ -45,3 +45,7 @@ export const setLocalStorageValue = (key: string, data: unknown, TTL = 3600) => 
 	window.localStorage.setItem(key, JSON.stringify({ expires, data }))
 	// console.log(`saved ${key} to localStorage`)
 }
+
+export const clearLocalStorageValue = (key: string) => {
+	window.localStorage.removeItem(key)
+}
