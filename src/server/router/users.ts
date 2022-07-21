@@ -7,6 +7,8 @@ export const usersRouter = createRouter()
 			email: z.string().email()
 		}),
 		async resolve({ ctx, input }) {
+			if (input.email === '') return null
+
 			return await ctx.prisma.user.findUnique({
 				where: {
 					email: input.email

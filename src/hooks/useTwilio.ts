@@ -51,6 +51,10 @@ export const useTwilio = async () => {
 		if (m.conversation.sid === activeChat?.sid) {
 			addActiveChatMessage(m)
 		}
+
+		if (isChatsList) {
+			getSubscribedChats()
+		}
 	}
 
 	const onConversationAdded = async (c: Conversation) => {
