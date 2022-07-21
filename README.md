@@ -15,6 +15,16 @@ App preview before deadline and project review: <br />
 - [Demo](https://bubble-marsiglia.vercel.app)
 > Screenshots provided by [webmobilefirst](https://www.webmobilefirst.com/en/).
 
+## ✨ Features
+- Login with GitHub
+- Ability to create multiple chats
+- Ability to delete chats
+- Ability to leave a chat
+- Invitation link with expiration of an hour
+- Dynamic routes for chats
+- Encrypted messages
+  ![Encrypted messages recieved shown in Twilio console](preview/encrypted.png)
+
 ## 👨‍💻 Hackathon Info
 - The hackathon goal was build a live and secure text chat (*mobile-first* or *mobile-only*) using [Twilio Conversations API](https://www.twilio.com/messaging/conversations-api).
 - Announced at **[2022/07/01](https://www.twitch.tv/videos/1519558242)**.
