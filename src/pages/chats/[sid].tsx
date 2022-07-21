@@ -21,7 +21,7 @@ const Chat: NextPage = () => {
 	const activeChatDBUsers = useStore(state => state.activeChatDBUsers)
 	const bottomRef = useRef<HTMLDivElement>(null)
 
-	useQuery(['user.findManyByEmails', {
+	const getNames = useQuery(['user.findManyByEmails', {
 		emails: activeChatParticipants?.map(p => p.identity)
 	}], {
 		refetchOnWindowFocus: false,
@@ -42,6 +42,10 @@ const Chat: NextPage = () => {
 			getActiveChatParticipants()
 		}
 	}, [activeChat])
+
+	useEffect(() => {
+		getNames.refetch()
+	}, [activeChatMessages])
 
 	return (
 		<Layout title={title}>

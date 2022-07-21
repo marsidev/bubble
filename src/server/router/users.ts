@@ -4,7 +4,7 @@ import { createRouter } from './context'
 export const usersRouter = createRouter()
 	.query('findByEmail', {
 		input: z.object({
-			email: z.string().email()
+			email: z.string()
 		}),
 		async resolve({ ctx, input }) {
 			if (input.email === '') return null
