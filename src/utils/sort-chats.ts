@@ -1,6 +1,6 @@
-import type { Chat } from '@store/chats'
+import type { ChatList } from '@store/chats'
 
-export const sortChats = (chats: Chat[]) => {
+export const sortChats = (chats: ChatList) => {
 	return chats.sort((a, b) => {
 		const dateB = b.lastMessage?.dateCreated || b.dateUpdated || b.dateCreated
 		const timeB = new Date(dateB!).getTime()

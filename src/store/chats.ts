@@ -12,7 +12,7 @@ import { sortChats } from '@utils/sort-chats'
 // 	updatedAt: Date
 // }
 
-type ChatList = Conversation[]
+export type ChatList = Conversation[]
 
 export interface ChatsState {
 	activeChat: Conversation | null
