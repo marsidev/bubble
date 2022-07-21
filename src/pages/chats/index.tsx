@@ -10,7 +10,6 @@ import {
 	CreateChatModal,
 	FloatingButton
 } from '@components'
-import { useMutation } from '@utils/trpc'
 import { createChat as createTwilioChat } from '@services'
 import { useStore } from '@store'
 
@@ -20,17 +19,6 @@ const Chats: NextPage = () => {
 	const client = useStore(state => state.TwilioClient)
 	const subscribedChats = useStore(state => state.subscribedChats)
 	const getSubscribedChats = useStore(state => state.getSubscribedChats)
-
-	const addChatToDB = useMutation(['chat.add'], {
-		async onSuccess() {
-			setIsAddingChat(false)
-			toast.success('Chat created successfully')
-		},
-		onError(error) {
-			console.error(error.message)
-			setIsAddingChat(false)
-		}
-	})
 
 	useEffect(() => {
 		if (client && subscribedChats.length === 0) {
@@ -60,14 +48,9 @@ const Chats: NextPage = () => {
 		setIsAddingChat(true)
 
 		try {
-			const twilioChat = await createTwilioChat({ chatName, client })
-
-			if (twilioChat) {
-				await addChatToDB.mutateAsync({
-					name: chatName,
-					sid: twilioChat.sid
-				})
-			}
+			await createTwilioChat({ chatName, client })
+			setIsAddingChat(false)
+			toast.success('Chat created successfully')
 		} catch (_error) {
 			toast.error('Error creating chat')
 			setIsAddingChat(false)
