@@ -4,12 +4,10 @@ Created to participate in a hackathon hosted by [midudev](https://www.github.com
 
 ## 🚀 Preview
 App preview before deadline and project review: <br />
-<div style="display:flex; flex-direction:column; text-align:center; align-items:center; gap:1em;">
-  <div style="display:flex; gap:1em; justify-content:center;">
-    <img src="preview/preview-1.png" alt="Preview of Bubble Chat on an iPhone 12 PRO MAX" width="30%"/>
-    <img src="preview/preview-2.png" alt="Preview of Bubble Chat on an iPhone 12 PRO MAX" width="30%"/>
-  </div>
-  <img src="preview/preview-3.png" alt="Preview of Bubble Chat on an iPhone 12 PRO MAX" width="30%"/>
+<div style="display:flex; text-align:center; align-items:center; gap:1em;">
+	<img src="preview/preview-1.png" alt="Preview of Bubble Chat on an iPhone 12 PRO MAX" width="30%"/>
+	<img src="preview/preview-2.png" alt="Preview of Bubble Chat on an iPhone 12 PRO MAX" width="30%"/>
+	<img src="preview/preview-3.png" alt="Preview of Bubble Chat on an iPhone 12 PRO MAX" width="30%"/>
 </div>
 
 - [Demo](https://bubble-marsiglia.vercel.app)
@@ -22,8 +20,11 @@ App preview before deadline and project review: <br />
 - Ability to leave a chat
 - Invitation link with expiration of an hour
 - Dynamic routes for chats
-- Encrypted messages
-  ![Encrypted messages recieved shown in Twilio console](preview/encrypted.png)
+- 
+	<div style="text-align:left; align-items:flex-start;">
+ 		<p>Encrypted messages</p>
+  	<img src="preview/encrypted.png" alt="Encrypted messages recieved shown in Twilio console" width="200px" />
+	</div>
 
 ## 👨‍💻 Hackathon Info
 - The hackathon goal was build a live and secure text chat (*mobile-first* or *mobile-only*) using [Twilio Conversations API](https://www.twilio.com/messaging/conversations-api).
