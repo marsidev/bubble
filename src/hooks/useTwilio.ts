@@ -18,6 +18,8 @@ export const useTwilio = async () => {
 	const addActiveChatMessage = useStore(state => state.addActiveChatMessage)
 	const getSubscribedChats = useStore(state => state.getSubscribedChats)
 
+	const isChatsList = router.pathname === '/chats'
+
 	// get token from local storage. If not exists or if expired, fetch a new one
 	useEffect(() => {
 		if (session?.user) {
@@ -37,6 +39,13 @@ export const useTwilio = async () => {
 			}
 		}
 	}, [session, client])
+
+	// refetch subscribed chats when rendering the chats list
+	useEffect(() => {
+		if (isChatsList) {
+			getSubscribedChats()
+		}
+	}, [isChatsList, getSubscribedChats])
 
 	const onMessageAdded = (m: Message) => {
 		if (m.conversation.sid === activeChat?.sid) {
