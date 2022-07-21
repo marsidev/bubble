@@ -1,4 +1,11 @@
 import { z } from 'zod'
+import {
+	adjectives,
+	animals,
+	colors,
+	uniqueNamesGenerator
+} from 'unique-names-generator'
+import { getRandomAvatar } from '@fractalsoftware/random-avatar-generator'
 import { createRouter } from './context'
 
 export const usersRouter = createRouter()
@@ -35,5 +42,28 @@ export const usersRouter = createRouter()
 					}
 				}
 			})
+		}
+	})
+	.mutation('createAnonUser', {
+		async resolve({ ctx }) {
+			const name = uniqueNamesGenerator({
+				dictionaries: [adjectives, colors, animals],
+				separator: ' ',
+				length: 3,
+				style: 'capital'
+			})
+			const email = name.toLowerCase().replaceAll(' ', '-') + '@anon.user'
+			const avatarSvg = getRandomAvatar(8, 'circle')
+			const image = `data:image/svg+xml;base64,${Buffer.from(avatarSvg).toString('base64')}`
+
+			const user = await ctx.prisma.user.create({
+				data: {
+					name,
+					email,
+					image
+				}
+			})
+
+			return user
 		}
 	})

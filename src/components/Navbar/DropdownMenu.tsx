@@ -30,6 +30,7 @@ const iconProps: IconProps = {
 
 export const DropdownMenu: React.FC<DropdownMenuProps> = () => {
 	const activeChat = useStore(state => state.activeChat)
+	const clearSession = useStore(state => state.clearSession)
 	const session = useQuery(['auth.getSession'])
 	const router = useRouter()
 	const { sid: routeSid } = router.query
@@ -50,6 +51,7 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = () => {
 	}
 
 	const onSignOut = async () => {
+		clearSession()
 		await signOut({ callbackUrl: '/' })
 	}
 

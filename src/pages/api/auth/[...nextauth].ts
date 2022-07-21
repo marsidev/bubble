@@ -5,6 +5,7 @@ import NextAuth, {
 	type User
 } from 'next-auth'
 import GithubProvider from 'next-auth/providers/github'
+import CredentialsProvider from 'next-auth/providers/credentials'
 import jwt from 'jsonwebtoken'
 import { prisma } from '@server/db/client'
 import { CustomPrismaAdapter } from '@server/db/adapter'
@@ -37,6 +38,25 @@ export const authOptions: NextAuthOptions = {
 		GithubProvider({
 			clientId: process.env.GITHUB_ID,
 			clientSecret: process.env.GITHUB_SECRET
+		}),
+		CredentialsProvider({
+			name: 'Credentials',
+			credentials: {
+				email: { label: 'Email', type: 'email' }
+			},
+			async authorize(credentials) {
+				const user = await prisma.user.findUnique({
+					where: {
+						email: credentials?.email
+					}
+				})
+
+				if (user) {
+					return user
+				} else {
+					return null
+				}
+			}
 		})
 	],
 	callbacks: {

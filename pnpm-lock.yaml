@@ -8,6 +8,7 @@ specifiers:
   '@emotion/styled': 11.9.3
   '@fontsource/nunito': ^4.5.9
   '@fontsource/raleway': ^4.5.9
+  '@fractalsoftware/random-avatar-generator': ^1.0.11
   '@prisma/client': ^4.0.0
   '@supabase/supabase-js': ^1.35.4
   '@trpc/client': ^9.26.0
@@ -37,6 +38,8 @@ specifiers:
   eslint-plugin-promise: 6.0.0
   eslint-plugin-react: 7.30.1
   framer-motion: 6.4.3
+  github-like-avatar-generator: ^1.1.10
+  give-me-an-avatar: ^1.0.0
   jsonwebtoken: ^8.5.1
   next: 12.2.2
   next-auth: ^4.10.0
@@ -62,6 +65,7 @@ dependencies:
   '@emotion/styled': 11.9.3_xorl7rqfpn4gtnla4dfecagcw4
   '@fontsource/nunito': 4.5.9
   '@fontsource/raleway': 4.5.9
+  '@fractalsoftware/random-avatar-generator': 1.0.11
   '@prisma/client': 4.0.0_prisma@4.0.0
   '@supabase/supabase-js': 1.35.4
   '@trpc/client': 9.26.0_@trpc+server@9.26.0
@@ -72,6 +76,8 @@ dependencies:
   crypto-js: 4.1.1
   emoji-mart: 5.1.0
   framer-motion: 6.4.3_biqbaboplfbrettd7655fr4n2y
+  github-like-avatar-generator: 1.1.10
+  give-me-an-avatar: 1.0.0
   jsonwebtoken: 8.5.1
   next: 12.2.2_beenoklgwfttvph5dgxj7na7aq
   next-auth: 4.10.0_biqbaboplfbrettd7655fr4n2y
@@ -1346,6 +1352,10 @@ packages:
     resolution: {integrity: sha512-K0GFmuJ5mlEX2czTzRHLyiO2dJDS+GGdtPkPOempss4ElgkYLYpgyqBMcJno5WeSOC9ABGMmtSJ6RtVVljUBzw==}
     dev: false
 
+  /@fractalsoftware/random-avatar-generator/1.0.11:
+    resolution: {integrity: sha512-LV+ndmma0uRkxBIukxgZU8XwH0QoTY/mhLNgLRwoUyuMmyosxdWzVW85Y4DtrCRrn3lkuLB+IQckdVfNdUxhNA==}
+    dev: false
+
   /@humanwhocodes/config-array/0.9.5:
     resolution: {integrity: sha512-ObyMyWxZiCu/yTisA7uzx81s40xR2fD5Cg/2Kq7G02ajkNubJf6BopgDTmDyc3U7sXpNKM8cYOw7s7Tyr+DnCw==}
     engines: {node: '>=10.10.0'}
@@ -2590,14 +2600,12 @@ packages:
     engines: {node: '>=7.0.0'}
     dependencies:
       color-name: 1.1.4
-    dev: true
 
   /color-name/1.1.3:
     resolution: {integrity: sha512-72fSenhMw2HZMTVHeCA9KCmpEIbzWiQsjN+BHcBbS9vr1mtt+vJjPdksIBNUmKAW8TFUDPJK5SUU3QhE9NEXDw==}
 
   /color-name/1.1.4:
     resolution: {integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==}
-    dev: true
 
   /color-support/1.1.3:
     resolution: {integrity: sha512-qiBjkpbMLO/HL68y+lh4q0/O1MZFj2RX6X/KmMa3+gJD3z+WwI1ZzDHysvqHGS3mP6mznPckpXmw1nI9cJjyRg==}
@@ -4035,6 +4043,16 @@ packages:
       call-bind: 1.0.2
       get-intrinsic: 1.1.2
     dev: true
+
+  /github-like-avatar-generator/1.1.10:
+    resolution: {integrity: sha512-cF+3An+s6Xih8AdtZJ7I3512AQdmmVyxYCbfCPC1nu5zzrZofwA2LTA+FZGIDJMfoEDkFuug341FH6C1NNJFAg==}
+    dependencies:
+      color-convert: 2.0.1
+    dev: false
+
+  /give-me-an-avatar/1.0.0:
+    resolution: {integrity: sha512-4KFmCYxmvGsI4SDru1ostkIZETBBQtu31TxZ05GjjY0+Jli63wb6zJgCkrzmy6QqeRdK644FMczivh+LsB8w6Q==}
+    dev: false
 
   /glob-parent/5.1.2:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==}

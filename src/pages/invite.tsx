@@ -18,7 +18,11 @@ interface AlreadyJoinedProps {
 const Decrypting = () => {
 	return (
 		<ClientlessLayout>
-			<Heading color='var(--primary-title)' fontSize='4xl'>
+			<Heading
+				color='var(--primary-title)'
+				fontSize='4xl'
+				wordBreak='break-word'
+			>
 				🔍 Decrypting invitation link...
 			</Heading>
 		</ClientlessLayout>
@@ -28,8 +32,12 @@ const Decrypting = () => {
 const BrokenLink = ({ message = 'Invitation link broken 💔' }) => {
 	return (
 		<ClientlessLayout title='Broken link 💔'>
-			<VStack spacing={4}>
-				<Heading color='var(--primary-title)' fontSize='4xl'>
+			<VStack maxW='4xl' spacing={4}>
+				<Heading
+					color='var(--primary-title)'
+					fontSize='4xl'
+					wordBreak='break-word'
+				>
 					{message}
 				</Heading>
 
@@ -42,11 +50,12 @@ const BrokenLink = ({ message = 'Invitation link broken 💔' }) => {
 const AlreadyJoined: React.FC<AlreadyJoinedProps> = ({ title = '', chat }) => {
 	return (
 		<ClientlessLayout title={title}>
-			<VStack gap={2}>
+			<VStack gap={2} maxW='4xl'>
 				<Heading
 					color='var(--primary-title)'
 					fontSize='4xl'
 					fontWeight='normal'
+					wordBreak='break-word'
 				>
 					{'You have already joined to the chat '}
 					<chakra.span fontStyle='italic' fontWeight='bold'>
@@ -137,11 +146,12 @@ const Invite: NextPage = () => {
 
 	return (
 		<ClientlessLayout title={title}>
-			<VStack gap={2}>
+			<VStack gap={2} maxW='4xl'>
 				<Heading
 					color='var(--primary-title)'
 					fontSize='4xl'
 					fontWeight='normal'
+					wordBreak='break-word'
 				>
 					<chakra.span fontWeight='bold'>{hostUser?.name}</chakra.span> invited
 					you to chat on{' '}
@@ -167,18 +177,5 @@ const Invite: NextPage = () => {
 		</ClientlessLayout>
 	)
 }
-
-// - show message {USER} invited you to {CHAT}
-// - show buttons to join/reject invitation
-// - if there is a session:
-//   - accepting the invitation should redirect to the chat (/chats/:chatSid)
-//   - declining the invitation should redirect to the home page (/chats)
-// - if there is no session:
-//   - there would be 3 options:
-//     - sign in with github and join the chat
-//     - join the chat as an anonymous user (this creates a new random user in the db)
-//     - reject the invitation
-//   - acceptinng the invitation should redirect to the chat (/chats/:chatSid)
-//   - declining the invitation should redirect to the home page (/)
 
 export default Invite
