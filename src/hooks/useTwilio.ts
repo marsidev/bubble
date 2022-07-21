@@ -7,6 +7,8 @@ import { useStore } from '@store'
 import { getAccessToken } from '@services'
 import { TWILIO_ACCESS_TOKEN_LOCAL_STORAGE_TTL as TTL } from '@utils/constants'
 
+const isDev = process.env.NODE_ENV === 'development'
+
 export const useTwilio = async () => {
 	const router = useRouter()
 	const session = useStore(state => state.session)
@@ -58,13 +60,13 @@ export const useTwilio = async () => {
 	}
 
 	const onConversationAdded = async (c: Conversation) => {
-		console.log(`conversation added: ${c.sid}`)
+		isDev && console.log(`conversation added: ${c.sid}`)
 		await getSubscribedChats()
 	}
 
 	const onConversationRemoved = async (c: Conversation) => {
 		const { friendlyName, sid, createdBy } = c
-		console.log(`conversation removed: ${sid}`)
+		isDev && console.log(`conversation removed: ${sid}`)
 
 		const isHost = session?.user?.email === createdBy
 		const isChatPage = router.pathname.startsWith('/chats/')
@@ -78,7 +80,7 @@ export const useTwilio = async () => {
 
 	const onConversationLeft = async (c: Conversation) => {
 		const { sid } = c
-		console.log(`conversation left: ${sid}`)
+		isDev && console.log(`conversation left: ${sid}`)
 		const isChatPage = router.pathname.startsWith('/chats/')
 
 		await getSubscribedChats()
@@ -88,7 +90,7 @@ export const useTwilio = async () => {
 	}
 
 	const onParticipantLeft = async (p: Participant) => {
-		console.log(`user ${p.identity} left the conversation ${p.conversation.sid}`)
+		isDev && console.log(`user ${p.identity} left the conversation ${p.conversation.sid}`)
 		await getSubscribedChats()
 	}
 
@@ -100,13 +102,6 @@ export const useTwilio = async () => {
 			client.on('conversationRemoved', onConversationRemoved)
 			client.on('conversationLeft', onConversationLeft)
 			client.on('participantLeft', onParticipantLeft)
-			// client.on('tokenExpired', console.warn)
-			// client.on('tokenAboutToExpire', console.warn)
-
-			// implement later:
-			// client.on('participantJoined', handleParticipantJoined)
-			// client.on('typingStarted', handleParticipantLeft)
-			// client.on('typingEnded', handleParticipantLeft)
 
 			return () => {
 				client.off('messageAdded', onMessageAdded)
@@ -114,8 +109,6 @@ export const useTwilio = async () => {
 				client.off('conversationRemoved', onConversationRemoved)
 				client.off('conversationLeft', onConversationLeft)
 				client.off('participantLeft', onParticipantLeft)
-				// client.off('tokenExpired', console.warn)
-				// client.off('tokenAboutToExpire', console.warn)
 			}
 		}
 	}, [

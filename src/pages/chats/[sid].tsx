@@ -9,24 +9,33 @@ import { useQuery } from '@utils/trpc'
 const Chat: NextPage = () => {
 	const { sid } = useRouter().query
 	const [title, setTitle] = useState('')
-	const client = useStore(state => state.TwilioClient)
-	const activeChat = useStore(state => state.activeChat)
-	const setActiveChat = useStore(state => state.setActiveChat)
-	const getChatData = useStore(state => state.getChatData)
-	const activeChatMessages = useStore(state => state.activeChatMessages)
-	const getActiveChatMessages = useStore(state => state.getActiveChatMessages)
-	const activeChatParticipants = useStore(state => state.activeChatParticipants)
-	const getActiveChatParticipants = useStore(state => state.getActiveChatParticipants)
-	const setActiveChatDBUsers = useStore(state => state.setActiveChatDBUsers)
-	const activeChatDBUsers = useStore(state => state.activeChatDBUsers)
+	const client = useStore(s => s.TwilioClient)
+	const activeChat = useStore(s => s.activeChat)
+	const setActiveChat = useStore(s => s.setActiveChat)
+	const getChatData = useStore(s => s.getChatData)
+	const activeChatMessages = useStore(s => s.activeChatMessages)
+	const getActiveChatMessages = useStore(s => s.getActiveChatMessages)
+	const activeChatParticipants = useStore(s => s.activeChatParticipants)
+	const getActiveChatParticipants = useStore(s => s.getActiveChatParticipants)
+	const setActiveChatDBUsers = useStore(s => s.setActiveChatDBUsers)
+	const activeChatDBUsers = useStore(s => s.activeChatDBUsers)
 	const bottomRef = useRef<HTMLDivElement>(null)
 
-	const getNames = useQuery(['user.findManyByEmails', {
-		emails: activeChatParticipants?.map(p => p.identity)
-	}], {
+	const getNames = useQuery([
+		'user.findManyByEmails', {
+			emails: activeChatParticipants?.map(p => p.identity)
+		}], {
 		refetchOnWindowFocus: false,
-		onSuccess: setActiveChatDBUsers
+		onSuccess(users) {
+			console.log({ users })
+			setActiveChatDBUsers(users)
+		},
+		cacheTime: 0
 	})
+
+	const refetchNames = async () => {
+		await getNames.refetch()
+	}
 
 	useEffect(() => {
 		if (client && activeChat?.sid !== sid) {
@@ -44,8 +53,16 @@ const Chat: NextPage = () => {
 	}, [activeChat])
 
 	useEffect(() => {
-		getNames.refetch()
-	}, [activeChatMessages])
+		if (client) {
+			client.on('participantJoined', refetchNames)
+			client.on('messageAdded', refetchNames)
+
+			return () => {
+				client.off('participantJoined', refetchNames)
+				client.off('messageAdded', refetchNames)
+			}
+		}
+	}, [client, refetchNames])
 
 	return (
 		<Layout title={title}>

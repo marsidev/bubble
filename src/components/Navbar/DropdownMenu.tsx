@@ -10,14 +10,16 @@ import {
 	DotsThreeVertical as DotsIcon,
 	IconProps,
 	SignOut as LeaveIcon,
+	SignIn as SignInIcon,
+	SignOut as SignOutIcon,
 	Trash as TrashIcon
 } from 'phosphor-react'
 import { signIn, signOut } from 'next-auth/react'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/router'
-import { useQuery } from '@utils/trpc'
+import { GitHub as GitHubIcon } from '~/icons'
+import { useMutation, useQuery } from '@utils/trpc'
 import { useStore } from '@store'
-import { SignIcon } from '.'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface DropdownMenuProps extends FlexProps { }
@@ -35,6 +37,15 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = () => {
 	const router = useRouter()
 	const { sid: routeSid } = router.query
 
+	const createAnonUser = useMutation(['user.createAnonUser'], {
+		async onSuccess(user) {
+			await signIn('credentials', {
+				email: user.email,
+				callbackUrl: '/chats'
+			})
+		}
+	})
+
 	const { data: sessionData } = session
 	const authenticated = !!session.data && !session.isLoading
 
@@ -46,13 +57,17 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = () => {
 	const showDeleteOption = isChat && isHost && isSameChat && !!activeChat
 	const showLeaveOption = isChat && !isHost && isSameChat && !!activeChat
 
-	const onSignIn = async () => {
+	const onSignInWithGitHub = async () => {
 		await signIn('github', { callbackUrl: '/chats' })
 	}
 
+	const onSignInAsAnon = async () => {
+		await createAnonUser.mutateAsync()
+	}
+
 	const onSignOut = async () => {
-		clearSession()
 		await signOut({ callbackUrl: '/' })
+		clearSession()
 	}
 
 	const onRemoveChat = async () => {
@@ -88,12 +103,26 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = () => {
 			/>
 
 			<MenuList>
-				<MenuItem
-					icon={<SignIcon authenticated={authenticated} />}
-					onClick={sessionData ? onSignOut : onSignIn}
-				>
-					{sessionData ? 'Sign out' : 'Sign in with GitHub'}
-				</MenuItem>
+				{!authenticated && (
+					<MenuItem
+						icon={<GitHubIcon fill='var(--panel-header-icon)' size={24} />}
+						onClick={onSignInWithGitHub}
+					>
+						Sign in with GitHub
+					</MenuItem>
+				)}
+
+				{!authenticated && (
+					<MenuItem icon={<SignInIcon {...iconProps} />} onClick={onSignInAsAnon}>
+						Sign in as anonymous
+					</MenuItem>
+				)}
+
+				{authenticated && (
+					<MenuItem icon={<SignOutIcon {...iconProps} />} onClick={onSignOut}>
+						Sign out
+					</MenuItem>
+				)}
 
 				{showDeleteOption && (
 					<MenuItem icon={<TrashIcon {...iconProps} />} onClick={onRemoveChat}>
