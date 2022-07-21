@@ -2,7 +2,7 @@ import { Box, Flex } from '@chakra-ui/react'
 
 export const DefaultGroup = () => {
 	return (
-		<Box h={10} pos='relative' rounded='full' w={10}>
+		<Box h={[8, 10]} pos='relative' rounded='full' w={[8, 10]}>
 			<Flex
 				align='center'
 				h='full'

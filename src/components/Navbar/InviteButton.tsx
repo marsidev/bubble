@@ -1,4 +1,4 @@
-import { Button, type ButtonProps } from '@chakra-ui/react'
+import { Button, type ButtonProps, useBreakpointValue } from '@chakra-ui/react'
 import { toast } from 'react-toastify'
 import { useMutation } from '@utils/trpc'
 import { copyTextToClipboard } from '@utils/clipboard'
@@ -19,6 +19,8 @@ export const InviteButton: React.FC<InviteButtonProps> = ({ sid, text = 'Invite'
 		}
 	})
 
+	const breakPointText = useBreakpointValue({ base: '+', sm: text })
+
 	const onClick = async () => {
 		if (sid.startsWith('CH') && sid.length === 34) {
 			try {
@@ -32,8 +34,13 @@ export const InviteButton: React.FC<InviteButtonProps> = ({ sid, text = 'Invite'
 	}
 
 	return (
-		<Button colorScheme='green' isLoading={getInvitationLink.isLoading} onClick={onClick}>
-			{text}
+		<Button
+			colorScheme='linkedin'
+			isLoading={getInvitationLink.isLoading}
+			size={['sm', 'md']}
+			onClick={onClick}
+		>
+			{breakPointText}
 		</Button>
 	)
 }

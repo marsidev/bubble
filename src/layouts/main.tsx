@@ -40,7 +40,7 @@ export const Layout: FC<LayoutProps> = ({ isPrivate = false, children, title }) 
 		<>
 			<DefaultSeo {...seo} title={title} />
 
-			<Navbar minH='6.5vh' />
+			<Navbar minH='10.5vh' />
 
 			<Flex
 				alignItems='center'
@@ -49,7 +49,7 @@ export const Layout: FC<LayoutProps> = ({ isPrivate = false, children, title }) 
 				flexDir='column'
 				h='full'
 				justify='center'
-				minH={isChat ? '82vh' : '93.5vh'} // 100vh - (navbar height + chat input height)
+				minH={isChat ? '79vh' : '89.5vh'} // 100vh - (navbar height + chat input height)
 				overflowX='hidden'
 				overflowY='hidden'
 				textAlign='center'
@@ -64,7 +64,7 @@ export const Layout: FC<LayoutProps> = ({ isPrivate = false, children, title }) 
 				</LayoutContent>
 			</Flex>
 
-			{isChat && <ChatInput minH='7.5vh' />}
+			{isChat && <ChatInput minH='10.5vh' />}
 		</>
 	)
 }

@@ -11,7 +11,6 @@ export const NavbarContainer: FC<NavbarContainerProps> = ({ children, ...props }
 		<Flex
 			align='center'
 			as='header'
-			// bg='teal.900'
 			bg='var(--panel-header-background)'
 			border='1px solid'
 			borderColor='gray.700'
@@ -20,7 +19,7 @@ export const NavbarContainer: FC<NavbarContainerProps> = ({ children, ...props }
 			left={0}
 			margin='auto'
 			pos='sticky'
-			px={4}
+			px={[2, 4]}
 			py={1}
 			top={0}
 			w='full'

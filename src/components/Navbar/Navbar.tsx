@@ -23,19 +23,26 @@ export const Navbar: React.FC<FlexProps> = ({ ...props }) => {
 
 	return (
 		<NavbarContainer {...props}>
-			<HStack>
+			<HStack spacing={[1, 2]}>
 				{isChat && <BackToHome />}
 
 				<NavbarAvatar />
 
 				{isChat && (
-					<Heading as='h1' fontFamily='NunitoVariable' fontSize={['xl', 'xl']}>
+					<Heading
+						as='h1'
+						className='ellipsis'
+						fontFamily='NunitoVariable'
+						fontSize={['md', 'lg']}
+						maxW={['180px', '280px', '600px', '900px']}
+						pl={2}
+					>
 						{chatTitle}
 					</Heading>
 				)}
 			</HStack>
 
-			<Flex flexDir='row' gap={2}>
+			<Flex align='center' flexDir='row' gap={[1, 2]}>
 				{isChat && client && isHost && <InviteButton sid={chatSid} />}
 
 				{/* <IconButton aria-label='toggle theme' variant='ghost'>
