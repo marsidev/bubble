@@ -19,11 +19,6 @@ export const messageRouter = createRouter()
 		resolve({ input }) {
 			const { encrypted } = input
 			if (!encrypted) return ''
-
-			// temporary as not all messages are encrypted and some are badly encrypted:
-			if (!encrypted?.startsWith('U2FsdGVkX1')) return encrypted
-			if (encrypted === 'U2FsdGVkX19L5T/GtvnZndZy/uB+uUO71QBDkYCySWY=') return encrypted
-
 			return decrypt(encrypted)
 		}
 	})
