@@ -2,24 +2,23 @@
 Live and secure chat strongly inspired on WhatsApp. Powered by [Twilio Conversations API](https://www.twilio.com/messaging/conversations-api). <br />
 Created to participate in a hackathon hosted by [midudev](https://www.github.com/midudev).
 
-<!-- ## 🚀 Preview
+## 🚀 Preview
 App preview before deadline and project review: <br />
 <div style="display:flex; flex-direction:column; text-align:center; align-items:center; gap:1em;">
   <div style="display:flex; gap:1em; justify-content:center;">
-    <img src="preview/preview-1.png" alt="Preview of Climatic on an iPhone 12 PRO MAX" width="35%"/>
-    <img src="preview/preview-2.png" alt="Preview of Climatic on an iPad PRO 11" width="55%"/>
+    <img src="preview/preview-1.png" alt="Preview of Bubble Chat on an iPhone 12 PRO MAX" width="30%"/>
+    <img src="preview/preview-2.png" alt="Preview of Bubble Chat on an iPhone 12 PRO MAX" width="30%"/>
   </div>
-  <img src="preview/preview-3.png" alt="Preview of Climatic on a Mackbook Air" width="90%"/>
+  <img src="preview/preview-3.png" alt="Preview of Bubble Chat on an iPhone 12 PRO MAX" width="30%"/>
 </div>
-> Screenshots provided by [webmobilefirst](https://www.webmobilefirst.com/en/). -->
+
+- [Demo](https://bubble-marsiglia.vercel.app)
+> Screenshots provided by [webmobilefirst](https://www.webmobilefirst.com/en/).
 
 ## 👨‍💻 Hackathon Info
 - The hackathon goal was build a live and secure text chat (*mobile-first* or *mobile-only*) using [Twilio Conversations API](https://www.twilio.com/messaging/conversations-api).
 - Announced at **[2022/07/01](https://www.twitch.tv/videos/1519558242)**.
 - Deadline: **2022/07/20**.
-
-## 🚀 Preview
-- [Demo](https://bubble-marsiglia.vercel.app)
 
 ## 🛠️ Technologies
 - [Twilio Conversations API](https://www.twilio.com/messaging/conversations-api)
