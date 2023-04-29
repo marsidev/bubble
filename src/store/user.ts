@@ -1,5 +1,5 @@
 import type { Get, Set, StoreSlice } from '.'
-import { clearLocalStorageValue } from '@utils/localStorage'
+import { clearLocalStorageValue } from '~/utils/localStorage'
 
 interface User {
 	name?: string | null | undefined

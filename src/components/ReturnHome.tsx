@@ -1,5 +1,5 @@
 import { Button } from '@chakra-ui/react'
-import { Link } from '@components/Link'
+import { Link } from '~/components/Link'
 
 export interface ReturnHomeProps {
 	href?: string

@@ -1,21 +1,15 @@
 import { Avatar, Spinner } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { DefaultGroup } from '~/icons'
-import { useQuery } from '@utils/trpc'
-import { Link } from '@components'
+import { api } from '~/utils/api'
+import { Link } from '~/components'
 
 const Brand = () => (
-	<Avatar
-		bg='transparent'
-		borderRadius='sm'
-		name='Bubble logo'
-		size='sm'
-		src='/logo.png'
-	/>
+	<Avatar bg='transparent' borderRadius='sm' name='Bubble logo' size='sm' src='/logo.png' />
 )
 
 export const NavbarAvatar = () => {
-	const session = useQuery(['auth.getSession'])
+	const session = api.auth.getSession.useQuery()
 	const { pathname } = useRouter()
 	const authenticated = !!session.data && !session.isLoading
 	const isHome = pathname === '/chats' || pathname === '/'

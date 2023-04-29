@@ -2,12 +2,16 @@ import type { Conversation, Message, Participant } from '@twilio/conversations'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/router'
-import { getLocalStorageValue, setLocalStorageValue } from '@utils/localStorage'
-import { useStore } from '@store'
-import { getAccessToken } from '@services'
-import { TWILIO_ACCESS_TOKEN_LOCAL_STORAGE_TTL as TTL } from '@utils/constants'
+import { env } from '~/env.mjs'
+import { useStore } from '~/store'
+import { getLocalStorageValue, setLocalStorageValue } from '~/utils/localStorage'
+import {
+	TWILIO_ACCESS_TOKEN_LOCAL_STORAGE_TTL as TTL,
+	TWILIO_ACCESS_TOKEN_TTL
+} from '~/utils/constants'
+import { api } from '~/utils/api'
 
-const isDev = process.env.NODE_ENV === 'development'
+const isDev = env.NEXT_PUBLIC_NODE_ENV === 'development'
 
 export const useTwilio = async () => {
 	const router = useRouter()
@@ -19,6 +23,14 @@ export const useTwilio = async () => {
 	const activeChat = useStore(state => state.activeChat)
 	const addActiveChatMessage = useStore(state => state.addActiveChatMessage)
 	const getSubscribedChats = useStore(state => state.getSubscribedChats)
+
+	const getAuthToken = api.twilio.getAuthToken.useMutation({
+		onSuccess(token) {
+			setTwilioToken(token)
+			createTwilioClient(token)
+			setLocalStorageValue('twilio-token', token, TTL)
+		}
+	})
 
 	const isChatsList = router.pathname === '/chats'
 
@@ -33,10 +45,9 @@ export const useTwilio = async () => {
 			}
 
 			if (!cachedToken) {
-				getAccessToken(session.user.email as string).then(token => {
-					setTwilioToken(token)
-					createTwilioClient(token)
-					setLocalStorageValue('twilio-token', token, TTL)
+				getAuthToken.mutateAsync({
+					identity: session.user.email as string,
+					ttl: TWILIO_ACCESS_TOKEN_TTL
 				})
 			}
 		}

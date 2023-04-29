@@ -3,15 +3,7 @@ import { Box, Flex } from '@chakra-ui/react'
 export const DefaultGroup = () => {
 	return (
 		<Box h={[8, 10]} pos='relative' rounded='full' w={[8, 10]}>
-			<Flex
-				align='center'
-				h='full'
-				justify='center'
-				left={0}
-				pos='absolute'
-				top={0}
-				w='full'
-			>
+			<Flex align='center' h='full' justify='center' left={0} pos='absolute' top={0} w='full'>
 				<svg fill='none' height='212' viewBox='0 0 212 212' width='212'>
 					<path
 						d='M105.946.25C164.318.25 211.64 47.596 211.64 106s-47.322 105.75-105.695 105.75C47.571 211.75.25 164.404.25 106S47.571.25 105.946.25Z'

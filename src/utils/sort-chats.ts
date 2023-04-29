@@ -1,4 +1,4 @@
-import type { ChatList } from '@store/chats'
+import type { ChatList } from '~/store/chats'
 
 export const sortChats = (chats: ChatList) => {
 	return chats.sort((a, b) => {

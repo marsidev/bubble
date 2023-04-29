@@ -25,18 +25,24 @@ dependencies:
   '@supabase/supabase-js':
     specifier: ^2.21.0
     version: 2.21.0
+  '@t3-oss/env-nextjs':
+    specifier: ^0.2.2
+    version: 0.2.2(zod@3.21.4)
+  '@tanstack/react-query':
+    specifier: ^4.29.5
+    version: 4.29.5(react-dom@18.2.0)(react@18.2.0)
   '@trpc/client':
-    specifier: ^9.27.4
-    version: 9.27.4(@trpc/server@9.27.4)
+    specifier: ^10.23.0
+    version: 10.23.0(@trpc/server@10.23.0)
   '@trpc/next':
-    specifier: ^9.27.4
-    version: 9.27.4(@trpc/client@9.27.4)(@trpc/react@9.27.4)(@trpc/server@9.27.4)(next@13.3.1)(react-dom@18.2.0)(react-query@3.39.3)(react@18.2.0)
-  '@trpc/react':
-    specifier: ^9.27.4
-    version: 9.27.4(@trpc/client@9.27.4)(@trpc/server@9.27.4)(react-dom@18.2.0)(react-query@3.39.3)(react@18.2.0)
+    specifier: ^10.23.0
+    version: 10.23.0(@tanstack/react-query@4.29.5)(@trpc/client@10.23.0)(@trpc/react-query@10.23.0)(@trpc/server@10.23.0)(next@13.3.1)(react-dom@18.2.0)(react@18.2.0)
+  '@trpc/react-query':
+    specifier: ^10.23.0
+    version: 10.23.0(@tanstack/react-query@4.29.5)(@trpc/client@10.23.0)(@trpc/server@10.23.0)(react-dom@18.2.0)(react@18.2.0)
   '@trpc/server':
-    specifier: ^9.27.4
-    version: 9.27.4
+    specifier: ^10.23.0
+    version: 10.23.0
   '@twilio/conversations':
     specifier: ^2.4.0
     version: 2.4.0
@@ -2037,60 +2043,92 @@ packages:
       defer-to-connect: 1.1.3
     dev: true
 
-  /@trpc/client@9.27.4(@trpc/server@9.27.4):
-    resolution: {integrity: sha512-NyS3J333xy8PJWGTSKO0egvj3x/s4SaSPx7XDWHf/i51W/i5Fla+sNxYpv+4z+SwE2xyJKszN2EZbvKIW2X/wA==}
-    deprecated: 'Migrate to v10: https://trpc.io/docs/migrate-from-v9-to-v10'
+  /@t3-oss/env-core@0.2.2(zod@3.21.4):
+    resolution: {integrity: sha512-Jiuph14/L3L9EDaU0O0YiLeaKUcWA9c3mWYuKem8+L64i3Iwz+IbKdl5Jp4cx+JbOsS/aptwGZplnxSHhm2gMQ==}
     peerDependencies:
-      '@trpc/server': 9.27.4
+      zod: ^3.0.0
     dependencies:
-      '@babel/runtime': 7.18.6
-      '@trpc/server': 9.27.4
+      zod: 3.21.4
     dev: false
 
-  /@trpc/next@9.27.4(@trpc/client@9.27.4)(@trpc/react@9.27.4)(@trpc/server@9.27.4)(next@13.3.1)(react-dom@18.2.0)(react-query@3.39.3)(react@18.2.0):
-    resolution: {integrity: sha512-QY7eT37hIjHmtqOSEfx4IvZXOGHozIQ6B0MQ3+olmpMpTrygcYi4mFiurPV8Txh1iLa5mgBoJ1ZepLaSc0qzkg==}
-    deprecated: 'Migrate to v10: https://trpc.io/docs/migrate-from-v9-to-v10'
+  /@t3-oss/env-nextjs@0.2.2(zod@3.21.4):
+    resolution: {integrity: sha512-9LnVpTkf/8WkggyVN6Liz9Ma9a7fLzV00b5BngWj3HI3iWDfddsWaqCf/H0f46Bgu29NubP3Bwajf1JieVrxFA==}
     peerDependencies:
-      '@trpc/client': 9.27.4
-      '@trpc/react': 9.27.4
-      '@trpc/server': 9.27.4
+      zod: ^3.0.0
+    dependencies:
+      '@t3-oss/env-core': 0.2.2(zod@3.21.4)
+      zod: 3.21.4
+    dev: false
+
+  /@tanstack/query-core@4.29.5:
+    resolution: {integrity: sha512-xXIiyQ/4r9KfaJ3k6kejqcaqFXXBTzN2aOJ5H1J6aTJE9hl/nbgAdfF6oiIu0CD5xowejJEJ6bBg8TO7BN4NuQ==}
+    dev: false
+
+  /@tanstack/react-query@4.29.5(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-F87cibC3s3eG0Q90g2O+hqntpCrudKFnR8P24qkH9uccEhXErnJxBC/AAI4cJRV2bfMO8IeGZQYf3WyYgmSg0w==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-native: '*'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+    dependencies:
+      '@tanstack/query-core': 4.29.5
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      use-sync-external-store: 1.2.0(react@18.2.0)
+    dev: false
+
+  /@trpc/client@10.23.0(@trpc/server@10.23.0):
+    resolution: {integrity: sha512-7hTh9OjVIx4Co3kUyIu94SjbUIuS2WKl3E5BMseYbNOHfeY5rqwkCsw0N5EHWszhIVttUMDE0oCf10tNhYEq1A==}
+    peerDependencies:
+      '@trpc/server': 10.23.0
+    dependencies:
+      '@trpc/server': 10.23.0
+    dev: false
+
+  /@trpc/next@10.23.0(@tanstack/react-query@4.29.5)(@trpc/client@10.23.0)(@trpc/react-query@10.23.0)(@trpc/server@10.23.0)(next@13.3.1)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-IoyoID4wUIFI1nrx6EJM1fBVdkyLiadCsw+r3XLtKnxCwfK5PLeIwwJAQrf+4IFtQT7KYhw4dSkP4gfltIPC3Q==}
+    peerDependencies:
+      '@tanstack/react-query': ^4.18.0
+      '@trpc/client': 10.23.0
+      '@trpc/react-query': 10.23.0
+      '@trpc/server': 10.23.0
       next: '*'
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
-      react-query: ^3.37.0
     dependencies:
-      '@babel/runtime': 7.18.6
-      '@trpc/client': 9.27.4(@trpc/server@9.27.4)
-      '@trpc/react': 9.27.4(@trpc/client@9.27.4)(@trpc/server@9.27.4)(react-dom@18.2.0)(react-query@3.39.3)(react@18.2.0)
-      '@trpc/server': 9.27.4
+      '@tanstack/react-query': 4.29.5(react-dom@18.2.0)(react@18.2.0)
+      '@trpc/client': 10.23.0(@trpc/server@10.23.0)
+      '@trpc/react-query': 10.23.0(@tanstack/react-query@4.29.5)(@trpc/client@10.23.0)(@trpc/server@10.23.0)(react-dom@18.2.0)(react@18.2.0)
+      '@trpc/server': 10.23.0
       next: 13.3.1(@babel/core@7.21.5)(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-      react-query: 3.39.3(react-dom@18.2.0)(react@18.2.0)
       react-ssr-prepass: 1.5.0(react@18.2.0)
     dev: false
 
-  /@trpc/react@9.27.4(@trpc/client@9.27.4)(@trpc/server@9.27.4)(react-dom@18.2.0)(react-query@3.39.3)(react@18.2.0):
-    resolution: {integrity: sha512-bP74Tf6vWcMoWYiTAvbWrieV9cFQiKUDKRoRj0+VeGJbxdbhdJyUzv4zos0T4SiSKuhgoEm9bP4jWU2NhNhpIA==}
-    deprecated: 'Migrate to v10: https://trpc.io/docs/migrate-from-v9-to-v10. Also, this package has changed name to `@trpc/react-query`.'
+  /@trpc/react-query@10.23.0(@tanstack/react-query@4.29.5)(@trpc/client@10.23.0)(@trpc/server@10.23.0)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-50vfR3HtOEcjCQMuHSGTFOG6W9WunvcI8msTp84UNAqZ9dz4YdjgBVNn2wxqB5LAQ6AGlcKuzJWjEj3yO56tvw==}
     peerDependencies:
-      '@trpc/client': 9.27.4
-      '@trpc/server': 9.27.4
+      '@tanstack/react-query': ^4.18.0
+      '@trpc/client': 10.23.0
+      '@trpc/server': 10.23.0
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
-      react-query: ^3.37.0
     dependencies:
-      '@babel/runtime': 7.18.6
-      '@trpc/client': 9.27.4(@trpc/server@9.27.4)
-      '@trpc/server': 9.27.4
+      '@tanstack/react-query': 4.29.5(react-dom@18.2.0)(react@18.2.0)
+      '@trpc/client': 10.23.0(@trpc/server@10.23.0)
+      '@trpc/server': 10.23.0
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-      react-query: 3.39.3(react-dom@18.2.0)(react@18.2.0)
     dev: false
 
-  /@trpc/server@9.27.4:
-    resolution: {integrity: sha512-yw0omUrxGp8+gEAuieZFeXB4bCqFvmyCDL3GOBv+Q6+cK0m5824ViHZKPgK5DYG1ijN/lbi1hP3UVKywPN7rbQ==}
-    deprecated: 'Migrate to v10: https://trpc.io/docs/migrate-from-v9-to-v10'
+  /@trpc/server@10.23.0:
+    resolution: {integrity: sha512-0CPfGZK3v3gfAL8ylV5vDJVBQtPp47EB4Vgx6WItSXmwYQlLC39ZC3gkZ4I5cGpQKl4l3QrNNeUvIcse4hlMxA==}
     dev: false
 
   /@ts-morph/common@0.11.1:
@@ -4304,8 +4342,8 @@ packages:
   /framer-motion@10.12.4(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-9gLtv8T6dui0tujHROR+VM3kdJyKiFCFiD94IQE+0OuX6LaIyXtdVpviokVdrHSb1giWhmmX4yzoucALMx6mtw==}
     peerDependencies:
-      react: ^18.0.0 || 18
-      react-dom: ^18.0.0 || 18
+      react: ^18.0.0
+      react-dom: ^18.0.0
     peerDependenciesMeta:
       react:
         optional: true

@@ -1,0 +1,6 @@
+dist
+.next
+public
+*.yaml
+*.yml
+*.css

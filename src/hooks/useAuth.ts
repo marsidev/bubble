@@ -1,13 +1,15 @@
 import { useEffect } from 'react'
 // import { useRouter } from 'next/router'
-import { useQuery } from '@utils/trpc'
-import { useStore } from '@store'
+import { api } from '~/utils/api'
+import { useStore } from '~/store'
 
 export const useAuth = () => {
 	const sessionState = useStore(state => state.session)
 	const setSession = useStore(state => state.setSession)
 	const clearSession = useStore(state => state.clearSession)
-	const session = useQuery(['auth.getSession'], { refetchInterval: 60000 })
+	const session = api.auth.getSession.useQuery(undefined, {
+		refetchInterval: 60000
+	})
 	// const router = useRouter()
 
 	const { isLoading: loading, data: sessionData } = session

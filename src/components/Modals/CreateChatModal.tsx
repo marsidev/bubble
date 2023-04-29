@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { Button, FormControl, Input, chakra } from '@chakra-ui/react'
 import { toast } from 'react-toastify'
-import { Modal } from '@components'
-import { useStore } from '@store'
+import { Modal } from '~/components'
+import { useStore } from '~/store'
 
 interface CreateChatModalProps {
 	isOpen: boolean
@@ -56,14 +56,7 @@ export const CreateChatModal: React.FC<CreateChatModalProps> = props => {
 			onClose={onClose}
 			{...rest}
 		>
-			<chakra.form
-				ref={form}
-				display='flex'
-				flexDir='column'
-				gap={4}
-				pb={4}
-				onSubmit={onSubmit}
-			>
+			<chakra.form ref={form} display='flex' flexDir='column' gap={4} pb={4} onSubmit={onSubmit}>
 				<FormControl>
 					<Input
 						autoComplete='off'

@@ -1,12 +1,11 @@
-import '@styles/globals.css'
+import '~/styles/globals.css'
 import 'react-toastify/dist/ReactToastify.css'
-import type { AppRouter } from '@server/router'
-import type { AppType } from 'next/dist/shared/lib/utils'
-import { withTRPC } from '@trpc/next'
-import superjson from 'superjson'
-import { SessionProvider } from 'next-auth/react'
+import type { AppType } from 'next/app'
+import type { Session } from 'next-auth'
 import { ToastContainer, ToastContainerProps, Zoom } from 'react-toastify'
-import { ChakraProvider } from '@utils/chakra/Provider'
+import { SessionProvider } from 'next-auth/react'
+import { api } from '~/utils/api'
+import { ChakraProvider } from '~/utils/chakra/Provider'
 
 const toastProps: ToastContainerProps = {
 	position: 'bottom-center',
@@ -26,8 +25,7 @@ const toastProps: ToastContainerProps = {
 }
 
 interface PageProps {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	session: any
+	session: Session | null
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	cookies: any
 }
@@ -46,33 +44,4 @@ const MyApp: AppType<PageProps> = ({
 	)
 }
 
-export const getBaseUrl = () => {
-	if (typeof window !== 'undefined') return ''
-	if (process.browser) return '' // Browser should use current path
-	if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}` // SSR should use vercel url
-
-	return `http://localhost:${process.env.PORT ?? 3000}` // dev SSR should use localhost
-}
-
-export default withTRPC<AppRouter>({
-	config() {
-		/**
-		 * If you want to use SSR, you need to use the server's full URL
-		 * @link https://trpc.io/docs/ssr
-		 */
-		const url = `${getBaseUrl()}/api/trpc`
-
-		return {
-			url,
-			transformer: superjson
-			/**
-			 * @link https://react-query.tanstack.com/reference/QueryClient
-			 */
-			// queryClientConfig: { defaultOptions: { queries: { staleTime: 60 } } },
-		}
-	},
-	/**
-	 * @link https://trpc.io/docs/ssr
-	 */
-	ssr: false
-})(MyApp)
+export default api.withTRPC(MyApp)

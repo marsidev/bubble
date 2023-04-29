@@ -1,10 +1,10 @@
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
-import { useStore } from '@store'
-import { Layout } from '@layouts'
-import { Bubble, ChatContainer } from '@components'
-import { useQuery } from '@utils/trpc'
+import { api } from '~/utils/api'
+import { useStore } from '~/store'
+import { Bubble, ChatContainer } from '~/components'
+import { Layout } from '~/layouts'
 
 const Chat: NextPage = () => {
 	const { sid } = useRouter().query
@@ -21,17 +21,19 @@ const Chat: NextPage = () => {
 	const activeChatDBUsers = useStore(s => s.activeChatDBUsers)
 	const bottomRef = useRef<HTMLDivElement>(null)
 
-	const getNames = useQuery([
-		'user.findManyByEmails', {
+	const getNames = api.user.findManyByEmails.useQuery(
+		{
 			emails: activeChatParticipants?.map(p => p.identity)
-		}], {
-		refetchOnWindowFocus: false,
-		onSuccess(users) {
-			console.log({ users })
-			setActiveChatDBUsers(users)
 		},
-		cacheTime: 0
-	})
+		{
+			refetchOnWindowFocus: false,
+			onSuccess(users) {
+				console.log({ users })
+				setActiveChatDBUsers(users)
+			},
+			cacheTime: 0
+		}
+	)
 
 	const refetchNames = async () => {
 		await getNames.refetch()
@@ -69,11 +71,7 @@ const Chat: NextPage = () => {
 			<ChatContainer>
 				{activeChatDBUsers.length > 0 &&
 					activeChatMessages.map(message => (
-						<Bubble
-							key={message.sid}
-							endOfChatRef={bottomRef}
-							message={message}
-						/>
+						<Bubble key={message.sid} endOfChatRef={bottomRef} message={message} />
 					))}
 
 				<span ref={bottomRef} />

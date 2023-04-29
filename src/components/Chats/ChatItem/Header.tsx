@@ -17,13 +17,7 @@ export const Header: FC<HeaderProps> = ({ chatName, lastMessageDate, ...props })
 			textAlign='left'
 			{...props}
 		>
-			<Flex
-				as='span'
-				className='ellipsis'
-				fontSize='sm'
-				maxW='85%'
-				pos='relative'
-			>
+			<Flex as='span' className='ellipsis' fontSize='sm' maxW='85%' pos='relative'>
 				{chatName}
 			</Flex>
 

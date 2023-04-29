@@ -1,16 +1,15 @@
 import { z } from 'zod'
 import { TRPCError } from '@trpc/server'
-import { getBaseUrl } from '~/pages/_app'
-import { decrypt, encrypt } from '@utils/encryption'
-import { createRouter } from './context'
-import { ServiceToken } from './twilio'
+import { createTRPCRouter, protectedProcedure, publicProcedure } from '~/server/api/trpc'
+import { ServiceToken } from '~/server/api/routers/twilio'
+import { getBaseUrl } from '~/utils/api'
+import { env } from '~/env.mjs'
+import { decrypt, encrypt } from '~/utils/encryption'
 
-export const inviteRouter = createRouter()
-	.query('decryptInvitationLink', {
-		input: z.object({
-			data: z.string()
-		}),
-		async resolve({ ctx, input }) {
+export const inviteRouter = createTRPCRouter({
+	decryptInvitationLink: publicProcedure
+		.input(z.object({ data: z.string() }))
+		.query(async ({ input, ctx }) => {
 			// decrypt the data and check if has expected params
 			const decrypted = decrypt(input.data)
 			const [hostIdentity, chatSid, expires] = decrypted.split(',')
@@ -48,11 +47,12 @@ export const inviteRouter = createRouter()
 			}
 
 			// get access token
-			const tokenServiceUrl = process.env.NEXT_PUBLIC_TWILIO_TOKEN_SERVICE_URL
+			const tokenServiceUrl = env.NEXT_PUBLIC_TWILIO_TOKEN_SERVICE_URL
 			const query = new URLSearchParams({
 				identity: hostIdentity,
 				ttl: '3600'
 			})
+
 			const res = await fetch(`${tokenServiceUrl}?${query}`)
 			const tokenData = (await res.json()) as ServiceToken
 
@@ -65,25 +65,21 @@ export const inviteRouter = createRouter()
 
 			const { accessToken } = tokenData
 			return { host, chatSid, accessToken }
-		}
-	})
-	.mutation('getInvitationLink', {
-		input: z.object({
-			chatSid: z.string().length(34),
-			ttl: z.number().default(3600)
 		}),
-		async resolve({ ctx, input }) {
-			const email = ctx.session?.user?.email
 
-			if (!email) {
-				throw new TRPCError({ code: 'UNAUTHORIZED' })
-			}
-
-			const expires = new Date().getTime() + (input.ttl * 1000)
-			const stringToEncrypt = `${email},${input.chatSid},${expires}`
+	getInvitationLink: protectedProcedure
+		.input(
+			z.object({
+				chatSid: z.string().length(34),
+				ttl: z.number().default(3600)
+			})
+		)
+		.mutation(({ input, ctx }) => {
+			const expires = new Date().getTime() + input.ttl * 1000
+			const stringToEncrypt = `${ctx.session.user.email!},${input.chatSid},${expires}`
 			const encrypted = encrypt(stringToEncrypt)
 
 			const baseUrl = getBaseUrl()
 			return `${baseUrl}/invite?data=${encrypted}`
-		}
-	})
+		})
+})

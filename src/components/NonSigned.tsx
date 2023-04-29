@@ -1,10 +1,10 @@
 import { Button, Flex, type FlexProps, Heading } from '@chakra-ui/react'
 import { signIn } from 'next-auth/react'
 import { GitHub } from '~/icons'
-import { useMutation } from '@utils/trpc'
+import { api } from '~/utils/api'
 
 export const NonSigned: React.FC<FlexProps> = ({ ...props }) => {
-	const createAnonUser = useMutation(['user.createAnonUser'], {
+	const createAnonUser = api.user.createAnonUser.useMutation({
 		async onSuccess(user) {
 			await signIn('credentials', {
 				email: user.email,

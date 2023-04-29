@@ -1,6 +1,6 @@
 import type { Get, Set, StoreSlice } from '.'
 import { Client } from '@twilio/conversations'
-import { createChatClient } from '@services'
+import { createChatClient } from '~/services'
 
 export interface TwilioState {
 	twilioToken: string | null
@@ -23,7 +23,9 @@ export const twilio: StoreSlice<TwilioState> = (set: Set, get: Get) => ({
 			const client = await createChatClient(token)
 			set({ TwilioClient: client })
 		} else {
-			console.warn('Could not create Twilio client because no token was provided or found in the store.')
+			console.warn(
+				'Could not create Twilio client because no token was provided or found in the store.'
+			)
 		}
 	}
 })

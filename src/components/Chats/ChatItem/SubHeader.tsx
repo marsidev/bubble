@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import { Flex, type FlexProps, chakra } from '@chakra-ui/react'
-import { useQuery } from '@utils/trpc'
+import { api } from '~/utils/api'
 
 interface SubHeaderProps extends FlexProps {
 	lastMessageAuthor: string
@@ -8,8 +8,10 @@ interface SubHeaderProps extends FlexProps {
 }
 
 export const SubHeader: FC<SubHeaderProps> = ({ lastMessageAuthor, lastMessageBody, ...props }) => {
-	const decryptedMessage = useQuery(
-		['message.decrypt', { encrypted: lastMessageBody }],
+	const decryptedMessage = api.message.decrypt.useQuery(
+		{
+			encrypted: lastMessageBody
+		},
 		{
 			refetchOnWindowFocus: false,
 			retryOnMount: true,
@@ -34,10 +36,7 @@ export const SubHeader: FC<SubHeaderProps> = ({ lastMessageAuthor, lastMessageBo
 			{...props}
 		>
 			{messageBody && (
-				<chakra.span
-					className='ellipsis'
-					maxW={['100px', '150px', '200px', '300px', '400px']}
-				>
+				<chakra.span className='ellipsis' maxW={['100px', '150px', '200px', '300px', '400px']}>
 					{lastMessageAuthor}
 				</chakra.span>
 			)}

@@ -2,10 +2,10 @@ import type { FC, ReactNode } from 'react'
 import { Flex, Spinner } from '@chakra-ui/react'
 import { DefaultSeo } from 'next-seo'
 import { useRouter } from 'next/router'
+import { ChatInput, Navbar, NonSigned } from '~/components'
+import { useAuth, useTwilio } from '~/hooks'
+import { useStore } from '~/store'
 import { defaultSeo as seo } from 'next-seo.config'
-import { ChatInput, Navbar, NonSigned } from '@components'
-import { useAuth, useTwilio } from '@hooks'
-import { useStore } from '@store'
 
 export interface LayoutProps {
 	children: ReactNode
@@ -55,11 +55,7 @@ export const Layout: FC<LayoutProps> = ({ isPrivate = false, children, title }) 
 				textAlign='center'
 				w='full'
 			>
-				<LayoutContent
-					authenticated={authenticated}
-					isLoading={isLoading}
-					isPrivate={isPrivate}
-				>
+				<LayoutContent authenticated={authenticated} isLoading={isLoading} isPrivate={isPrivate}>
 					{children}
 				</LayoutContent>
 			</Flex>

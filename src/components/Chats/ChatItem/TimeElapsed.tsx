@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 import { memo } from 'react'
 import { Flex, type FlexProps } from '@chakra-ui/react'
-import { useTime } from '@hooks'
+import { useTime } from '~/hooks'
 
 interface TimeElapsedProps extends FlexProps {
 	date: Date | null

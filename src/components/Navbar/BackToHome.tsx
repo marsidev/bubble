@@ -1,6 +1,6 @@
 import { IconButton } from '@chakra-ui/react'
 import { CaretLeft } from 'phosphor-react'
-import { Link } from '@components'
+import { Link } from '~/components'
 
 export const BackToHome = () => {
 	return (

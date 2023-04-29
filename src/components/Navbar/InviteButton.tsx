@@ -1,7 +1,7 @@
 import { Button, type ButtonProps, useBreakpointValue } from '@chakra-ui/react'
 import { toast } from 'react-toastify'
-import { useMutation } from '@utils/trpc'
-import { copyTextToClipboard } from '@utils/clipboard'
+import { api } from '~/utils/api'
+import { copyTextToClipboard } from '~/utils/clipboard'
 
 interface InviteButtonProps extends ButtonProps {
 	sid: string
@@ -9,7 +9,7 @@ interface InviteButtonProps extends ButtonProps {
 }
 
 export const InviteButton: React.FC<InviteButtonProps> = ({ sid, text = 'Invite' }) => {
-	const getInvitationLink = useMutation(['invite.getInvitationLink'], {
+	const getInvitationLink = api.invite.getInvitationLink.useMutation({
 		async onSuccess(data) {
 			await copyTextToClipboard(data)
 			toast.success('Invitation link copied to clipboard')

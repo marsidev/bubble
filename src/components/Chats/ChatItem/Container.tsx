@@ -1,6 +1,6 @@
 import type { FC, ReactNode } from 'react'
 import { Flex, type FlexProps, HStack } from '@chakra-ui/react'
-import { Link } from '@components'
+import { Link } from '~/components'
 
 interface ContainerProps extends FlexProps {
 	sid: string

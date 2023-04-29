@@ -1,13 +1,7 @@
 import { Flex, type FlexProps, HStack, Heading } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import { useStore } from '@store'
-import {
-	BackToHome,
-	DropdownMenu,
-	InviteButton,
-	NavbarAvatar,
-	NavbarContainer
-} from '.'
+import { useStore } from '~/store'
+import { BackToHome, DropdownMenu, InviteButton, NavbarAvatar, NavbarContainer } from '.'
 
 export const Navbar: React.FC<FlexProps> = ({ ...props }) => {
 	const { pathname } = useRouter()

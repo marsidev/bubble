@@ -1,11 +1,4 @@
-import {
-	type FlexProps,
-	IconButton,
-	Menu,
-	MenuButton,
-	MenuItem,
-	MenuList
-} from '@chakra-ui/react'
+import { type FlexProps, IconButton, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react'
 import {
 	DotsThreeVertical as DotsIcon,
 	IconProps,
@@ -18,11 +11,11 @@ import { signIn, signOut } from 'next-auth/react'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/router'
 import { GitHub as GitHubIcon } from '~/icons'
-import { useMutation, useQuery } from '@utils/trpc'
-import { useStore } from '@store'
+import { api } from '~/utils/api'
+import { useStore } from '~/store'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface DropdownMenuProps extends FlexProps { }
+interface DropdownMenuProps extends FlexProps {}
 
 const iconProps: IconProps = {
 	color: 'var(--panel-header-icon)',
@@ -33,11 +26,11 @@ const iconProps: IconProps = {
 export const DropdownMenu: React.FC<DropdownMenuProps> = () => {
 	const activeChat = useStore(state => state.activeChat)
 	const clearSession = useStore(state => state.clearSession)
-	const session = useQuery(['auth.getSession'])
+	const session = api.auth.getSession.useQuery()
 	const router = useRouter()
 	const { sid: routeSid } = router.query
 
-	const createAnonUser = useMutation(['user.createAnonUser'], {
+	const createAnonUser = api.user.createAnonUser.useMutation({
 		async onSuccess(user) {
 			await signIn('credentials', {
 				email: user.email,

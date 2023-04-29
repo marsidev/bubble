@@ -4,11 +4,11 @@ import { useState } from 'react'
 import { Button, HStack, Heading, VStack, chakra } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
-import { ClientlessLayout } from '@layouts'
-import { useAuth } from '@hooks'
-import { Link, ReturnHome } from '@components'
-import { useQuery } from '@utils/trpc'
-import { createChatClient } from '@services'
+import { api } from '~/utils/api'
+import { Link, ReturnHome } from '~/components'
+import { ClientlessLayout } from '~/layouts'
+import { useAuth } from '~/hooks'
+import { createChatClient } from '~/services'
 
 interface AlreadyJoinedProps {
 	chat: Conversation
@@ -18,11 +18,7 @@ interface AlreadyJoinedProps {
 const Decrypting = () => {
 	return (
 		<ClientlessLayout>
-			<Heading
-				color='var(--primary-title)'
-				fontSize='4xl'
-				wordBreak='break-word'
-			>
+			<Heading color='var(--primary-title)' fontSize='4xl' wordBreak='break-word'>
 				🔍 Decrypting invitation link...
 			</Heading>
 		</ClientlessLayout>
@@ -33,11 +29,7 @@ const BrokenLink = ({ message = 'Invitation link broken 💔' }) => {
 	return (
 		<ClientlessLayout title='Broken link 💔'>
 			<VStack maxW='4xl' spacing={4}>
-				<Heading
-					color='var(--primary-title)'
-					fontSize='4xl'
-					wordBreak='break-word'
-				>
+				<Heading color='var(--primary-title)' fontSize='4xl' wordBreak='break-word'>
 					{message}
 				</Heading>
 
@@ -81,10 +73,10 @@ const Invite: NextPage = () => {
 	const [loading, setLoading] = useState(true)
 	const { data: encryptedData } = router.query
 
-	const invitation = useQuery(
-		['invite.decryptInvitationLink', {
+	const invitation = api.invite.decryptInvitationLink.useQuery(
+		{
 			data: (encryptedData as string)?.replace(/ /g, '+') || ''
-		}],
+		},
 		{
 			refetchOnWindowFocus: false,
 			retry: false,
@@ -153,8 +145,7 @@ const Invite: NextPage = () => {
 					fontWeight='normal'
 					wordBreak='break-word'
 				>
-					<chakra.span fontWeight='bold'>{hostUser?.name}</chakra.span> invited
-					you to chat on{' '}
+					<chakra.span fontWeight='bold'>{hostUser?.name}</chakra.span> invited you to chat on{' '}
 					<chakra.span fontStyle='italic' fontWeight='bold'>
 						{conversation?.friendlyName}
 					</chakra.span>
@@ -165,11 +156,7 @@ const Invite: NextPage = () => {
 						Join
 					</Button>
 
-					<Button
-						aria-label='Decline chat invitation'
-						colorScheme='pink'
-						onClick={onDecline}
-					>
+					<Button aria-label='Decline chat invitation' colorScheme='pink' onClick={onDecline}>
 						Decline
 					</Button>
 				</HStack>

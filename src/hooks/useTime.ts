@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getTimeAgo } from '@utils/time'
+import { getTimeAgo } from '~/utils/time'
 
 export const useTime = (date: Date | null) => {
 	const [, setTime] = useState<Date>(new Date())

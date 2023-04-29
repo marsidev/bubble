@@ -1,8 +1,8 @@
 import type { FC, ReactNode } from 'react'
 import { Flex } from '@chakra-ui/react'
 import { DefaultSeo } from 'next-seo'
+import { Navbar } from '~/components'
 import { defaultSeo as seo } from 'next-seo.config'
-import { Navbar } from '@components'
 
 export interface ClientlessLayoutProps {
 	children: ReactNode

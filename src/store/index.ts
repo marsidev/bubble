@@ -1,6 +1,7 @@
 import type { StoreApi } from 'zustand'
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
+import { env } from '~/env.mjs'
 import { UserState, user } from './user'
 import { ChatsState, chats } from './chats'
 import { TwilioState, twilio } from './twilio'
@@ -17,10 +18,9 @@ const store = (set: Set, get: Get) => ({
 	...twilio(set, get)
 })
 
+// export const useStore = process.env.NODE_ENV === 'development' ? create(devtools(store)) : create(store)
 export const useStore =
-	process.env.NODE_ENV === 'development'
-		? create(devtools(store))
-		: create(store)
+	env.NEXT_PUBLIC_NODE_ENV === 'development' ? create(devtools(store)) : create(store)
 
 export * from './types.d'
 

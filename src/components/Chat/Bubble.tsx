@@ -1,8 +1,8 @@
 import type { Message } from '@twilio/conversations'
 import { Flex, type FlexProps, Tag } from '@chakra-ui/react'
 import { useEffect } from 'react'
-import { useStore } from '@store'
-import { useQuery } from '@utils/trpc'
+import { api } from '~/utils/api'
+import { useStore } from '~/store'
 
 interface BubbleProps extends FlexProps {
 	message: Message
@@ -29,8 +29,8 @@ export const Bubble: React.FC<BubbleProps> = ({ message, endOfChatRef }) => {
 
 	const { body: encryptedMessage, author, dateCreated } = message
 
-	const decryptedMessage = useQuery(
-		['message.decrypt', { encrypted: encryptedMessage }],
+	const decryptedMessage = api.message.decrypt.useQuery(
+		{ encrypted: encryptedMessage },
 		{
 			refetchOnWindowFocus: false,
 			retryOnMount: true,
@@ -59,19 +59,13 @@ export const Bubble: React.FC<BubbleProps> = ({ message, endOfChatRef }) => {
 
 	const authorUser = activeChatDBUsers?.find(user => user.email === author)
 
-	const formattedAuthor = outgoingMessage
-		? 'You'
-		: `${authorUser?.name ?? author}`
+	const formattedAuthor = outgoingMessage ? 'You' : `${authorUser?.name ?? author}`
 
-	const bubbleBg = outgoingMessage
-		? 'var(--outgoing-background)'
-		: 'var(--incoming-background)'
+	const bubbleBg = outgoingMessage ? 'var(--outgoing-background)' : 'var(--incoming-background)'
 
 	const isToday = new Date().toDateString() === dateCreated!.toDateString()
 
-	const timestamp = isToday
-		? todayFmt.format(dateCreated!)
-		: beforeTodayFmt.format(dateCreated!)
+	const timestamp = isToday ? todayFmt.format(dateCreated!) : beforeTodayFmt.format(dateCreated!)
 
 	const messageBody = decryptedMessage?.data ?? ''
 

@@ -1,8 +1,8 @@
 import type { Conversation, Message } from '@twilio/conversations'
 import { type FC, useEffect, useState } from 'react'
 import { Flex, type FlexProps } from '@chakra-ui/react'
-import { useStore } from '@store'
-import { useQuery } from '@utils/trpc'
+import { api } from '~/utils/api'
+import { useStore } from '~/store'
 import { Header } from './Header'
 import { SubHeader } from './SubHeader'
 
@@ -21,8 +21,8 @@ export const Preview: FC<PreviewProps> = ({ chat, ...props }) => {
 	const lastMessageAuthor = lastMessage ? lastMessage.author! : ''
 	const lastMessageDate = lastMessage ? lastMessage.dateCreated! : null
 
-	const authorUser = useQuery(
-		['user.findByEmail', { email: lastMessageAuthor }],
+	const authorUser = api.user.findByEmail.useQuery(
+		{ email: lastMessageAuthor },
 		{
 			refetchOnWindowFocus: false,
 			cacheTime: 60 * 60 * 1000
@@ -62,10 +62,7 @@ export const Preview: FC<PreviewProps> = ({ chat, ...props }) => {
 			{...props}
 		>
 			<Header chatName={chatName} lastMessageDate={lastMessageDate} />
-			<SubHeader
-				lastMessageAuthor={formattedAuthor}
-				lastMessageBody={lastMessageBody}
-			/>
+			<SubHeader lastMessageAuthor={formattedAuthor} lastMessageBody={lastMessageBody} />
 		</Flex>
 	)
 }

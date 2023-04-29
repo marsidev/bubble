@@ -1,10 +1,7 @@
 import crypto from 'crypto-js'
+import { env } from '~/env.mjs'
 
-const secret = process.env.CRYPTO_SECRET
-
-if (!secret) {
-	throw new Error('CRYPTO_SECRET is not set')
-}
+const secret = env.CRYPTO_SECRET
 
 export const encrypt = (text: string) => {
 	const stringify = JSON.stringify(text)

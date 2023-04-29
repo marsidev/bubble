@@ -1,22 +1,15 @@
-import {
-	Flex,
-	type FlexProps,
-	HStack,
-	IconButton,
-	Input,
-	chakra
-} from '@chakra-ui/react'
+import { Flex, type FlexProps, HStack, IconButton, Input, chakra } from '@chakra-ui/react'
 import { PaperPlaneRight } from 'phosphor-react'
 import { useRef } from 'react'
-import { useStore } from '@store'
-import { useMutation } from '@utils/trpc'
+import { api } from '~/utils/api'
+import { useStore } from '~/store'
 
 export const ChatInput: React.FC<FlexProps> = ({ ...props }) => {
 	const form = useRef<HTMLFormElement | null>(null)
 	const activeChat = useStore(state => state.activeChat)
 	const activeChatMessages = useStore(state => state.activeChatMessages)
 
-	const encryptMessage = useMutation(['message.encrypt'], {
+	const encryptMessage = api.message.encrypt.useMutation({
 		async onSuccess(encrypted) {
 			await activeChat?.sendMessage(encrypted)
 		}

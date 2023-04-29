@@ -3,15 +3,10 @@ import { useEffect } from 'react'
 import { useDisclosure } from '@chakra-ui/react'
 import { Plus } from 'phosphor-react'
 import { toast } from 'react-toastify'
-import { Layout } from '@layouts'
-import {
-	ChatItem,
-	ChatsContainer,
-	CreateChatModal,
-	FloatingButton
-} from '@components'
-import { createChat as createTwilioChat } from '@services'
-import { useStore } from '@store'
+import { ChatItem, ChatsContainer, CreateChatModal, FloatingButton } from '~/components'
+import { createChat as createTwilioChat } from '~/services'
+import { useStore } from '~/store'
+import { Layout } from '~/layouts'
 
 const Chats: NextPage = () => {
 	const twilioToken = useStore(state => state.twilioToken)
@@ -26,11 +21,7 @@ const Chats: NextPage = () => {
 		}
 	}, [client])
 
-	const {
-		isOpen: modalIsOpen,
-		onClose: closeModal,
-		onOpen: openModal
-	} = useDisclosure()
+	const { isOpen: modalIsOpen, onClose: closeModal, onOpen: openModal } = useDisclosure()
 
 	const onAddingNewChat = async (chatName: string) => {
 		if (!twilioToken) {

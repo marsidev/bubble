@@ -1,7 +1,7 @@
 import type { Get, Set, StoreSlice } from '.'
 import type { Conversation, Participant } from '@twilio/conversations'
 import { User } from '.prisma/client'
-import { sortChats } from '@utils/sort-chats'
+import { sortChats } from '~/utils/sort-chats'
 
 // interface DBChat {
 // 	sid: string // twilio sid

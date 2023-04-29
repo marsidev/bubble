@@ -1,11 +1,5 @@
 import type { NextPage } from 'next'
-import {
-	Center,
-	Container,
-	HStack,
-	Heading,
-	StackDivider
-} from '@chakra-ui/react'
+import { Center, Container, HStack, Heading, StackDivider } from '@chakra-ui/react'
 import { DefaultSeo } from 'next-seo'
 
 const Custom404: NextPage = () => {
