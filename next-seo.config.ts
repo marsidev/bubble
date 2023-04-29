@@ -29,8 +29,8 @@ const seo = {
 		]
 	},
 	twitter: {
-		handle: '@marsigliacr',
-		site: '@marsigliacr',
+		handle: '@marsidev',
+		site: '@marsidev',
 		cardType: 'summary_large_image'
 	},
 	additionalMetaTags: [
