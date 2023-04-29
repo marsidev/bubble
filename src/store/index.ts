@@ -1,5 +1,5 @@
-import type { GetState, SetState } from 'zustand'
-import createStore from 'zustand'
+import type { StoreApi } from 'zustand'
+import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 import { UserState, user } from './user'
 import { ChatsState, chats } from './chats'
@@ -7,8 +7,8 @@ import { TwilioState, twilio } from './twilio'
 import { MessagesState, messages } from './messages'
 
 export type StoreState = UserState & ChatsState & TwilioState & MessagesState
-export type Set = SetState<StoreState>
-export type Get = GetState<StoreState>
+export type Set = StoreApi<StoreState>['setState']
+export type Get = StoreApi<StoreState>['getState']
 
 const store = (set: Set, get: Get) => ({
 	...user(set, get),
@@ -19,8 +19,8 @@ const store = (set: Set, get: Get) => ({
 
 export const useStore =
 	process.env.NODE_ENV === 'development'
-		? createStore(devtools(store))
-		: createStore(store)
+		? create(devtools(store))
+		: create(store)
 
 export * from './types.d'
 

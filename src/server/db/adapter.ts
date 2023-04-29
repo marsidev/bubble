@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 // https://github.com/nextauthjs/next-auth/blob/main/packages/adapter-prisma/src/index.ts
 import type { Adapter } from 'next-auth/adapters'
 import type { Prisma, PrismaClient } from '.prisma/client'

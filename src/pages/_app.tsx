@@ -25,7 +25,14 @@ const toastProps: ToastContainerProps = {
 	icon: true
 }
 
-const MyApp: AppType = ({
+interface PageProps {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	session: any
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	cookies: any
+}
+
+const MyApp: AppType<PageProps> = ({
 	Component,
 	pageProps: { session, cookies, ...pageProps }
 }) => {
