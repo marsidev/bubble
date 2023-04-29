@@ -15,13 +15,12 @@
 		"vercel:deploy:prod": "vercel deploy --prod"
 	},
 	"dependencies": {
-		"@chakra-ui/react": "^2.2.4",
-		"@emotion/react": "11.9.3",
-		"@emotion/styled": "11.9.3",
+		"@chakra-ui/react": "^2.6.0",
+		"@emotion/react": "^11.10.8",
+		"@emotion/styled": "^11.10.8",
 		"@fontsource/nunito": "^4.5.12",
 		"@fontsource/raleway": "^4.5.12",
 		"@fractalsoftware/random-avatar-generator": "^1.0.11",
-		"@next-auth/prisma-adapter": "0.4.4-canary.81",
 		"@prisma/client": "^4.13.0",
 		"@supabase/supabase-js": "^1.35.7",
 		"@trpc/client": "^9.27.4",

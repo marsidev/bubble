@@ -9,7 +9,6 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import jwt from 'jsonwebtoken'
 import { prisma } from '@server/db/client'
 import { CustomPrismaAdapter } from '@server/db/adapter'
-// import { PrismaAdapter } from '@next-auth/prisma-adapter'
 
 export interface Session extends NextAuthSession {
 	user?: {

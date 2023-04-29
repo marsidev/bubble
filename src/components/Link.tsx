@@ -1,22 +1,22 @@
-import {
-	Link as ChakraLink,
-	type LinkProps as ChakraLinkProps
-} from '@chakra-ui/react'
-import NextLink, { type LinkProps as NextLinkProps } from 'next/link'
+/* eslint-disable @typescript-eslint/indent */
+import type { LinkProps as NextLinkProps } from 'next/link'
+import type { LinkProps as ChakraLinkProps } from '@chakra-ui/react'
+import { Link as ChakraLink, forwardRef } from '@chakra-ui/react'
+import NextLink from 'next/link'
 
-type LinkProps = ChakraLinkProps & NextLinkProps
+export interface LinkProps
+	extends ChakraLinkProps,
+		Omit<NextLinkProps, 'href' | 'as'> {
+	href: ChakraLinkProps['href']
+	as?: ChakraLinkProps['as']
+}
 
-export const Link: React.FC<LinkProps> = ({
-	href,
-	children,
-	textDecoration = 'none',
-	...props
-}) => (
-	<NextLink passHref href={href}>
-		<ChakraLink _hover={{ textDecoration }} {...props}>
+export const Link = forwardRef<LinkProps, typeof ChakraLink>(
+	({ children, textDecoration = 'none', ...props }, ref) => (
+		<ChakraLink ref={ref} _hover={{ textDecoration }} as={NextLink} {...props}>
 			{children}
 		</ChakraLink>
-	</NextLink>
+	)
 )
 
 export default Link
